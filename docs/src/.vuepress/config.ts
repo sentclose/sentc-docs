@@ -45,12 +45,12 @@ export default defineConfig({
 				link: '/guide/',
 			},
 			{
-				text: 'Config',
-				link: '/config/'
+				text: 'Git',
+				link: 'https://gitlab.com/sentclose/sentc'
 			},
 			{
-				text: 'VuePress',
-				link: 'https://v1.vuepress.vuejs.org'
+				text: "Homepage",
+				link: "https://sentclose.com/"
 			}
 		],
 		sidebar: {
@@ -60,7 +60,10 @@ export default defineConfig({
 					collapsable: false,
 					children: [
 						'',
-						'using-vue',
+						'create-app',
+						'user',
+						'group',
+						'file'
 					]
 				}
 			],
@@ -71,7 +74,11 @@ export default defineConfig({
 	 * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/
 	 */
 	plugins: [
+		// @ts-ignore
 		'@vuepress/plugin-back-to-top',
+		// @ts-ignore
 		'@vuepress/plugin-medium-zoom',
+		// @ts-ignore
+		'vuepress-plugin-element-tabs',
 	]
 });
