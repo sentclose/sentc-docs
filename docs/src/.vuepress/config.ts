@@ -63,7 +63,8 @@ export default defineConfig({
 						'create-app',
 						'user',
 						'group',
-						'file'
+						'file',
+						'backend-only'
 					]
 				}
 			],
@@ -79,6 +80,6 @@ export default defineConfig({
 		// @ts-ignore
 		'@vuepress/plugin-medium-zoom',
 		// @ts-ignore
-		'vuepress-plugin-element-tabs',
+		'@bidoubiwa/vuepress-plugin-element-tabs',
 	]
 });
