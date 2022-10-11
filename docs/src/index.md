@@ -35,7 +35,6 @@ yarn add @sentclose/sentc
 
 </code-group>
 
-:::
 Easy to use, installed or in the browser:
 
 <code-group>
