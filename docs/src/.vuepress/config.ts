@@ -45,7 +45,13 @@ export default defineConfig({
 				link: '/guide/',
 			},
 			{
-				text: 'Git',
+				text: "Integrations",
+				items: [
+					{text: "Javascript", link: "https://gitlab.com/sentclose/sentc/sdk-implementations/sentc-javascript"}
+				]
+			},
+			{
+				text: 'Code',
 				link: 'https://gitlab.com/sentclose/sentc'
 			},
 			{
