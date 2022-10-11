@@ -8,6 +8,11 @@ End-to-end encryption can be hard to develop and hard to maintain.
 Lucky there is sentc which gives you full control of your application and provides easy to use encryption in group or from user to user.
 We are also provide multi device support, were a user can have multiple devices in one account, but with different login identifier and password for each device.
 
+Sentc can also be used with another backend like firebase or your own. 
+You can configure your app to call some functions just from the backend with your secret token.
+For backend only function call the equivalent of the function with a `prepare` or `done` prefix like: `prepareRegister()` instead of `register` and call your backend with the data of `prepareRegister`. 
+`doneRegister()` after registration.
+
 Sentc is available for javascript in the browser at the moment, but we are working on a flutter sdk and many more.
 
 ## Quick start
@@ -60,12 +65,12 @@ import Sentc from "@sentclose/sentc";
 
 //init the javascript client
 await Sentc.init({
-app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi"  // <-- your app token
+    app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi"  // <-- your app token
 });
 ```
 </code-block>
 
-<code-block title="Browser" active>
+<code-block title="Browser">
 ```html
 <script>
     //init the wasm
@@ -109,7 +114,7 @@ await Sentc.register("username", "password");
 ```
 </code-block>
 
-<code-block title="Browser" active>
+<code-block title="Browser">
 ```html
 <script>
     //init the wasm
@@ -152,7 +157,7 @@ const user = await Sentc.login("username", "password");
 ```
 </code-block>
 
-<code-block title="Browser" active>
+<code-block title="Browser">
 ```html
 <script>
     //init the wasm
