@@ -306,9 +306,112 @@ await group.stopInvites();
 
 ## Get group member
 
+The fetch uses pagination to not fetch all members at once. 
+
+:::: tabs type:card
+
+::: tab Javascript
+
+Members are from type GroupUserListItem.
+
+```ts
+const members = await group.getMember();
+```
+:::
+
+::::
+
+To fetch more use the last fetched member item:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+Members are from type GroupUserListItem.
+
+```ts
+const last_item = members[members.length -1];
+
+const members = await group.getMember(last_item);
+```
+:::
+
+::::
+
+
 ## Delete group member
 
+A group member with rank higher than 2 (0,1,2) can delete member which are the same or lower in rank. The member can't kick themselves.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const members = await group.kickUser("internal_user_id");
+```
+:::
+
+::::
+
+## Leave a group
+
+Every member can leave a group except the creator.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await group.leave();
+```
+:::
+
+::::
+
 ## Parent and child group
+
+A group can be a child of a parent group. This will create a hierarchy of groups. 
+Every member of the parent group got access to the child group with the same rank as in the parent group. 
+When a new member joins the parent group he/she is automatically member of all child groups.
+Multiple child groups are also possible like
+
+````
+parent
+    child from parent
+        child from child from parent
+            child from child from parent
+    child from parent
+````
+
+To create a child group just call group create in the parent group not in the user scope
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const group_id = await group.createChildGroup();
+```
+:::
+
+::::
+
+If you want to create the group from your own backend then you can use this function 
+and call your api with a post request and this input. Endpoint: `https://api.sentc.com/api/v1/group/<the_group_id>/child`
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const input = await group.prepareCreateChildGroup();
+```
+:::
+
+::::
+
+See more at [own backend](/guide/backend-only/)
 
 ## Key rotation
 
@@ -316,3 +419,56 @@ A group can have more keys at the same time. With a key rotation new keys are cr
 The rotation is done on server side (but the server don't know the clear text keys) so it can be used for large groups as well.
 
 Key rotation could be used after a member leaves, so every new content is encrypted by the newest key.
+
+### Key rotation start
+
+To start the rotation call this function from any group member account:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await group.keyRotation();
+```
+:::
+
+::::
+
+The new keys will be created on your device, encrypted by the starter public key and send to the api. 
+The api will encrypt the nw group keys for all other member, but the api still don't know the clear text keys and 
+can't use them because the new keys are encrypted by an ephemeral key which is only accessible to the group members.
+
+It doesn't matter how many members are in this group, because the user device are not doing the encryption for every member.
+
+### Key rotation finish
+
+To get the new key for the other member just call this function for all group member:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await group.finishKeyRotation();
+```
+:::
+
+::::
+
+This will fetch all new keys for a group and prepares the new keys.
+
+## Delete a group
+
+Only the creator (rank 0) or the admins (rank 1) can delete a group.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await group.deleteGroup();
+```
+:::
+
+::::
