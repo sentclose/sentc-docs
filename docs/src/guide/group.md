@@ -458,6 +458,25 @@ await group.finishKeyRotation();
 
 This will fetch all new keys for a group and prepares the new keys.
 
+### Key rotation with own backend
+
+If you want to control the rotation from your own backend, just call this function to start the rotation:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const input = await group.prepareKeyRotation();
+```
+:::
+
+::::
+
+and call this endpoint to start the rotation with a post request: `https://api.sentc.com/api/v1/group/<group_id>/key_rotation`
+
+Still use the finishKeyRotation function to finish the rotation.
+
 ## Delete a group
 
 Only the creator (rank 0) or the admins (rank 1) can delete a group.
