@@ -28,8 +28,8 @@ const group_id = await user.createGroup();
 
 ::::
 
-When having your own backend call use the prepare function. This returns the client data for a new group. 
-Just call our Api with this data from your backend: `https://api.sentc.com/api/v1/group`
+When you are using your own backend, call the prepare function. This returns the client data for a new group. 
+Just call our Api with a post request and this data from your backend: `https://api.sentc.com/api/v1/group`
 
 :::: tabs type:card
 
@@ -42,9 +42,11 @@ const group_data = await user.prepareGroupCreate();
 
 ::::
 
+See more at [own backend](/guide/backend-only/)
+
 ## Fetch a group
 
-When a user got access to a group it can be fetched and the keys got decrypt for the caller. 
+When a user got access to a group the keys can be fetched from the api and got decrypt for the caller. 
 Fetch a group with the group id. This returned a group obj.
 
 :::: tabs type:card
@@ -83,7 +85,7 @@ const decrypted_string = await group.decryptString(encrypted_string);
 ## Group rank
 
 The higher the rank, the more rights the user has in a group. 
-An admin or creator can everything but a normal member can't even accept join requests.
+An admin or creator can do everything but a normal member can't even accept join requests.
 The rank is a number from 0 to 3.
 
 - 0 is the creator of a group and can do everything
@@ -105,7 +107,8 @@ await group.updateRank("internal_user_id", 2)
 ::::
 
 If you have your own backend and want to change the rank from the secret token, 
-here is the function to get the input data for the api:
+here is the function to get the input data for the api.
+Just call our Api with a put request, the group id and this data from your backend: `https://api.sentc.com/api/v1/group/<the_group_id>/change_rank`
 
 :::: tabs type:card
 
@@ -118,17 +121,154 @@ const input = await group.prepareUpdateRank("internal_user_id", 2)
 
 ::::
 
+See more at [own backend](/guide/backend-only/)
+
 ## Invite more user
 
-There are two methods how to get more users to a group.
+There are two methods how to get more users to a group, by invite and by join request.
 
 ### Invite a user
 
-This is called from a group admin to a non group member. The non group member can accept or reject the invite.
+This is called from a group admin (rank 0 - 2) to a non group member. The non group member can accept or reject the invite.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+await group.invite("internal_user_id")
+```
+:::
+
+::::
+
+A user can get invites by fetching invites or from init the client.
+
+:::: tabs type:card
+
+::: tab Javascript
+The invites are from type GroupInviteListItem
+
+```ts
+const invites = await user.getGroupInvites();
+```
+:::
+
+::::
+
+To fetch more invites just pass in the last fetched item from the function:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const last_item = invites[invites.length - 1];
+
+const invites = await user.getGroupInvites(last_item);
+```
+:::
+
+::::
+
+To accept an invitation as user call his function with the group id to accept:
+
+:::: tabs type:card
+
+::: tab Javascript
+The group id can be got from the GroupInviteListItem
+
+```ts
+await user.acceptGroupInvite("group_id");
+```
+:::
+
+::::
+
+Or reject the invite
+
+:::: tabs type:card
+
+::: tab Javascript
+The group id can be got from the GroupInviteListItem
+
+```ts
+await user.rejectGroupInvite("group_id");
+```
+:::
+
+::::
 
 ### Join request
 
-This is called from a non group member to get access to a group. A group admin can accept or reject the request.
+This is called from a non group member to get access to a group. A group admin can accept or reject the request. Call it with the group id.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.groupJoinRequest("group_id");
+```
+:::
+
+::::
+
+To fetch the join requests as a group admin use this function:
+
+:::: tabs type:card
+
+::: tab Javascript
+The requests are from type GroupJoinReqListItem
+
+```ts
+const req = await group.getJoinRequests();
+```
+:::
+
+::::
+
+To fetch more requests just pass in the last fetched item from the function:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const last_item = req[req.length - 1];
+
+const req = await group.getJoinRequests(last_item);
+```
+:::
+
+::::
+
+A group admin can accept the request like this:
+
+:::: tabs type:card
+
+::: tab Javascript
+The user id can get from the GroupJoinReqListItem.
+
+```ts
+await group.acceptJoinRequest("user_id");
+```
+:::
+
+::::
+
+Or reject it:
+
+:::: tabs type:card
+
+::: tab Javascript
+The user id can get from the GroupJoinReqListItem.
+
+```ts
+await group.rejectJoinRequest("user_id");
+```
+:::
+
+::::
 
 ### Auto invite
 
