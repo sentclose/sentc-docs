@@ -61,6 +61,51 @@ const group = await user.getGroup(group_id);
 
 ::::
 
+## Get all groups
+
+To get all group ids where the user is member use this function:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+//the user obj from login
+const groups = await user.getGroups();
+```
+
+The groups are an array and each item is from type GroupList
+
+````ts
+interface GroupList
+{
+	group_id: string,
+	time: number,
+	joined_time: number,
+	rank: number,
+	parent?: string
+}
+````
+
+:::
+
+::::
+
+To fetch more groups use pagination and pass in the last fetched item:
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+const last_item = groups[groups.length - 1];
+
+//the user obj from login
+const groups = await user.getGroups(last_item);
+```
+:::
+
+::::
+
 ## Encrypt and decrypt in a group
 
 Every group member has access to all group keys and can encrypt or decrypt for every group member. 
@@ -148,11 +193,21 @@ A user can get invites by fetching invites or from init the client.
 :::: tabs type:card
 
 ::: tab Javascript
-The invites are from type GroupInviteListItem
 
 ```ts
 const invites = await user.getGroupInvites();
 ```
+
+The invites are an array and each item is from type GroupInviteListItem
+
+````ts
+interface GroupInviteListItem
+{
+	group_id: string,
+	time: number
+}
+````
+
 :::
 
 ::::
@@ -220,11 +275,21 @@ To fetch the join requests as a group admin use this function:
 :::: tabs type:card
 
 ::: tab Javascript
-The requests are from type GroupJoinReqListItem
 
 ```ts
 const req = await group.getJoinRequests();
 ```
+
+The requests are an array and each item is from type GroupJoinReqListItem
+
+````ts
+interface GroupJoinReqListItem
+{
+	user_id: string,
+	time: number
+}
+````
+
 :::
 
 ::::
@@ -313,11 +378,21 @@ The fetch uses pagination to not fetch all members at once.
 
 ::: tab Javascript
 
-Members are from type GroupUserListItem.
-
 ```ts
 const members = await group.getMember();
 ```
+
+Members are an array and each item is from type GroupUserListItem.
+
+````ts
+interface GroupUserListItem 
+{
+	user_id: string,
+	rank: number,
+	joined_time: number,
+}
+````
+
 :::
 
 ::::
