@@ -47,7 +47,7 @@ See more at [own backend](/guide/backend-only/)
 ## Fetch a group
 
 When a user got access to a group the keys can be fetched from the api and got decrypt for the caller. 
-Fetch a group with the group id. This returned a group obj.
+Fetch a group with the group id. This returned a group obj which is used for all group related actions.
 
 :::: tabs type:card
 
@@ -125,7 +125,8 @@ See more at [own backend](/guide/backend-only/)
 
 ## Invite more user
 
-There are two methods how to get more users to a group, by invite and by join request.
+There are two methods how to get more users to a group, by invite and by join request. 
+When inviting a user or accepting a join request, the group keys are encrypted by the new members actual newest public key.
 
 ### Invite a user
 
@@ -275,11 +276,33 @@ await group.rejectJoinRequest("user_id");
 This is also called from a group admin, but this time the non group member is automatically invited and accepted without any actions. 
 This can be useful for 1:1 user sessions.
 
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await group.inviteAuto("user_id");
+```
+:::
+
+::::
+
 ### Stop invite
 
 When calling this function, then no non group member can send join requests and no group admin can invite more users. 
 
 This is useful for 1:1 user session. After auto inviting the other user, close the invite.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await group.stopInvites();
+```
+:::
+
+::::
 
 ## Get group member
 
