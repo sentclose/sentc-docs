@@ -305,6 +305,10 @@ const user = await Sentc.getActualUser();
 
 ::::
 
+## The user data
+
+<!--TODO-->
+
 ## Authentification and JWT
 
 After login the user received a json web token (jwt) to authenticate at the sentc api. This jwt is only valid for 5 min.
@@ -316,17 +320,15 @@ There are 3 strategies to refresh a jwt.
 However, this is only necessary if you must use http-only cookies for the browser.
 If you are using other implementations, go with the default.
 
-### Refresh directly by the sdk 
+See more at [own backend](/guide/backend-only/)
 
-This is the default method. 
-Both the refresh and the jwt are stored in the client. When calling the api and the jwt is invalid this token is used.
 
-### Refresh from a cookie
+## Register device
 
-In this case, a request is happened to your endpoint. The old jwt will be in an Authorization header. 
-Call the refresh endpoint from your backend with a put request: `https://api.sentc.com/api/v1/refresh` with the old jwt token as Authorization Bearer header.
+To register a new device, the user must be logged in on another device.
+The process has three parts: prepare the data on the new device, send the data to the logged in device and add the new device.
 
-Set in the options when init the client the refresh endpoint option to cookie.
+On the new device do this to produce the input. The identifier and the password could be generated the way we showed at register user.
 
 :::: tabs type:card
 
@@ -337,31 +339,17 @@ Set in the options when init the client the refresh endpoint option to cookie.
 ```ts
 import Sentc from "@sentclose/sentc";
 
-//init the javascript client
-await Sentc.init({
-    app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",  // <-- your app token
-    refresh: { 
-        endpoint: 0, // or REFRESH_ENDPOINT.cookie for typescript
-        endpoint_url: "<your_endpoint>"
-    }
-});
+const input = await Sentc.registerDeviceStart("device_identifier", "device_pw");
 ```
 </code-block>
 
 <code-block title="Browser">
 ```html
 <script>
-    //init the wasm
     const sentc = window.Sentc.default;
 
     async function run() {
-        await sentc.init({
-           app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", // <-- your app token
-           refresh: { 
-               endpoint: 1,
-               endpoint_url: "<your_endpoint>"
-           }
-        });
+        const input = await sentc.registerDeviceStart("device_identifier", "device_pw");
     }
 
     run();
@@ -373,59 +361,159 @@ await Sentc.init({
 
 ::::
 
-See more at [own backend](/guide/backend-only/)
+Send the input to the logged in device (maybe through a QR code, the logged in device just scans the qr code) and call this function with the input.
 
-To get the refresh token, just get it from the user object after login. The token won't store in the client, just in the object. 
-Then put the refresh token in a cookie.
+:::: tabs type:card
 
-### Refresh with a function
+::: tab Javascript
+```ts
+//the user obj from login
+await user.registerDevice(input);
+```
+:::
 
-The sdk won't send any requests for refreshing jwt in this case. 
-Instead, you can define a function to refresh the jwt, maybe do the refresh directly in your backend.
+::::
+
+This will make sure that only the devices of the user got access to the user data.
+
+After this the user can just log in on the new device.
+
+## Get devices
+
+The device list can be fetched via pagination.
 
 :::: tabs type:card
 
 ::: tab Javascript
 
-Define a function which returns a promise and get the old jwt.
-
-<code-group>
-<code-block title="Installed" active>
 ```ts
-import Sentc from "@sentclose/sentc";
-
-//init the javascript client
-await Sentc.init({
-    app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",  // <-- your app token
-    refresh: {
-        endpoint: 1, // or REFRESH_ENDPOINT.cookie_fn for typescript
-        endpoint_fn: (old_jwt: string) => Promise<string>
-    }
-});
+const devices = await user.getDevices();
 ```
-</code-block>
 
-<code-block title="Browser">
-```html
-<script>
-    //init the wasm
-    const sentc = window.Sentc.default;
+The devices are an array and each item is from type UserDeviceList
 
-    async function run() {
-        await sentc.init({
-           app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", // <-- your app token
-           refresh: { 
-               endpoint: 1,
-               endpoint_fn: (old_jwt: string) => Promise<string>
-           }
-        });
-    }
+````ts
+interface UserDeviceList
+{
+	device_id: string,
+	time: number,
+	device_identifier: string
+}
+````
 
-    run();
-</script>
+:::
+
+::::
+
+To fetch the next pages, just call this function with the last fetched device.
+
+:::: tabs type:card
+
+::: tab Javascript
+The devices are from type UserDeviceList
+
+```ts
+const last_item = devices[devices.length - 1];
+
+const devices = await user.getDevices(last_item);
 ```
-</code-block>
-</code-group>
+:::
+
+::::
+
+## Change password
+
+The user must enter the old and the new password.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.changePassword("old_password", "new_password");
+```
+:::
+
+::::
+
+## Reset password
+
+To reset a password the user must be logged in on the device. 
+A normal reset without logged in is not possible because the user must have access to the device keys. 
+If the user doesn't have access he/she can't decrypt the information anymore because the sentc api got not access to the keys too.
+
+When resetting the password, the secret keys of the device will be encrypted again with the new password.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.resetPassword("new_password");
+```
+:::
+
+::::
+
+## Update user or device identifier
+
+This will change the user identifier. The function will throw an error if the identifier is not available. 
+Only the identifier of the actual device will be changed.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.updateUser("new_identifier");
+```
+:::
+
+::::
+
+## Log out
+
+After logout, every local data will be deleted from the client.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.logOut();
+```
+:::
+
+::::
+
+
+## Delete device
+
+To delete a device the device password and the device id are needed to delete the device. The id can be got from the user data 
+or from fetching the device list.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.deleteDevice("password", "device_id");
+```
+:::
+
+::::
+
+## Delete account
+
+To delete the whole account, use any device password. 
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+await user.deleteUser("password");
+```
 :::
 
 ::::
