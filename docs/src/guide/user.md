@@ -307,7 +307,34 @@ const user = await Sentc.getActualUser();
 
 ## The user data
 
-<!--TODO-->
+The data contains all information about the user account and the device, sentc needs.
+
+For the device:
+- asymmetric key pairs only for the device
+- device id
+
+For user account:
+- asymmetric key pairs for the account (which is also used to join a group)
+- the actual jwt for this session
+- the refresh token for this session
+- user id
+
+To get the data just access the data in the user class.
+
+:::: tabs type:card
+
+::: tab Javascript
+The devices are from type UserDeviceList
+
+```ts
+//user from login
+const refresh_token = user.data.refresh_token;
+const user_id = user.data.user_id;
+const device_id = user.data.device_id;
+```
+:::
+
+::::
 
 ## Authentification and JWT
 
@@ -498,6 +525,21 @@ or from fetching the device list.
 
 ```ts
 await user.deleteDevice("password", "device_id");
+```
+:::
+
+::::
+
+Get the device id from the user data:
+
+:::: tabs type:card
+
+::: tab Javascript
+The devices are from type UserDeviceList
+
+```ts
+//user from login
+const device_id = user.data.device_id;
 ```
 :::
 
