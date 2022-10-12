@@ -30,6 +30,7 @@ const group_id = await user.createGroup();
 
 When you are using your own backend, call the prepare function. This returns the client data for a new group. 
 Just call our Api with a post request and this data from your backend: `https://api.sentc.com/api/v1/group`
+Don't forget the Authorization header with the jwt.
 
 :::: tabs type:card
 
