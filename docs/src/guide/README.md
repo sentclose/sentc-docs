@@ -17,9 +17,9 @@ Sentc is available for javascript in the browser at the moment, but we are worki
 
 ## Quick start
 
-0. Create an account and an app. Use the public ap token in your sdk options.
+Create an account and an app. Use the public ap token in your sdk options.
 
-1. Install the sdk.
+### Install the sdk.
 
 :::: tabs type:card
 
@@ -47,11 +47,18 @@ yarn add @sentclose/sentc
 </code-block>
 </code-group>
 
+#### Module bundler
+
+The core sdk uses wasm in the browser.
+
+When you are using a module bundler like webpack and you are not using the browser import then [see here](/guide/module-bundler/) for the module bundler wasm configuration.
+
 :::
 
 ::::
 
-2. Initialize the sdk. This checks if the user is logged in and checks the jwt
+### Initialize the sdk. 
+This checks if the user is logged in and checks the jwt
 
 :::: tabs type:card
 

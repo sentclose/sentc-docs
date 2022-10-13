@@ -51,6 +51,12 @@ export default defineConfig({
 				]
 			},
 			{
+				text: "Examples",
+				items: [
+					{text: "Nuxt 2", link: "https://gitlab.com/sentclose/sentc/sdk-examples/nuxt2"}
+				]
+			},
+			{
 				text: 'Code',
 				link: 'https://gitlab.com/sentclose/sentc'
 			},
@@ -70,7 +76,8 @@ export default defineConfig({
 						'user',
 						'group',
 						'file',
-						'backend-only'
+						'backend-only',
+						'module-bundler'
 					]
 				}
 			],
