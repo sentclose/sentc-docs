@@ -58,7 +58,7 @@ await Sentc.init({
 });
 ````
 
-The following example shoes the use in webpack 4 when packing it in node with another framework like vue, react, etc., 
+The following example shows the use in webpack 4 when packing it in node with another framework like vue, react, etc., 
 where the build process and transpiling is happened.
 
 - Install the webpack copy to copy the wasm file to your public directory during build time:
@@ -154,7 +154,7 @@ npm install copy-webpack-plugin
 }
 ````
 
-Set your wasm output directory as bundleDir in the babel-plugin-bundled-import-meta options. Do not forget to st browser as main filed at first.
+Set your wasm output directory as bundleDir in the babel-plugin-bundled-import-meta options. Do not forget to set browser as main filed at first.
 
 ````javascript
 //set here the path to 
