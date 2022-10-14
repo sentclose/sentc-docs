@@ -47,11 +47,14 @@ yarn add @sentclose/sentc
 </code-block>
 </code-group>
 
+::: warning
+
 #### Module bundler
 
 The core sdk uses wasm in the browser.
 
-When you are using a module bundler like webpack and you are not using the browser import then [see here](/guide/module-bundler/) for the module bundler wasm configuration.
+When you are using a module bundler like webpack and you are not using the browser import,
+[see Module bundler](/guide/module-bundler/) for the module bundler wasm configuration.
 
 :::
 

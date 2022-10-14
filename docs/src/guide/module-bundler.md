@@ -22,6 +22,8 @@ module.exports = {
 }
 ````
 
+::: tip
+
 Sometimes webpack uses the commonjs file and this could cause errors when loading the wasm file in the browser.
 To avoid this set the module specific. Make sure you are setting module before main:
 
@@ -37,14 +39,17 @@ module.exports = {
 		]
 	},
 	resolve: {
-		mainFields: ["module", "main"],
+		mainFields: ["module", "main"], // <-- use module before main
 	}
 }
 ````
+:::
 
 ## Webpack 4
 
+::: warning
 Webpack 4 can't use the normal import and fetch of the wasm file.
+:::
 
 You must set in the sdk options the path to your wasm file from a browser perspective (normally your public directory) 
 so the browser can fetch the wasm file:
