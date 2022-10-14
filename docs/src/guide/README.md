@@ -8,10 +8,16 @@ End-to-end encryption can be hard to develop and hard to maintain.
 Lucky there is sentc which gives you full control of your application and provides easy to use encryption in group or from user to user.
 We are also provide multi device support, were a user can have multiple devices in one account, but with different login identifier and password for each device.
 
-Sentc can also be used with another backend like firebase or your own. 
+::: tip
+Sentc can also be used with another backend like firebase or your own.
+
 You can configure your app to call some functions just from the backend with your secret token.
-For backend only function call the equivalent of the function with a `prepare` or `done` prefix like: `prepareRegister()` instead of `register` and call your backend with the data of `prepareRegister`. 
-`doneRegister()` after registration.
+For backend only function call the equivalent of the 
+function with a `prepare` or `done` prefix like: `prepareRegister()` instead of `register` and 
+call your backend with the data of `prepareRegister` or `doneRegister()` after registration.
+
+See more at [own backend](/guide/backend-only/)
+:::
 
 Sentc is available for javascript in the browser at the moment, but we are working on a flutter sdk and many more.
 
@@ -101,7 +107,9 @@ await Sentc.init({
 
 ::::
 
+::: tip Ready
 Now you are ready to register, login, delete a user or a group.
+:::
 
 ## Examples
 
