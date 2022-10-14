@@ -50,6 +50,8 @@ await Sentc.register("username", "password");
 </code-block>
 </code-group>
 
+::: warning
+This function will also throw an error if the **username exists for your app**.
 :::
 
 ::::
@@ -139,6 +141,12 @@ const available = await Sentc.checkUserIdentifierAvailable("identifier");
 
 ::::
 
+::: tip
+The default app settings for user register are from another backend because sentc won't save other data then the keys and the username.
+
+The following shows how to register a user from your backend
+:::
+
 ### Own backend
 
 When you are using your own backend to store more information about the user, you can just use the prepare function. 
@@ -153,6 +161,7 @@ Send the output to our api with a post request to this endpoint: `https://api.se
 ```ts
 import Sentc from "@sentclose/sentc";
 
+//call this in the client
 const input = await Sentc.prepareRegister("identifier", "password");
 ```
 </code-block>
@@ -226,6 +235,8 @@ const user = await Sentc.login("identifier", "password");
 </code-block>
 </code-group>
 
+::: warning
+This function will also throw an error if the **username not found** or the **password was wrong**.
 :::
 
 ::::
@@ -384,6 +395,9 @@ const input = await Sentc.registerDeviceStart("device_identifier", "device_pw");
 ```
 </code-block>
 </code-group>
+
+::: warning
+This function will also throw an error if the **username still exists for your app**
 :::
 
 ::::
@@ -459,6 +473,8 @@ The user must enter the old and the new password.
 ```ts
 await user.changePassword("old_password", "new_password");
 ```
+::: warning
+This function will also throw an error if **the old password was not correct**
 :::
 
 ::::
@@ -494,6 +510,8 @@ Only the identifier of the actual device will be changed.
 ```ts
 await user.updateUser("new_identifier");
 ```
+::: warning
+This function will also throw an error if **the identifier still exists for your app**
 :::
 
 ::::
@@ -516,7 +534,7 @@ await user.logOut();
 
 ## Delete device
 
-To delete a device the device password and the device id are needed to delete the device. The id can be got from the user data 
+To delete a device, a device password from any device and the device id are needed to delete the device. The id can be got from the user data 
 or from fetching the device list.
 
 :::: tabs type:card
@@ -526,6 +544,8 @@ or from fetching the device list.
 ```ts
 await user.deleteDevice("password", "device_id");
 ```
+::: warning
+This function will also throw an error if **the password was not correct**
 :::
 
 ::::
@@ -556,6 +576,8 @@ To delete the whole account, use any device password.
 ```ts
 await user.deleteUser("password");
 ```
+::: warning
+This function will also throw an error if **the password was not correct**
 :::
 
 ::::

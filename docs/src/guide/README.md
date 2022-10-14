@@ -111,6 +111,18 @@ await Sentc.init({
 Now you are ready to register, login, delete a user or a group.
 :::
 
+:::: tabs type:card
+
+::: tab Javascript
+
+::: warning
+Every function which makes a request (in javascript with a promise) will throw an error if the request or server output is not correct.
+
+We noted when the function will also throw an error
+:::
+
+::::
+
 ## Examples
 
 The following examples are just minimal code blocks. To see more incl. their configuration, please see the documentation for each part.
