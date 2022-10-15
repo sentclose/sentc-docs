@@ -11,7 +11,7 @@ features:
   details: Create groups where every member can encrypt content for all other member, incl. key rotation to renew the keys but still using the old ones.
 - title: User management
   details: Register and login users securely and easy.
-footer: Made by  with ❤️
+footer: © 2022 - Sentclose
 ---
 
 :::: tabs type:card
