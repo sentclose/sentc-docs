@@ -236,7 +236,7 @@ Just pass in the file id of the file to delete.
 ::: tab Javascript
 
 ````typescript
-await group.downloadFile(file_id);
+await group.deleteFile(file_id);
 ````
 :::
 
@@ -254,7 +254,16 @@ Every part will now uploaded and download from your storage.
 If a file gets deleted we will call your backend storage to delete this file. 
 We are stacking the delete process to delete a bunch of files at once.
 
-First set your upload and download url in the sentc init options:
+In summery:
+
+1. Set your own upload and download endpoint in the app option in the sdk
+2. Prepare your upload endpoint to get multiple parameters through the url
+3. Call the sentc api to register the file part. You will get an id back, this id will be used to delete the file part.
+4. Set the delete endpoint and an optional token in your app file options in the dashboard
+
+See an example for using your own storage: [here](https://gitlab.com/sentclose/sentc/sdk-examples)
+
+### Set your upload and download url in the sentc init options
 
 :::: tabs type:card
 
@@ -280,4 +289,46 @@ The downloader will then try to download the part from the new url.
 
 Make sure to transfer your data to the new url.
 
-Do not forget to set the `delete` endpoint in your [app options](/guide/create-app/)
+### When uploading file parts to your url, register the file part at sentc api 
+
+Call this endpoint when the upload is done: `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
+
+- session_id is the id of the file upload session, this is a string.
+- file_part_sequence is the sequence of the file part when downloading and decrypting the file. if this is wrong then the file can't be decrypted anymore.
+- end is a boolean. Pass in false if the file upload has not finished yet or true if it is.
+
+The sdk will call your endpoint with these values in the url as parameter. 
+A request might look like: `https://your_url.com/<session_id>/<file_part_sequence>/<end>` 
+or `https://your_url.com/abc_123/0/false` or `https://your_url.com/abc_123/1/true`
+
+Just extract the values and call the sentc api to register the file part, so sentc can download the file. 
+In the example above: `https://api.sentc.com/api/v1/file/part/abc_123/0/false` and `https://api.sentc.com/api/v1/file/part/abc_123/1/true`
+
+### After calling the sentc api you will get back the file part id
+
+This id is used to fetch and delete a part. 
+Please store the id or rename your file part to this id.
+
+### Alternative workflow
+
+You can also call the sentc api first to register a part and then read the request body.
+Then you will get the right id, and you can name your file correctly.
+
+
+### Set the delete endpoint for file parts 
+
+This endpoint will be called with a `delete` request and the deleted file part names in the body as json array:
+
+````json
+["name_0", "name_1", "name_2"]
+````
+
+See more here [app options](/guide/create-app/).
+
+You can also set a token for us, so you know that the request comes really from our api to delete the files.
+
+### When downloading a part the part id is in the url
+
+The sdk will call your endpoint with a get request and the part id in the url. And except the encrypted file part as bytes.
+
+`https://your_url.com/<part_id>`
