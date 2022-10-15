@@ -166,9 +166,11 @@ const decrypted = await user.decryptString(encrypted);
 
 ::::
 
-## Create a new symmetric key
+## Register a key
 
 You can also create a new key to encrypt the content. This can helpful for asymmetric encryption, where the data length is very limited.
+
+### Create a new symmetric key
 
 When creating a new key for a group then this key will be encrypted by the actual group key. 
 For another user, the key will be encrypted be the users public key.
@@ -207,7 +209,7 @@ const master_key_id = key.master_key_id;
 
 ::::
 
-## Encrypt and decrypt with a registered key
+### Encrypt and decrypt with a registered key
 
 This works the same as group encrypt, decrypt.
 
@@ -229,7 +231,7 @@ const decrypted = key.decrypt(encrypted);
 
 ::::
 
-## Fetch a key
+### Fetch a key
 
 When you saved the master key id (the key is which was used to encrypt the key) and the key id then you can fetch the key.
 
