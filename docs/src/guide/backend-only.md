@@ -66,6 +66,18 @@ Header name: Authorization
 Header value: Bearer <the_jwt>
 ````
 
+## App token
+
+For every request, you must send your app token. The sdk will send your public app token automatically.
+Send it with an x-sentc-app-token header:
+
+```
+Header name: x-sentc-app-token
+Header value: <your_app_token>
+```
+
+Use your public token for every frontend related requests and your secret token only for requests from your backend.
+
 ## User
 
 ::: tip
