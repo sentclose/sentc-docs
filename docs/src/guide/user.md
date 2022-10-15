@@ -581,3 +581,41 @@ This function will also throw an error if **the password was not correct**
 :::
 
 ::::
+
+## Public user information
+
+Only the newest public key is used. You can just fetch the newest public key or a verify key by id.
+
+Public key:
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+import Sentc from "@sentclose/sentc";
+
+//this retuns the key and the key id
+const {key, id} = await Sentc.getUserPublicKey("<user_id>");
+```
+:::
+
+::::
+
+Verify Key:
+
+This key can only be fetched by id because to verify data you need a specific verify key.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+import Sentc from "@sentclose/sentc";
+
+//this retuns just the key
+const key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
+```
+:::
+
+::::

@@ -257,3 +257,57 @@ const key = await user.fetchKey("<key_id>", "<master_key_id>");
 :::
 
 ::::
+
+## Sign and verify the encrypted data
+
+Sentc provides a way to sign the data after encrypt and verify the encrypted data before decrypt.
+
+### Sign
+
+For sign, the newest sign key of the user is used.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+For a group:
+```ts
+//just set sign to true
+
+const encrypted = await group.encryptString("hello there!", true);
+```
+
+For a user:
+
+```ts
+const encrypted = await user.encryptString("hello there!", "<reply_id>", true);
+```
+
+:::
+
+::::
+
+### Verify
+
+For verify, the right verify key is fetched, but you need to save the id of the user who encrypted the content.
+
+:::: tabs type:card
+
+::: tab Javascript
+
+For a group:
+```ts
+//just set sign to true
+
+const decrypted = await group.decryptString(encrypted, true, "<user_id>");
+```
+
+For a user:
+
+```ts
+const decrypted = await user.decryptString(encrypted, true, "<user_id>");
+```
+
+:::
+
+::::
