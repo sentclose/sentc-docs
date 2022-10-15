@@ -75,6 +75,7 @@ export default defineConfig({
 						'create-app',
 						'user',
 						'group',
+						'encrypt',
 						'file',
 						'backend-only',
 						'module-bundler'

@@ -128,6 +128,8 @@ const decrypted_string = await group.decryptString(encrypted_string);
 
 ::::
 
+See more at [encrypt decrypt](/guide/encrypt/).
+
 ## Group rank
 
 The higher the rank, the more rights the user has in a group. 
