@@ -292,6 +292,7 @@ Make sure to transfer your data to the new url.
 ### When uploading file parts to your url, register the file part at sentc api 
 
 Call this endpoint when the upload is done: `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
+This endpoint needs your secret token and should only be called from your backend.
 
 - session_id is the id of the file upload session, this is a string.
 - file_part_sequence is the sequence of the file part when downloading and decrypting the file. if this is wrong then the file can't be decrypted anymore.
