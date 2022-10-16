@@ -261,7 +261,7 @@ In summery:
 3. Call the sentc api to register the file part. You will get an id back, this id will be used to delete the file part.
 4. Set the delete endpoint and an optional token in your app file options in the dashboard
 
-See an example for using your own storage: [here](https://gitlab.com/sentclose/sentc/sdk-examples)
+See an example for using your own storage: [here](https://gitlab.com/sentclose/sentc/sdk-examples/own-backend-storage)
 
 ### Set your upload and download url in the sentc init options
 
@@ -294,7 +294,19 @@ Make sure to transfer your data to the new url.
 Call this endpoint when the upload is done: 
 - `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
 
-This endpoint needs your secret token and should only be called from your backend.
+This endpoint needs your secret token and should only be called from your backend. See [own backend](/guide/backend-only) for sending the token as header.
+
+```
+Header name: x-sentc-app-token
+Header value: <your_app_token>
+```
+
+You need also pass in the jwt token of the user.
+
+````
+Header name: Authorization
+Header value: Bearer <the_jwt>
+````
 
 - session_id is the id of the file upload session, this is a string.
 - file_part_sequence is the sequence of the file part when downloading and decrypting the file. if this is wrong then the file can't be decrypted anymore.
@@ -316,6 +328,8 @@ In the example above:
 This id is used to fetch and delete a part. 
 Please store the id or rename your file part to this id.
 
+Return the success result as json to the sdk: `{"status":true,"result":"Success"}`.
+
 ### Alternative workflow
 
 You can also call the sentc api first to register a part and then read the request body.
@@ -324,7 +338,7 @@ Then you will get the right id, and you can name your file correctly.
 
 ### Set the delete endpoint for file parts 
 
-This endpoint will be called with a `delete` request and the deleted file part names in the body as json array:
+This endpoint will be called with a `post` request and the deleted file part names in the body as json array:
 
 ````json
 ["name_0", "name_1", "name_2"]
@@ -336,6 +350,7 @@ You can also set a token for us, so you know that the request comes really from 
 
 ### When downloading a part the part id is in the url
 
-The sdk will call your endpoint with a get request and the part id in the url. And except the encrypted file part as bytes.
+The sdk will call your endpoint with a get request and the part id in the url. 
+And except the encrypted file part as bytes.
 
 `https://your_url.com/<part_id>`
