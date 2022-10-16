@@ -291,7 +291,9 @@ Make sure to transfer your data to the new url.
 
 ### When uploading file parts to your url, register the file part at sentc api 
 
-Call this endpoint when the upload is done: `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
+Call this endpoint when the upload is done: 
+- `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
+
 This endpoint needs your secret token and should only be called from your backend.
 
 - session_id is the id of the file upload session, this is a string.
@@ -299,11 +301,15 @@ This endpoint needs your secret token and should only be called from your backen
 - end is a boolean. Pass in false if the file upload has not finished yet or true if it is.
 
 The sdk will call your endpoint with these values in the url as parameter. 
-A request might look like: `https://your_url.com/<session_id>/<file_part_sequence>/<end>` 
-or `https://your_url.com/abc_123/0/false` or `https://your_url.com/abc_123/1/true`
+A request might look like: 
+- `https://your_url.com/<session_id>/<file_part_sequence>/<end>` 
+- or `https://your_url.com/abc_123/0/false` 
+- or `https://your_url.com/abc_123/1/true`
 
 Just extract the values and call the sentc api to register the file part, so sentc can download the file. 
-In the example above: `https://api.sentc.com/api/v1/file/part/abc_123/0/false` and `https://api.sentc.com/api/v1/file/part/abc_123/1/true`
+In the example above: 
+- `https://api.sentc.com/api/v1/file/part/abc_123/0/false` 
+- and `https://api.sentc.com/api/v1/file/part/abc_123/1/true`
 
 ### After calling the sentc api you will get back the file part id
 
