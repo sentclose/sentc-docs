@@ -32,8 +32,7 @@ A new key will be created for each file which will encrypt the file.
 In the following a file will be created, encrypted and uploaded for a group, so every group member can download and decrypt it.
 
 ::: warning
-It is important to store not only the `file id` but the `master key id` which was used to encrypt the file.
-This can be the group key id or a user key.
+It is important to store the `file id` to fetch the file later
 :::
 
 :::: tabs type:card
@@ -117,7 +116,7 @@ This will cancel the actual upload of a file. But this won't delete the file.
 
 ## Download and decrypt a file
 
-To download a file, not only the file id is needed but the master key id too, which was needed to encrypt the file key.
+To download a file just use the file id.
 A file key could be encrypted by another created key or a group key. The file create will always give you the master key id back.
 
 :::: tabs type:card
@@ -125,7 +124,7 @@ A file key could be encrypted by another created key or a group key. The file cr
 ::: tab Javascript
 
 ```typescript
-const [url, meta_info, file_key] = await group.downloadFile(file_id, master_key_id);
+const [url, meta_info, file_key] = await group.downloadFile(file_id);
 ```
 
 - This fill return the file blob url, so you can use it in the browser, like set the url as an image src or download the file.
@@ -134,6 +133,7 @@ const [url, meta_info, file_key] = await group.downloadFile(file_id, master_key_
 ````typescript
 interface FileMetaInformation {
 	file_id: string,
+    master_key_id: string,
 	belongs_to?: string,
 	belongs_to_type: any,
 	key_id: string,
@@ -156,10 +156,10 @@ There is a limit to store just up to 2 gb into the indexeddb in many browser.
 :::
 
 ::: tip Download a file in a browser
-To download a file just make a 'fake' a-tag and click it. Just get the file name from the meta info to show it in the borwser for download.
+To download a file just make a 'fake' a-tag and click it. Just get the file name from the meta info to show it in the browser for download.
 
 ````typescript
-const [url, meta_info, file_key] = await group.downloadFile(file_id, master_key_id);
+const [url, meta_info, file_key] = await group.downloadFile(file_id);
 
 const a = document.createElement("a");
 a.download = meta_info.file_name;
@@ -179,7 +179,7 @@ To get the user verify key just fetch it see [user - Public user information](/g
 ::: tab Javascript
 
 ```typescript
-const [url, meta_info, file_key] = await group.downloadFile(file_id, master_key_id, verify_key);
+const [url, meta_info, file_key] = await group.downloadFile(file_id, verify_key);
 ```
 
 :::
@@ -199,7 +199,7 @@ To see the actual download progress pass in the download file function a closure
 
 ````typescript
 //no verify key in this case, just pass in an empty string
-const output = await group.downloadFile(file, master_key_id, '', (progress: number) => {
+const output = await group.downloadFile(file, '', (progress: number) => {
 	console.log("Download: " + progress);
 });
 ````
