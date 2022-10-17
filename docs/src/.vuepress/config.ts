@@ -53,7 +53,8 @@ export default defineConfig({
 			{
 				text: "Examples",
 				items: [
-					{text: "Nuxt 2", link: "https://gitlab.com/sentclose/sentc/sdk-examples/nuxt2"}
+					{text: "Nuxt 2", link: "https://gitlab.com/sentclose/sentc/sdk-examples/nuxt2"},
+					{text: "Node js custom file storage", link: "https://gitlab.com/sentclose/sentc/sdk-examples/own-backend-storage"}
 				]
 			},
 			{
