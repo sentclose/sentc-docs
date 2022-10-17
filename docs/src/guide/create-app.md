@@ -45,11 +45,7 @@ The jwt is structured the following:
     sub: string,
     exp: number,
     iat: number,
-
-	internal_user_id: string,
 	group_id: string,
-	device_id: string,
-	device_identifier: string,
 	fresh: boolean
 }
 ````
@@ -58,10 +54,9 @@ The jwt is structured the following:
 
 ::::
 
-- sub is the app id (which is double-checked on the api)
-- internal_user_id is user id at sentc api
+- aud is the user id
+- sub is the device id
 - group_id is the user device group (this value can be ignored)
-- device_id the actual logged in device of the user
 - fresh, after login the user will get a fresh token. When the tokens refresh, 
 the jwt is not fresh anymore. A fresh jwt is needed to delete a user, but the sdk will log in the user again before delete to get a fresh jwt
 
