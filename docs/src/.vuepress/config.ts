@@ -47,7 +47,8 @@ export default defineConfig({
 			{
 				text: "Integrations",
 				items: [
-					{text: "Javascript", link: "https://gitlab.com/sentclose/sentc/sdk-implementations/sentc-javascript"}
+					{text: "Javascript / Web", link: "https://gitlab.com/sentclose/sentc/sdk-implementations/sentc-javascript"},
+					{text: "Dart / Flutter", link: "https://gitlab.com/sentclose/sentc/sdk-implementations/sentc-flutter"}
 				]
 			},
 			{

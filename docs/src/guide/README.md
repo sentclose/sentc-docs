@@ -5,8 +5,8 @@
 Sentc is an end-to-end encryption sdk with user and group management.
 
 End-to-end encryption can be hard to develop and hard to maintain. 
-Lucky there is sentc which gives you full control of your application and provides easy to use encryption in group or from user to user.
-We are also provide multi device support, were a user can have multiple devices in one account, but with different login identifier and password for each device.
+Luckily there is sentc which gives you full control of your application and provides easy to use encryption in group or from user to user.
+We are also provide multi device support, were an user can have multiple devices in one account, but with different login identifier and password for each device.
 
 ::: tip
 Sentc can also be used with another backend like firebase or your own.
