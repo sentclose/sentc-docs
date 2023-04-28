@@ -4,32 +4,33 @@
 File handling will be available after the beta.
 :::
 
-Handling large encrypted files can be hard and not trivial as specially in the browser.
+Handling large encrypted files can be difficult, especially in the browser.
 
-Large files are generally too big to encrypt them as once. The file might be load completely into the memory.
+Large files are generally too big to encrypt all at once and can potentially overload system memory. 
+To solve this issue, one solution is to use a stream to encrypt and decrypt files one piece at a time. 
+However, browsers cannot send file streams through requests.
 
-One solution is to use a stream. Only one piece of a file will be read and encrypt at a time. 
-This will solve the memory problem, but browsers can't send file streams through requests.
-
-Another solution is to just chunk a file and encrypt each piece and then sending this piece as one file to the storage. 
-We can send now encrypted files from the browser too, but now we need to deal with multiple files not just one. 
-We need to handle the upload but also handle the deletion of a file. THe pieces must be deleted as well.
+Another solution is to chunk the file into smaller pieces and encrypt each piece before sending it to storage. 
+This allows encrypted files to be sent from the browser, but requires managing multiple files instead of just one. 
+In addition to handling uploads, file deletion must also be managed, including deleting the individual pieces.
 
 ::: tip Sentc solution
-Sentc chunks the files in the client and will encrypt them. Then these parts are sent to our api storage **or to your storage**. 
 
-We will save all part ids to your file and if you need the file you can just fetch it from our backend as if it is one file. 
-You can also delete the file as if it is one file and not a pile of pieces.
+Sentc offers a solution for handling large encrypted files. 
+In the client, Sentc chunks the file and encrypts each piece. 
+These encrypted pieces are then sent to our API storage or your storage.
+
+We save all the part IDs associated with your file, allowing you to fetch the complete file from our backend as if it were a single file. 
+Additionally, you can delete the file as if it were a single file, and Sentc will manage the deletion of the individual encrypted pieces.
+
 :::
 
 ## Encrypt and upload a file
 
-Files can be encrypted for a group (which is recommended) 
-or from one user to another (but here the sender can't decrypt the file **only the receiver**).
+With Sentc, files can be encrypted for a group or for a single user. 
+We recommend encrypting files for a group, as this allows all group members to download and decrypt the file.
 
-A new key will be created for each file which will encrypt the file.
-
-In the following a file will be created, encrypted and uploaded for a group, so every group member can download and decrypt it.
+For each file, Sentc creates a new key that is used for encryption. To encrypt and upload a file for a group, follow these steps:
 
 ::: warning
 It is important to store the `file id` to fetch the file later
@@ -57,10 +58,10 @@ interface FileCreateOutput
 
 ::::
 
-To also sign a file set sign to true in the function parameter. This will use the users sign key. 
-This is normally not necessary when handling the files only from your applications and not from any other apps.
+To also sign a file, set the 'sign' parameter to 'true' in the function. This will use the user's sign key. 
+Note that this is not necessary when handling files only within your application and not from any other apps. 
 
-You need to store the user id too to fetch the right verify key when downloading and verify the file.
+When downloading and verifying the file, you will also need to store the user ID to fetch the right verify key
 
 :::: tabs type:card
 
@@ -116,8 +117,9 @@ This will cancel the actual upload of a file. But this won't delete the file.
 
 ## Download and decrypt a file
 
-To download a file just use the file id.
-A file key could be encrypted by another created key or a group key. The file create will always give you the master key id back.
+To download a file, simply use its file ID. 
+The file key may be encrypted using either another created key or a group key. 
+The file creator will always provide you with the master key ID.
 
 :::: tabs type:card
 
@@ -244,22 +246,21 @@ await group.deleteFile(file_id);
 
 ## Setting up your storage
 
-In the [app options](/guide/create-app/) it is possible to use an own storage for file upload and download.
-For default, you are using the sentc storage, and you get paid for every gb per month.
+In the [app options](/guide/create-app/), you can choose to use your own storage for file upload and download. 
+By default, the SDK uses sentc storage, and you are charged per GB per month for its usage.
 
-If you have your own storage (like aws s3, etc.) you can simply the `delete`, `download` and `upload` urls to this storage.
+If you have your own storage solution, such as AWS S3, you can simply update the `delete`, `download` and `upload` URLs to point to your own storage. 
+This will allow all file parts to be uploaded and downloaded directly from your storage.
 
-Every part will now uploaded and download from your storage.
-
-If a file gets deleted we will call your backend storage to delete this file. 
-We are stacking the delete process to delete a bunch of files at once.
+If a file is deleted, we will call your backend storage to delete the corresponding file. 
+The delete process can be stacked to delete multiple files at once.
 
 In summery:
 
-1. Set your own upload and download endpoint in the app option in the sdk
-2. Prepare your upload endpoint to get multiple parameters through the url
-3. Call the sentc api to register the file part. You will get an id back, this id will be used to delete the file part.
-4. Set the delete endpoint and an optional token in your app file options in the dashboard
+1. Set up your own upload and download endpoints in the app options within the SDK.
+2. Configure your upload endpoint to receive multiple parameters through the URL.
+3. Call the sentc API to register the file part, and you will receive an ID that can be used to delete the file part.
+4. Set up the delete endpoint and an optional token in your app's file options within the dashboard.
 
 See an example for using your own storage: [here](https://gitlab.com/sentclose/sentc/sdk-examples/own-backend-storage)
 
@@ -279,15 +280,17 @@ await Sentc.init({
 
 ::::
 
-We are using the same url for upload and download but with different Http methods:
+We use the same URL for both upload and download, but with different HTTP methods:
 
-- upload: Method post
-- download: Method get
+- Upload: Method post
+- Download: Method get
 
-To update your url just set the file part url in the options. The uploader will upload the parts to the new url. 
-The downloader will then try to download the part from the new url. 
 
-Make sure to transfer your data to the new url.
+To update your URL, simply set the file part URL in the options. 
+The uploader will automatically upload the parts to the new URL, 
+and the downloader will attempt to download the parts from the new URL.
+
+Please ensure that you transfer your data to the new URL.
 
 ### When uploading file parts to your url, register the file part at sentc api 
 

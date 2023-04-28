@@ -2,28 +2,28 @@
 
 ## What is sentc
 
-Sentc is an end-to-end encryption sdk with user and group management.
+Sentc is an end-to-end encryption SDK with user and group management.
 
-End-to-end encryption can be hard to develop and hard to maintain. 
-Luckily there is sentc which gives you full control of your application and provides easy to use encryption in group or from user to user.
-We are also provide multi device support, were an user can have multiple devices in one account, but with different login identifier and password for each device.
+End-to-end encryption can be difficult to develop and maintain. 
+Fortunately, Sentc gives you full control of your application and provides easy-to-use encryption for groups or between users. 
+We also provide multi-device support, where a user can have multiple devices under one account but with different login identifiers and passwords for each device.
 
 ::: tip
-Sentc can also be used with another backend like firebase or your own.
+Sentc can also be used with another backend, such as Firebase or your own.
 
-You can configure your app to call some functions just from the backend with your secret token.
-For backend only function call the equivalent of the 
-function with a `prepare` or `done` prefix like: `prepareRegister()` instead of `register` and 
-call your backend with the data of `prepareRegister` or `doneRegister()` after registration.
+You can configure your app to call some functions only from the backend using your secret token.
+For backend-only function calls, use the equivalent of the function with a 
+`prepare` or `done` prefix, such as `prepareRegister()` instead of `register` 
+and call your backend with the data from `prepareRegister` or `doneRegister()` after registration.
 
 See more at [own backend](/guide/backend-only/)
 :::
 
-Sentc is available for javascript in the browser at the moment, but we are working on a flutter sdk and many more.
+Sentc is currently available for JavaScript in the browser, but we are also working on a Flutter SDK and more.
 
 ## Quick start
 
-Create an account and an app. Use the public ap token in your sdk options.
+Create an account and an app. Use the public API token in your SDK options.
 
 ### Install the sdk.
 
@@ -57,17 +57,18 @@ yarn add @sentclose/sentc
 
 #### Module bundler
 
-The core sdk uses wasm in the browser.
+The core SDK uses WebAssembly (WASM) in the browser.
 
-When you are using a module bundler like webpack and you are not using the browser import,
-[see Module bundler](/guide/module-bundler/) for the module bundler wasm configuration.
+If you are using a module bundler like Webpack and you are not using the browser import,
+please refer to the module bundler WASM configuration in our documentation.
+[see Module bundler](/guide/module-bundler/)
 
 :::
 
 ::::
 
-### Initialize the sdk. 
-This checks if the user is logged in and checks the jwt
+### Initialize the SDK. 
+This function checks if the user is logged in and verifies the JSON Web Token (JWT).
 
 :::: tabs type:card
 
@@ -108,7 +109,7 @@ await Sentc.init({
 ::::
 
 ::: tip Ready
-Now you are ready to register, login, delete a user or a group.
+You are now ready to register, log in, delete a user, or a group.
 :::
 
 :::: tabs type:card
@@ -116,20 +117,22 @@ Now you are ready to register, login, delete a user or a group.
 ::: tab Javascript
 
 ::: warning
-Every function which makes a request (in javascript with a promise) will throw an error if the request or server output is not correct.
+Every function that makes a request (in JavaScript with a Promise) will throw an error if the request or server output is not correct.
 
-We noted when the function will also throw an error
+We have noted when the function will also throw an error.
 :::
 
 ::::
 
 ## Examples
 
-The following examples are just minimal code blocks. To see more incl. their configuration, please see the documentation for each part.
+The following examples are minimal code blocks. To see more, including their configurations, please refer to the documentation for each part.
 
 ### Register and login user
 
-Register a user from the client. It is also possible to register a user from your own backend, see User documentation for more.
+You can register a user from the client. 
+It is also possible to register a user from your own backend. 
+Please refer to the User documentation for more information.
 
 :::: tabs type:card
 
@@ -170,9 +173,10 @@ await Sentc.register("username", "password");
 
 ### Login a user
 
-Login a user with the used username and password. After login the user gets a JWT. A login for your own backend is also possible.
+Log in a user with their username and password. 
+After login, the user receives a JSON Web Token (JWT). It is also possible to implement login functionality for your own backend.
 
-After login you get a user object back.
+After logging in, you will receive a user object.
 
 :::: tabs type:card
 
@@ -213,9 +217,10 @@ const user = await Sentc.login("username", "password");
 
 ### Create a group
 
-A group can be created with the user object. The group keys are encrypted by the user keys automatically.
+You can create a group using the user object. The group keys are automatically encrypted by the user keys.
 
-With the group obj you can encrypt/decrypt content, invite or delete member and do key rotation. For more see Groups.
+With the group object, you can encrypt/decrypt content, invite or delete members, and perform key rotation. 
+For more information, please refer to the Groups documentation.
 
 :::: tabs type:card
 
@@ -237,7 +242,7 @@ const group = await user.getGroup(group_id);
 
 ### Encrypt in a group
 
-There are encryption and decryption of raw data or of strings.
+You can perform encryption and decryption of raw data or strings in a group.
 
 :::: tabs type:card
 

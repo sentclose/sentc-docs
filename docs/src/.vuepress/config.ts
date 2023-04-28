@@ -59,6 +59,10 @@ export default defineConfig({
 				]
 			},
 			{
+				text: "Dashboard",
+				link: "https://api.sentc.com/dashboard/"
+			},
+			{
 				text: 'Code',
 				link: 'https://gitlab.com/sentclose/sentc'
 			},

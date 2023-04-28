@@ -1,13 +1,13 @@
 # Own backend processing
 
-For every endpoint you can decide which token can access it in the app options.
+For each endpoint, you can specify which token is required to access it in the app options.
 
-The default settings are everything with the public token but register and user delete are set to secret token. 
-See more at [Create an app](/guilde/create-app/).
+By default, all endpoints can be accessed using the public token, except for "register" and "user delete", 
+which require the secret token. For more information, please refer to the "[Create an app](/guilde/create-app/)" documentation.
 
-This gives you the flexibility to store more data about the user and just send the data we need for a user to our backend.
+This feature provides flexibility for storing additional user data in your own backend while only sending necessary data to the sentc backend.
 
-In general, every main function in sentc got two equivalent functions with a `prepare` and a `done` prefix.
+In general, every main function in sentc has two equivalent functions with a `prepare` and `done` prefix.
 
 :::: tabs type:card
 
@@ -29,8 +29,8 @@ const user_id = Sentc.doneRegister("server_output");
 
 ::::
 
-Call the `prepare` function in the client to get the needed server input for our api.
-Then make a request to our api from your backend with our secret token.
+To retrieve the necessary server input for your API, call the `prepare` function in the client. 
+Once you have this input, make a request to your own backend API using the secret token provided by sentc.
 
 ## Response
 
@@ -123,12 +123,13 @@ Or simply check the status of the json response in your backend.
 
 ### Login
 
-Login involved multiple requests and data sharing. 
-The best option is to just login in the client and call your backend to get more data. Just check the jwt from the user. 
+Logging in involves multiple requests and data sharing. 
+The recommended approach is to simply log in on the client-side and then call your backend to retrieve additional data. 
+You can verify the JWT token from the user to ensure security.
 
-Another approach might be to just use your own backend login and then login in the client again to the sentc api.
+Alternatively, you can use your own backend's login process and then log in again to the sentc API on the client-side.
 
-The sentc api login is a very safe way to login because the password will never leave the client of your user.
+The sentc API login is a highly secure process because the user's password never leaves their client device.
 
 ::: tip Jwt check
 You can simply check the jwt from the sentc api with your jwt public key see more at [Create an app](/guilde/create-app/).
@@ -136,10 +137,11 @@ You can simply check the jwt from the sentc api with your jwt public key see mor
 
 ### Register device
 
-Prepare register device is analog to first user register. 
-But the validation of the register over a logged in device is still the same as we show in user [here](/guide/user/#register-device).
+The "Prepare register device" function is similar to the initial user registration process. 
+However, the validation for device registration is the same as described in the "User" section [here](/guide/user/#register-device).
 
-Send the input to our api to the endpoint with a post request, without a jwt: `https://api.sentc.com/api/v1/user/prepare_register_device`
+To register a device, send the necessary input to our API endpoint 
+using a POST request without a JWT at: https://api.sentc.com/api/v1/user/prepare_register_device
 
 :::: tabs type:card
 
@@ -178,13 +180,14 @@ Do not forget to send an Authorization header with the Jwt as Bearer value.
 
 ### Create group
 
-Call the prepare function from the user object because we need the user keys.
+To create a group, call the "prepare" function from the user object as we need the user keys.
 
-Send this input to this endpoint with a post request: `https://api.sentc.com/api/v1/group`
+Send the necessary input to this endpoint using a POST request: https://api.sentc.com/api/v1/group
 
-The input contains all client related values are need to create a group, like group keys and the encrypted group key by users public key.
+The input should contain all the client-related values needed to create a group, 
+such as group keys and the encrypted group key by the user's public key.
 
-You will get back the group id was result from the api request.
+Upon successful API request, the resulting group ID will be returned.
 
 :::: tabs type:card
 
@@ -211,11 +214,11 @@ Both the refresh and the jwt are stored in the client. When calling the api and 
 
 ### Refresh from a cookie
 
-In this case, a request is happened to your endpoint. The old jwt will be in an Authorization header.
-Call the refresh endpoint from your backend with a put request: `https://api.sentc.com/api/v1/refresh` with the old jwt token as Authorization Bearer header.
+In this scenario, a request is made to your endpoint with the old JWT token included in the Authorization header. 
+To refresh the token, make a PUT request to the refresh endpoint on the sentc API from your backend: https://api.sentc.com/api/v1/refresh. 
+Include the old JWT token in the Authorization Bearer header.
 
-Set in the options when init the client the refresh endpoint option to cookie.
-
+When initializing the client, set the refresh endpoint option to "cookie" in the options.
 :::: tabs type:card
 
 ::: tab Javascript

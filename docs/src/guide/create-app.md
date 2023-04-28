@@ -19,12 +19,10 @@ Then you are ready to create applications.
 
 ## Create an app
 
-1. When you are on the main dashboard page, click of the New App button in the right corner.
-2. You can choose an app name (the name will be displayed on the dashboard to find your app easier).
-3. Optional change the app options or file options. To change the app options click on the app options name and then options panel will open. The same for file options. 
-Default are: files disabled and only user register and user delete are only accessible with your secret token. See App options for more.
-4. After you will get your app tokens (public and secret) and jwt keys (sign and verify). 
-You can download every important keys and tokens as .env file.
+1. When you are on the main dashboard page, click on the "New App" button in the right corner.
+2. Choose an app name (the name will be displayed on the dashboard to make it easier to find your app).
+3. Optionally, you can change the app options or file options. To change the app options, click on the app options name and then the options panel will open. The same goes for file options. By default, files are disabled and only user register and user delete are accessible with your secret token. See "App options" for more information.
+4. After creating the app, you will receive your app tokens (public and secret) and jwt keys (sign and verify). You can download every important key and token as a .env file.
 
 ## App tokens and keys
 
@@ -62,42 +60,45 @@ the jwt is not fresh anymore. A fresh jwt is needed to delete a user, but the sd
 
 ### App tokens
 
-With the public app token we know that you are accessing the api via the frontend. With the secret token we know it is the backend. 
-App tokens are hashed after creation on the backend and can't recover. 
-To renew the app tokens keep in mind that you need to update the public app token for your sdk too.
+The public app token is used to access the API via the frontend, while the secret token is used for backend access. 
+After creation, app tokens are hashed and cannot be recovered. 
+To renew your app tokens, please remember to update the public app token for your SDK as well.
 
 
 ## App options
 
-In the app option you can control which token can access which endpoint. 
-The default values are public token for every endpoint except for register and delete user. 
-Because sentc only stores the required data, only the username and the encrypted keys, 
-you may need more values from your users, like an e-mail or the full name.
+With app options, you can control which token can access which endpoint. 
+By default, the public token can access every endpoint except for register and delete user. 
+As Sentc only stores the required data, which includes only the username and encrypted keys, 
+you may require additional information from your users, such as an email address or their full name.
 
-To change the options, just click in the row of the endpoint to public, secret or block (which means no token can access this endpoint).
+To change the options, simply click on the row of the endpoint and choose public, secret, or block (which means no token can access this endpoint).
 
-You can also choose other fast options to click on LAX button to allow the public token access for all endpoints.
+Additionally, you can choose other quick options by clicking on the "LAX" button to allow the public token access to all endpoints.
 
 ## App file options
 
-Default is none. No file handling from sentc.
+By default, file handling is disabled.
 
-If you choose Sentc api then you are using the sentc api storage. No more configuration from your side is needed.
+However, if you choose to use the Sentc API storage option, no additional configuration is required on your end.
 
 ### Own backend
 
-Own backend enables you to store the files at your backend storage (so you don't need to pay our storages prices). 
-Please set the files delete endpoint from your backend, 
-which we will call with a delete request and the deleted file part names in the body as json array:
+Using your own backend enables you to store files on your own storage system, 
+so you don't need to pay for our storage services. 
+To use this option, please set the files delete endpoint on your backend. 
+We will call this endpoint with a delete request, 
+passing the names of the deleted file parts in a JSON array in the request body.
+
 
 ````json
 ["name_0", "name_1", "name_2"]
 ````
 
-A file got many parts and every part got an id. This id is in the array.
+Each file is divided into multiple parts, each with its own unique ID. These IDs are passed in an array.
 
-We are deleting the files with a worker, so there can be many file parts at once.
+As we use a worker to delete files, multiple file parts can be deleted at once.
 
-You can also set a token, so you know that the request comes from the sentc api to delete your files.
+You can also set a token to ensure that the delete request comes from the Sentc API for your files.
 
-See [Files](/guide/file/) for more about file handling in sentc.
+For more information about file handling in Sentc, please refer to the [Files](/guide/file/) section.

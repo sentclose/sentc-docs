@@ -1,21 +1,25 @@
 # User
 
-Sentc provides secure registration and login out of the box, but we don't store any data about the user.
-If you need more values to store about the user like E-mail or Full name you can register the user from your own backend. 
+Sentc provides secure registration and login capabilities out of the box, 
+but we do not store any additional data about the user. 
+If you require additional information, such as an email address or full name, you can register the user from your own backend.
 
-See more at [own backend](/guide/backend-only/)
+Please refer to the [own backend](/guide/backend-only/) section for more information.
 
-Users are needed to encrypt / decrypt and join groups. A user got public/private key and sign/verify key. 
-The keys are not available for the api because they are encrypted with the given password, which the api won't know. 
+Users are required for encryption/decryption and group joining. 
+Each user has a public and private key, as well as a sign and verify key. 
+These keys are not available through the API, as they are encrypted using the provided password, 
+which the API does not have access to.
 
-A user account can have multiple devices with different logins but any device can access the user keys.
+A user account can have multiple devices with different logins, but any device can access the user's keys.
 
 ## Register
 
-The first register is also the first device register. See register a device for more.
+The first registration is also considered the first device registration. 
+Please refer to the "Register a Device" section for more information.
 
-The username / identifier can be anything, like a name, an email or a random number. 
-The name is only needed to log in to the right device.
+The username/identifier can be anything, such as a name, email address, or random number. 
+The username is only required to log in to the correct device.
 
 :::: tabs type:card
 
@@ -51,14 +55,14 @@ await Sentc.register("username", "password");
 </code-group>
 
 ::: warning
-This function will also throw an error if the **username exists for your app**.
+This function will also throw an error if the **chosen username already exists** within your app.
 :::
 
 ::::
 
-The username and password can be generated too, to get a unique and secure login for each device. 
+The username and password can also be generated to ensure a unique and secure login for each device. 
 The following function will create a random device name and password. 
-But they are not stored, so store them on the device of the user.
+However, these values are not stored, so please ensure that they are securely stored on the user's device.
 
 :::: tabs type:card
 
@@ -101,8 +105,9 @@ await Sentc.register(device_identifier, device_pw);
 
 ::::
 
-The registration will throw an error if the username is already taken. There is a way to check if the name is taken. 
-This function will return true is the name is still available:
+The registration process will throw an error if the chosen username is already taken. 
+To check if a username is still available, you can use the following function, 
+which will return true if the username is still available:
 
 :::: tabs type:card
 
@@ -142,15 +147,17 @@ const available = await Sentc.checkUserIdentifierAvailable("identifier");
 ::::
 
 ::: tip
-The default app settings for user register are from another backend because sentc won't save other data then the keys and the username.
+The default app settings for user registration are designed to be used with your own backend, 
+as Sentc will not store any data other than the keys and username. 
 
-The following shows how to register a user from your backend
+The following code shows how to register a user from your backend:
 :::
 
 ### Own backend
 
-When you are using your own backend to store more information about the user, you can just use the prepare function. 
-Send the output to our api with a post request to this endpoint: `https://api.sentc.com/api/v1/register`
+If you are using your own backend to store additional user information, 
+you can use the prepare function to prepare the registration data. 
+Then, send the output to our API with a POST request to the following endpoint: `https://api.sentc.com/api/v1/register`
 
 :::: tabs type:card
 
@@ -194,13 +201,13 @@ See more at [own backend](/guide/backend-only/)
 
 ## Login
 
-The login just use the identifier and the password which was used for registration. 
-The user will be logged in to the device with the given identifier. 
+To log in, you just need to provide the identifier (i.e., username, email, or random number) and the password that was used during registration. 
+The user will then be logged in to the device associated with the given identifier.
 
-The used password won't be sent to the api, so we can't grab the passwords of the user. 
-This is done by using a password derivation function right in the client and not on the server. 
+The password is not sent to the API, so we cannot access or retrieve the user's password. 
+This is accomplished by using a password derivation function in the client instead of on the server.
 
-This function will throw an error if the identifier or the password are not correct.
+If the identifier or the password is incorrect, this function will throw an error.
 
 :::: tabs type:card
 
@@ -236,14 +243,14 @@ const user = await Sentc.login("identifier", "password");
 </code-group>
 
 ::: warning
-This function will also throw an error if the **username not found** or the **password was wrong**.
+This function will also throw an error if the **username is not found** or the **password is incorrect**.
 :::
 
 ::::
 
-After successfully logged in you get a user object back which is needed to fulfill all user action, like creating a group.
+After successfully logging in, you will receive a user object, which is required to perform all user actions, such as creating a group.
 
-You can still get the actual user object by calling the init function like this:
+You can obtain the actual user object by calling the init function as follows:
 
 :::: tabs type:card
 
@@ -282,8 +289,7 @@ const user = await Sentc.init({
 
 ::::
 
-
-or by calling get actual user function. This function won't check the jwt.
+Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
 
 :::: tabs type:card
 
@@ -316,21 +322,21 @@ const user = await Sentc.getActualUser();
 
 ::::
 
-## The user data
+## The User Data
 
-The data contains all information about the user account and the device, sentc needs.
+The data contains all information about the user account and the device that sentc needs.
 
 For the device:
-- asymmetric key pairs only for the device
-- device id
+- Asymmetric key pairs only for the device.
+- Device ID.
 
 For user account:
-- asymmetric key pairs for the account (which is also used to join a group)
-- the actual jwt for this session
-- the refresh token for this session
-- user id
+- Asymmetric key pairs for the account (which are also used to join a group).
+- The actual JWT for this session.
+- The refresh token for this session.
+- User ID
 
-To get the data just access the data in the user class.
+To get the data, just access the data in the user class.
 
 :::: tabs type:card
 
@@ -347,26 +353,27 @@ const device_id = user.data.device_id;
 
 ::::
 
-## Authentification and JWT
+## Authentication and JWT
 
-After login the user received a json web token (jwt) to authenticate at the sentc api. This jwt is only valid for 5 min.
-But don't worry the sdk will refresh the jwt automatically when the users try to do a request with an invalid jwt.
+After logging in, the user receives a JSON Web Token (JWT) to authenticate with the sentc API. 
+This JWT is only valid for 5 minutes. 
+But don't worry, the SDK will automatically refresh the JWT when the user tries to make a request with an invalid JWT.
 
-For refreshing the jwt a refresh token is needed. This token is obtained by the login too.
+To refresh the JWT, a refresh token is needed. This token is obtained during the login process.
 
-There are 3 strategies to refresh a jwt. 
-However, this is only necessary if you must use http-only cookies for the browser.
-If you are using other implementations, go with the default.
+There are three strategies to refresh a JWT. 
+However, this is only necessary if you must use HTTP-only cookies for the browser. 
+If you are using other implementations, stick with the default.
 
 See more at [own backend](/guide/backend-only/)
 
 
-## Register device
+## Register Device
 
-To register a new device, the user must be logged in on another device.
-The process has three parts: prepare the data on the new device, send the data to the logged in device and add the new device.
+To register a new device, the user must be logged in on another device. 
+The process has three parts: preparing the data on the new device, sending the data to the logged-in device, and adding the new device.
 
-On the new device do this to produce the input. The identifier and the password could be generated the way we showed at register user.
+To produce the input on the new device, follow these steps. The identifier and password could be generated the same way as during user registration.
 
 :::: tabs type:card
 
@@ -402,7 +409,7 @@ This function will also throw an error if the **username still exists for your a
 
 ::::
 
-Send the input to the logged in device (maybe through a QR code, the logged in device just scans the qr code) and call this function with the input.
+Send the Input to the Logged-In Device (possibly through a QR code, which the logged-in device can scan), and call this function with the input.
 
 :::: tabs type:card
 
@@ -415,13 +422,13 @@ await user.registerDevice(input);
 
 ::::
 
-This will make sure that only the devices of the user got access to the user data.
+This will ensure that only the user's devices have access to the user's data.
 
-After this the user can just log in on the new device.
+After this, the user can log in on the new device.
 
 ## Get devices
 
-The device list can be fetched via pagination.
+The device list can be fetched through pagination.
 
 :::: tabs type:card
 
@@ -446,7 +453,7 @@ interface UserDeviceList
 
 ::::
 
-To fetch the next pages, just call this function with the last fetched device.
+To fetch the next pages, simply call this function with the last fetched device.
 
 :::: tabs type:card
 
@@ -464,7 +471,7 @@ const devices = await user.getDevices(last_item);
 
 ## Change password
 
-The user must enter the old and the new password.
+The user must enter the old and new passwords.
 
 :::: tabs type:card
 
@@ -481,9 +488,9 @@ This function will also throw an error if **the old password was not correct**
 
 ## Reset password
 
-To reset a password the user must be logged in on the device. 
-A normal reset without logged in is not possible because the user must have access to the device keys. 
-If the user doesn't have access he/she can't decrypt the information anymore because the sentc api got not access to the keys too.
+To reset a password, the user must be logged in on the device. 
+A normal reset without being logged in is not possible because the user must have access to the device keys. 
+If the user doesn't have access, he/she can no longer decrypt the information because the sentc API doesn't have access to the keys either.
 
 When resetting the password, the secret keys of the device will be encrypted again with the new password.
 
@@ -518,7 +525,7 @@ This function will also throw an error if **the identifier still exists for your
 
 ## Log out
 
-After logout, every local data will be deleted from the client.
+After logging out, all local data will be deleted from the client.
 
 :::: tabs type:card
 
@@ -534,8 +541,8 @@ await user.logOut();
 
 ## Delete device
 
-To delete a device, a device password from any device and the device id are needed to delete the device. The id can be got from the user data 
-or from fetching the device list.
+To delete a device, a device password from any device and the device ID are needed.
+The ID can be obtained from the user data or by fetching the device list.
 
 :::: tabs type:card
 
@@ -567,7 +574,7 @@ const device_id = user.data.device_id;
 
 ## Delete account
 
-To delete the whole account, use any device password. 
+To delete the entire account, use any device password. 
 
 :::: tabs type:card
 

@@ -1,30 +1,33 @@
 # Encryption and decryption
 
-Encryption can be done by the user or the group object. 
-A new symmetric key for encryption can be created for a user or a group too.
+Encryption can be performed by either the user or the group object. 
+Additionally, a new symmetric key can be generated for encryption purposes for either a user or a group.
 
 ## Encrypt for a group
 
-The group will encrypt everything with the actual used group key. 
-After a [key rotation](/guide/group/#key-rotation) the new group key is used to encrypt new content, 
-but the old one can still be used to decrypt the content. 
+When encrypting content for a group, the content will be encrypted using the group's current key. 
+In the event of a [key rotation](/guide/group/#key-rotation), the new group key will be used to encrypt new content, 
+while the previous key can still be used to decrypt previously encrypted content.
 
 ::: tip
-Sentc will handle the key management for you: when which key should be used to encrypt and which key must be used to decrypt.
+Sentc will handle key management for you, determining which key should be used for encryption and which key should be used for decryption.
 :::
 
 ## Encrypt for a user
 
-When encrypting for a user, the content is encrypted with the users public key. Please keep in mind, that public / private key encryption can't handle large amount of data.
-The best practices is to use a symmetric key to encrypt the content and then encrypt the symmetric key with the user public key (like in groups).
+When encrypting content for a user, the content is encrypted using the user's public key. 
+However, it is important to note that public/private key encryption may not be suitable for handling large amounts of data. 
+To address this, best practice is to use a symmetric key to encrypt the content, 
+and then encrypt the symmetric key with the user's public key (as with groups).
 
-For user encrypt, the **reply user id is needed** to encrypt the content for the user
+When encrypting content for a user, the reply user ID is required.
 
 ::: tip
-We highly recommend creating a group even for user to user communication (1:1). 
-Then the user who encrypt the data is also able to decrypt the data later without any configuration.
+We highly recommend creating a group even for one-on-one user communication. 
+This allows the user who encrypts the data to also decrypt it later without any additional configuration. 
+To achieve this, simply auto-invite the other user and use the "stop invite" feature for this group. 
 
-Just auto invite the other user and use stop invite for this group. [See more at group - Auto invite](/guide/group/#invite-more-user).
+For more information on auto-invite functionality, please see the [auto invite](/guide/group/#invite-more-user). section.
 :::
 
 ## Encrypt raw data
@@ -118,9 +121,9 @@ const decrypted = await user.decrypt(encrypted);
 
 ## Encrypt strings
 
-This is a special case because otherwise you must use an utf-8 reader to read the text as bytes and then encrypt these bytes.
+Encrypting strings is a special case, as it requires converting the text to bytes using an UTF-8 reader before encryption.
 
-Sentc will handle this for you with the string encrypt functions.
+To simplify this process, Sentc offers string encryption functions that handle this conversion for you.
 
 :::: tabs type:card
 
@@ -168,15 +171,17 @@ const decrypted = await user.decryptString(encrypted);
 
 ## Register a key
 
-You can also create a new key to encrypt the content. This can helpful for asymmetric encryption, where the data length is very limited.
+In addition to using existing keys, you can also create a new key specifically for encrypting content. 
+This can be particularly useful for asymmetric encryption, where data length is limited.
 
 ### Create a new symmetric key
 
-When creating a new key for a group then this key will be encrypted by the actual group key. 
-For another user, the key will be encrypted be the users public key.
+When creating a new key for a group, the key will be encrypted using the group's current key. 
+For another user, the key will be encrypted using the user's public key.
 
-You don't need to store this key, because sentc will handle this for you. You can just fetch the key. 
-Just make sure to store the used key id and the master key id which was used to encrypt the key for the encrypted content to fetch it later to decrypt it.
+There is no need to store this key, as Sentc will handle this for you. 
+Simply fetch the key and store the used key ID and the master key ID that was used to encrypt the key for the encrypted content, 
+in order to fetch it later for decryption.
 
 ::: tip
 For sentc file handling, the sdk will create a new key for every file the same way
@@ -233,9 +238,10 @@ const decrypted = key.decrypt(encrypted);
 
 ### Fetch a key
 
-When you saved the master key id (the key is which was used to encrypt the key) and the key id then you can fetch the key.
+If you have saved the master key ID (the key that was used to encrypt the key) and the key ID, you can fetch the key.
 
-Make sure that the user got access to the master key (like group member, or it was his/her public key used to encrypt).
+However, it is important to ensure that the user has access to the master key 
+(such as being a group member or having their public key used for encryption).
 
 :::: tabs type:card
 
@@ -260,7 +266,8 @@ const key = await user.fetchKey("<key_id>", "<master_key_id>");
 
 ## Sign and verify the encrypted data
 
-Sentc provides a way to sign the data after encrypt and verify the encrypted data before decrypt.
+Sentc offers the ability to sign data after encryption and verify data before decryption. 
+This ensures the authenticity of the encrypted data and protects against potential tampering.
 
 ### Sign
 

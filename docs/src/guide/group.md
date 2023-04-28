@@ -1,21 +1,21 @@
 # Group
 
-Everything is a group can be shared with every group member. Every group member get access to the keys of a group.
-If you encrypt something for a group, every group member is able to decrypt it.
-It can also be used for 1:1 user session for more flexibility. 
+Everything in a group can be shared with every group member. Every group member gets access to the keys of the group. 
+If you encrypt something for a group, every group member is able to decrypt it. 
+It can also be used for 1:1 user sessions for more flexibility.
 
 In sentc everything is a group, even the user account with all devices as members.
 
-A group has a public / private key pair, symmetric key and for user groups a sign / verify key pair. 
-All of those keys are coupled together via an internal id. 
-With a key rotation new keys are created but the old one can still be used.
-No extra key management is needed from your side.
+A group has a public/private key pair and symmetric key. 
+All of those keys are coupled together via an internal ID. 
+With a key rotation, new keys are created, but the old one can still be used. 
+No extra key management is needed on your side.
 
 ## Create a group
 
-When creating a group all group private keys are encrypted in the client by the creators public key and send to the server.
+When creating a group, all group private keys are encrypted in the client by the creator's public key and sent to the server.
 
-Call create group from the user obj from login a user.
+Call createGroup() from the User object after logging in a user.
 
 :::: tabs type:card
 
@@ -28,9 +28,9 @@ const group_id = await user.createGroup();
 
 ::::
 
-When you are using your own backend, call the prepare function. This returns the client data for a new group. 
-Just call our Api with a post request and this data from your backend: `https://api.sentc.com/api/v1/group`
-Don't forget the Authorization header with the jwt.
+When you use your own backend, call the prepare function. This function returns the client data for a new group. 
+Make a POST request to our API (https://api.sentc.com/api/v1/group) with this data from your backend. 
+Don't forget to include the Authorization header with the JWT token.
 
 :::: tabs type:card
 
@@ -47,8 +47,8 @@ See more at [own backend](/guide/backend-only/)
 
 ## Fetch a group
 
-When a user got access to a group the keys can be fetched from the api and got decrypt for the caller. 
-Fetch a group with the group id. This returned a group obj which is used for all group related actions.
+To access the keys of a group, a user can fetch them from the API and decrypt them for their own use. 
+To fetch a group, use the group ID as a parameter. This returns a group object that can be used for all group-related actions.
 
 :::: tabs type:card
 
@@ -63,7 +63,7 @@ const group = await user.getGroup(group_id);
 
 ## Get all groups
 
-To get all group ids where the user is member use this function:
+To retrieve all group IDs where the user is a member, use this function:
 
 :::: tabs type:card
 
@@ -108,9 +108,9 @@ const groups = await user.getGroups(last_item);
 
 ## Encrypt and decrypt in a group
 
-Every group member has access to all group keys and can encrypt or decrypt for every group member. 
-For encrypt the group uses the actual newest group key. 
-For decrypt the group fetches automatically the right key which was used to encrypt the data.
+Every group member has access to all group keys and can encrypt or decrypt data for any other group member. 
+To encrypt data, the group uses the most current group key. 
+To decrypt data, the group automatically retrieves the key that was used to encrypt the data.
 
 :::: tabs type:card
 
@@ -132,16 +132,17 @@ See more at [encrypt decrypt](/guide/encrypt/).
 
 ## Group rank
 
-The higher the rank, the more rights the user has in a group. 
-An admin or creator can do everything but a normal member can't even accept join requests.
-The rank is a number from 0 to 3.
+The user's rank in a group determines their level of access. 
+An administrator or creator has full control, 
+while a regular member may have limited privileges such as being unable to accept join requests. 
+Ranks are assigned as numbers ranging from 0 to 4
 
-- 0 is the creator of a group and can do everything
-- 1 is an admin and can do almost everything, except kicking the creator
-- 2 can change user: accept join requests, make invite, change user rank (just to max rank 2), kick group members (when the rank is not higher than 2)
-- 3 and 4 are normal user ranks. A new member is automatically rank 4. So you can use rank 3 for other actions like content.
+- 0 is the creator of a group and has full control
+- 1 is an administrator and has nearly full control, except for removing the creator
+- 2 can manage users: accept join requests, send invites, change user ranks (up to rank 2), and remove group members (with a rank of 2 or lower)
+- 3 and 4 are normal user ranks. A new member is automatically assigned rank 4. Rank 3 can be used for other actions, such as content management.
 
-To change a rank you just need the sentc api user id and set a new rank number:
+To change a user's rank, you need the Sentc API user ID and assign a new rank number:
 
 :::: tabs type:card
 
@@ -154,9 +155,10 @@ await group.updateRank("internal_user_id", 2)
 
 ::::
 
-If you have your own backend and want to change the rank from the secret token, 
-here is the function to get the input data for the api.
-Just call our Api with a put request, the group id and this data from your backend: `https://api.sentc.com/api/v1/group/<the_group_id>/change_rank`
+If you have your own backend and want to change a user's rank using a secret token, 
+use this function to obtain the input data for the API. 
+To change the rank, make a PUT request to the following URL with the group ID 
+and the input data from your backend: `https://api.sentc.com/api/v1/group/<the_group_id>/change_rank`
 
 :::: tabs type:card
 
@@ -173,12 +175,12 @@ See more at [own backend](/guide/backend-only/)
 
 ## Invite more user
 
-There are two methods how to get more users to a group, by invite and by join request. 
-When inviting a user or accepting a join request, the group keys are encrypted by the new members actual newest public key.
+There are two methods to add more users to a group: by invitation or by join request. 
+When a user is invited or their join request is accepted, the group keys are encrypted using the new member's most current public key.
 
 ### Invite a user
 
-This is called from a group admin (rank 0 - 2) to a non group member. The non group member can accept or reject the invite.
+Inviting a user is done by a group administrator (ranks 0-2) to a non-group member. The non-group member can choose to accept or reject the invitation.
 
 :::: tabs type:card
 
@@ -259,7 +261,9 @@ await user.rejectGroupInvite("group_id");
 
 ### Join request
 
-This is called from a non group member to get access to a group. A group admin can accept or reject the request. Call it with the group id.
+A non-group member can request to join a group by calling this function. 
+A group administrator can choose to accept or reject the request. 
+To request to join a group, call this function with the group ID.
 
 :::: tabs type:card
 
@@ -341,8 +345,9 @@ await group.rejectJoinRequest("user_id");
 
 ### Auto invite
 
-This is also called from a group admin, but this time the non group member is automatically invited and accepted without any actions. 
-This can be useful for 1:1 user sessions.
+A group administrator can use this function to automatically invite and accept a non-group member, 
+without requiring any additional actions from the new member. 
+This feature can be useful for one-on-one user sessions.
 
 :::: tabs type:card
 
@@ -357,9 +362,9 @@ await group.inviteAuto("user_id");
 
 ### Stop invite
 
-When calling this function, then no non group member can send join requests and no group admin can invite more users. 
-
-This is useful for 1:1 user session. After auto inviting the other user, close the invite.
+Calling this function will prevent non-group members from sending join requests and group administrators from inviting more users. 
+This feature can be useful for one-on-one user sessions. 
+After automatically inviting the other user, you can use this function to close the invitation process.
 
 :::: tabs type:card
 
@@ -419,7 +424,8 @@ const members = await group.getMember(last_item);
 
 ## Delete group member
 
-A group member with rank higher than 2 (0,1,2) can delete member which are the same or lower in rank. The member can't kick themselves.
+A group member with a rank higher than 2 (0, 1, 2) can use this function to delete another member with the same or lower rank. 
+However, a member cannot delete themselves using this function.
 
 :::: tabs type:card
 
@@ -449,10 +455,11 @@ await group.leave();
 
 ## Parent and child group
 
-A group can be a child of a parent group. This will create a hierarchy of groups. 
-Every member of the parent group got access to the child group with the same rank as in the parent group. 
-When a new member joins the parent group he/she is automatically member of all child groups.
-Multiple child groups are also possible like
+A group can be set as a child of a parent group, creating a hierarchical structure of groups. 
+All members of the parent group are automatically granted access to the child group(s) 
+with the same rank as in the parent group. When a new member joins the parent group, 
+they are automatically added as a member to all child groups. 
+Multiple child groups can also be created:
 
 ````
 parent
@@ -475,8 +482,9 @@ const group_id = await group.createChildGroup();
 
 ::::
 
-If you want to create the group from your own backend then you can use this function 
-and call your api with a post request and this input. Endpoint: `https://api.sentc.com/api/v1/group/<the_group_id>/child`
+If you want to create a child group from your own backend, you can use this function to generate the necessary input data. 
+After generating the data, call your API with a POST request and include the input data. 
+The endpoint for creating a child group is: https://api.sentc.com/api/v1/group/<the_group_id>/child
 
 :::: tabs type:card
 
@@ -493,10 +501,11 @@ See more at [own backend](/guide/backend-only/)
 
 ## Key rotation
 
-A group can have more keys at the same time. With a key rotation new keys are created for a group but the old keys can still be used.
-The rotation is done on server side (but the server don't know the clear text keys) so it can be used for large groups as well.
+A group can have multiple encryption keys at the same time. 
+Key rotation is the process of generating new encryption keys for a group while still allowing the use of the old ones. 
+This is done on the server side, but the server does not have access to the clear text keys, making it suitable for large groups as well.
 
-Key rotation could be used after a member leaves, so every new content is encrypted by the newest key.
+Key rotation can be useful when a member leaves the group, ensuring that all new content is encrypted using the newest key.
 
 ### Key rotation start
 
@@ -513,11 +522,11 @@ await group.keyRotation();
 
 ::::
 
-The new keys will be created on your device, encrypted by the starter public key and send to the api. 
-The api will encrypt the nw group keys for all other member, but the api still don't know the clear text keys and 
-can't use them because the new keys are encrypted by an ephemeral key which is only accessible to the group members.
+The new keys will be created on your device, encrypted by the starter public key, and sent to the API. 
+The API will encrypt the new group keys for all other members, but the API still doesn't know the clear text keys and 
+can't use them because the new keys are encrypted by an ephemeral key that is only accessible to the group members.
 
-It doesn't matter how many members are in this group, because the user device are not doing the encryption for every member.
+It doesn't matter how many members are in this group because the user devices are not doing the encryption for every member.
 
 ### Key rotation finish
 

@@ -5,12 +5,12 @@ tagline: Encryption as a service
 actionText: Quick Start →
 actionLink: /guide/
 features:
-- title: Easy to use encryption
-  details: Create highly secure applications with a few lines of code
+- title: Easy-to-use encryption
+  details: Create highly secure applications with just a few lines of code.
 - title: Group management
-  details: Create groups where every member can encrypt content for all other member, incl. key rotation to renew the keys but still using the old ones.
+  details: Create groups where every member can encrypt content for all other members, including key rotation to renew the keys while still using the old ones.
 - title: User management
-  details: Register and login users securely and easy.
+  details: Register and securely log in users with ease.
 footer: © 2022 - Sentclose
 ---
 
