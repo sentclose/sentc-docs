@@ -150,7 +150,7 @@ const available = await Sentc.checkUserIdentifierAvailable("identifier");
 The default app settings for user registration are designed to be used with your own backend, 
 as Sentc will not store any data other than the keys and username. 
 
-The following code shows how to register a user from your backend:
+The following code shows how to register a user from your backend.
 :::
 
 ### Own backend
