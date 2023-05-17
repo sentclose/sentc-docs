@@ -47,15 +47,15 @@ export default defineConfig({
 			{
 				text: "Integrations",
 				items: [
-					{text: "Javascript / Web", link: "https://gitlab.com/sentclose/sentc/sdk-implementations/sentc-javascript"},
-					{text: "Dart / Flutter", link: "https://gitlab.com/sentclose/sentc/sdk-implementations/sentc-flutter"}
+					{text: "Javascript / Web", link: "https://github.com/sentclose/sentc-javascript"},
+					{text: "Dart / Flutter", link: "https://github.com/sentclose/sentc-flutter"}
 				]
 			},
 			{
 				text: "Examples",
 				items: [
-					{text: "Nuxt 2", link: "https://gitlab.com/sentclose/sentc/sdk-examples/nuxt2"},
-					{text: "Node js custom file storage", link: "https://gitlab.com/sentclose/sentc/sdk-examples/own-backend-storage"}
+					{text: "Nuxt 2", link: "https://github.com/sentclose/sentc-nuxt2-example"},
+					{text: "Node js custom file storage", link: "https://github.com/sentclose/sentc-example-storage-nodejs"}
 				]
 			},
 			{
@@ -64,12 +64,12 @@ export default defineConfig({
 			},
 			{
 				text: 'Code',
-				link: 'https://gitlab.com/sentclose/sentc'
+				link: 'https://github.com/sentclose'
 			},
-			{
-				text: "Homepage",
-				link: "https://sentclose.com/"
-			}
+			// {
+			// 	text: "Homepage",
+			// 	link: "https://sentclose.com/"
+			// }
 		],
 		sidebar: {
 			'/guide/': [
