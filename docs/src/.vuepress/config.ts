@@ -45,6 +45,10 @@ export default defineConfig({
 				link: '/guide/',
 			},
 			{
+				text: "Protocol",
+				link: "/protocol/"
+			},
+			{
 				text: "Integrations",
 				items: [
 					{text: "Javascript / Web", link: "https://github.com/sentclose/sentc-javascript"},
@@ -88,6 +92,15 @@ export default defineConfig({
 					]
 				}
 			],
+			"/protocol/": [
+				{
+					title: "Protocol",
+					collapsable: false,
+					children: [
+						""
+					]
+				}
+			]
 		}
 	},
 
