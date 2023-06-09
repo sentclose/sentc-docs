@@ -477,6 +477,12 @@ To create a child group just call group create in the parent group not in the us
 
 ```ts
 const group_id = await group.createChildGroup();
+
+//get the group from a user, if not loaded, the parent group will be loaded automatically
+const group = await user.getGroup(group_id);
+
+//or get it from the parent group
+const group_from_parent = await group.getChildGroup(group_id);
 ```
 :::
 
@@ -498,6 +504,84 @@ const input = await group.prepareCreateChildGroup();
 ::::
 
 See more at [own backend](/guide/backend-only/)
+
+## Connected groups
+
+A group can also be a member in another group which is not a child of this group. 
+Connected groups can also have children or be a child of a parent.
+Groups with access to the connected group got also access to all the child groups.
+A connected group can't be member in another group, so only normal groups can be a member in a connected group.
+Normal groups can't have other groups as member except their child groups.
+
+A connected group can be created from a normal group.
+
+
+:::: tabs type:card
+
+::: tab Javascript
+
+```ts
+const group_id = await group.createConnectedGroup();
+```
+:::
+
+::: tab Flutter
+```dart
+final groupId = await group.createConnectedGroup();
+```
+:::
+
+::::
+
+To fetch the connected group you can either fetch it from the group or from the user. 
+From user requires the group id which was connected to the connected group.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+// from the group
+const connected_group = await group.getConnectedGroup(connected_group_id);
+
+//from the user, the group id is needed
+const connected_group_by_user = await user.getGroup(connected_group_id, group_id);
+```
+:::
+
+::: tab Flutter
+```dart
+// from the group
+final connectedGroup = await group.getConnectedGroup(connectedGroupId);
+
+//from the user, the group id is needed
+final connectedGroupByUser = await user.getGroup(connectedGroupId, groupId);
+```
+:::
+
+::::
+
+When accessing a child group of a connected group, make sure to load the parent group first which is connected to the user group.
+
+## Child groups vs connected groups, when use what?
+
+The problem with child groups is that it is a fixed structure and can't be changed in the future.
+
+A connected group can be helpfully if you want to give a group (and all its parents) access to another group (and all its children).
+This can be used to connect resources and users together, e.g.:
+- user in department groups (hr, marketing, development)
+- resources like customer, employee data, devops secrets
+- let dev manager access group employee data and devops secrets and marketing access customer.
+- Inside each department group there are multiple child groups for each sub department. If the manger is in the parent group, he/she can access every sub group
+
+The recommended approach is to use normal groups for user and connected groups for resources.
+
+````
+parent
+    child from parent                               -->              connected group
+        child from child from parent                                    child from connected group
+            child from child from parent
+    child from parent
+````
 
 ## Key rotation
 
