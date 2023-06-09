@@ -6,7 +6,7 @@ actionText: Quick Start →
 actionLink: /guide/
 features:
 - title: Easy-to-use encryption
-  details: Create highly secure applications with just a few lines of code.
+  details: Create secure applications with just a few lines of code.
 - title: Group management
   details: Create groups where every member can encrypt content for all other members, including key rotation to renew the keys while still using the old ones.
 - title: User management
@@ -122,4 +122,58 @@ console.log(decrypted_string);  //hello there!
 </code-group>
 :::
 
+::: tab Flutter
+Easy to install:
+
+```bash
+flutter pub add sentc
+```
+
+Easy to use:
+
+```dart
+demo() async {
+  //init the client
+  await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
+
+  //register a user
+  await Sentc.register("userIdentifier", "password");
+
+  //log in a user
+  final user = await Sentc.login("userIdentifier", "password");
+
+  //create a group
+  final groupId = await user.createGroup();
+
+  //load a group. returned a group obj for every user.
+  final group = await user.getGroup(groupId);
+
+  //invite another user to the group. Not here in the example because we only got one user so far
+  // await group.inviteAuto("other user id");
+
+  //encrypt a string for the group
+  final encrypted = await group.encryptString("hello there!");
+
+  //now every user in the group can decrypt the string
+  final decrypted = await group.decryptString(encrypted);
+
+  print(decrypted); //hello there!
+
+  //delete a group
+  await group.deleteGroup();
+
+  //delete a user
+  await user.deleteUser("password");
+}
+```
+:::
+
 ::::
+
+## Limitations
+
+The protocol is designed for async long-running communication between groups. 
+- A group member should be able to decrypt the whole communication even if they joined years after the beginning. 
+- Group member should get decrypt all messages even if they were offline for years.
+
+The both requirements make perfect forward secrecy impossible. See more [at the Protocol](/protocol/) how we solved it.
