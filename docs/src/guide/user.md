@@ -626,3 +626,111 @@ const key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
 :::
 
 ::::
+
+## Create safety number
+
+A safety number (or public fingerprint) can be used to check if another user is the real user. 
+Both users can create a safety number with each other and can then check if the number is the same. 
+This check should be done live in person or via video chat.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+const number = await user.createSafetyNumber({
+	user_id: "<user_to_compare_id>",
+	verify_key_id: "<the_verify_key_id_to_compare>"
+});
+
+//the other user side
+const number_2 = await user.createSafetyNumber({
+	user_id: "<user_to_compare_id>",
+	verify_key_id: "<the_verify_key_id_to_compare>"
+});
+```
+:::
+
+::: tab Flutter
+```dart
+final number = await await user.createSafetyNumber(
+  UserVerifyKeyCompareInfo(
+    "<user_to_compare_id>", 
+    "<the_verify_key_id_to_compare>",
+  ),
+);
+
+//the other user side
+final number2 = await await user.createSafetyNumber(
+  UserVerifyKeyCompareInfo(
+    "<user_to_compare_id>", 
+    "<the_verify_key_id_to_compare>",
+  ),
+);
+```
+:::
+
+::::
+
+## Verify a users public key
+
+To make sure that the public key which is used to encrypt the group keys really belongs to the user, this key can be verified.
+A safety number can be helpful to check if the verify key is the right one.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+//fetch a public key of a user
+const public_key = await sentc.getUserPublicKey(user_id);
+
+//now verify if this key is from the same user
+const verify: boolean = await sentc.verifyUserPublicKey(user_id, public_key);
+```
+:::
+
+::: tab Flutter
+```dart
+final publicKey = await Sentc.getUserPublicKey(userId);
+
+final verify = await Sentc.verifyUserPublicKey(userId, publicKey);
+```
+:::
+
+::::
+
+To check the right verify key of this public key the user can get it:
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+const public_key = await sentc.getUserPublicKey(user_id);
+
+const verify_key_id = public_key.public_key_sig_key_id;
+
+//create a safety number with this key
+const number = await user.createSafetyNumber({
+	user_id: user_id,
+	verify_key_id: verify_key_id
+});
+
+const verify: boolean = await sentc.verifyUserPublicKey(user_id, public_key);
+```
+:::
+
+::: tab Flutter
+```dart
+final publicKey = await Sentc.getUserPublicKey(userId);
+
+final verifyKeyId = publicKey.publicKeySigKeyId;
+
+//create a safety number with this key
+final number = await user.createSafetyNumber(
+  UserVerifyKeyCompareInfo(userId, verifyKeyId),
+);
+
+final verify = await Sentc.verifyUserPublicKey(userId, publicKey);
+```
+:::
+
+::::
