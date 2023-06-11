@@ -505,6 +505,32 @@ const input = await group.prepareCreateChildGroup();
 
 See more at [own backend](/guide/backend-only/)
 
+To get all children of the first level use the `getChildren()` function in the group object.
+
+It returns a List with the child group id, the child group created time and the parent id.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+const children: GroupChildrenListItem[] = await group.getChildren();
+
+//to get the 2nd page pass in the last child
+const children_page_two: GroupChildrenListItem[] = await group.getChildren(children[children.length -1]);
+```
+::: 
+
+::: tab Flutter
+```dart
+List<GroupChildrenList> children = await group.getChildren();
+
+//to get the 2nd page pass in the last child
+final childrenPageTwo = await group.getChildren(children.last);
+```
+:::
+
+::::
+
 ## Connected groups
 
 A group can also be a member in another group which is not a child of this group. 
@@ -561,6 +587,31 @@ final connectedGroupByUser = await user.getGroup(connectedGroupId, groupId);
 ::::
 
 When accessing a child group of a connected group, make sure to load the parent group first which is connected to the user group.
+
+To get all connected groups to a group use the `getGroups()` function in the group object. 
+It returns a List of groups with the group id and the group created time.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+const connected_groups: GroupList[] = await group.getGroups();
+
+//to get the next pages, use the last item.
+const connected_groups_page_two: GroupList[] = await group.getGroups(connected_groups[connected_groups.length-1]);
+```
+:::
+
+::: tab Flutter
+```dart
+List<ListGroups> connectedGroups = await group.getGroups();
+
+//to get the next pages, use the last item.
+List<ListGroups> connectedGroupsPageTwo = await await group.getGroups(connectedGroups.last);
+```
+:::
+
+::::
 
 ## Child groups vs connected groups, when use what?
 
