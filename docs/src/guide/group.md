@@ -649,7 +649,7 @@ This can be used to connect resources and users together, e.g.:
 - user in department groups (hr, marketing, development)
 - resources like customer, employee data, devops secrets
 - let dev manager access group employee data and devops secrets and marketing access customer.
-- Inside each department group there are multiple child groups for each sub department. If the manger is in the parent group, he/she can access every sub group
+- Inside each department group there are multiple child groups for each sub department. If the manger is in the parent group, he/she can access every subgroup
 
 The recommended approach is to use normal groups for user and connected groups for resources.
 
@@ -669,6 +669,9 @@ This is done on the server side, but the server does not have access to the clea
 
 Key rotation can be useful when a member leaves the group, ensuring that all new content is encrypted using the newest key.
 
+The user who starts the rotation can also sign the new keys.
+When the other member finish the rotation, the signed keys can be verified to make sure that the starter is the real user.
+
 ### Key rotation start
 
 To start the rotation call this function from any group member account:
@@ -679,6 +682,18 @@ To start the rotation call this function from any group member account:
 
 ```ts
 await group.keyRotation();
+
+//with sign
+await group.keyRotation(true);
+```
+:::
+
+::: tab Flutter
+```dart
+await group.keyRotation();
+
+//with sign
+await group.keyRotation(true);
 ```
 :::
 
@@ -700,6 +715,18 @@ To get the new key for the other member just call this function for all group me
 
 ```ts
 await group.finishKeyRotation();
+
+//optional verify the new keys if the starter signed the keys
+await group.finishKeyRotation(true);
+```
+:::
+
+::: tab Flutter
+```dart
+await group.finishKeyRotation();
+
+//optional verify the new keys if the starter signed the keys
+await group.finishKeyRotation(true);
 ```
 :::
 
