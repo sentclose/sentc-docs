@@ -203,6 +203,27 @@ const input = user.prepareGroupCreate();
 
 To delete a group call this endpoint with the jwt in header and a delete request: `https://api.sentc.com/api/v1/group/<group_id>` 
 
+### Check group access
+
+At your backend you can also check if a user got access to a group. 
+Use this endpoint: ``https://api.sentc.com/api/v1/group/<group_id>/light` with a GET request.
+
+The response is either an error with status code 310 or a json object:
+
+```
+{
+    "group_id",
+    "parent_group_id",
+    "rank",
+    "created_time",
+    "joined_time",
+    "is_connected_group",
+    "access_by"
+}
+```
+
+Access by describes how the user access this group. Either direct, as member of a parent group or from a connected group.
+
 ## Refreshing the jwt
 
 Like we said in [user - Authentification and JWT](/guide/user/#authentification-and-jwt) there are three different strategies to handle the refreshing.
