@@ -370,6 +370,65 @@ await group.rejectJoinRequest("user_id");
 
 ::::
 
+A user can fetch the sent join requests:
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+interface GroupInviteListItem
+{
+	group_id: string,
+    time: number
+}
+
+const list: GroupInviteListItem[] = await user.sentJoinReq();
+
+//to load more use the last item of the pre fetch
+const list_page_two: GroupInviteListItem[] = await user.sentJoinReq(list[list.length -1]);
+```
+:::
+
+::: tab Flutter
+```dart
+class GroupInviteReqList {
+  final String groupId;
+  final String time;
+
+  const GroupInviteReqList({
+    required this.groupId,
+    required this.time,
+  });
+}
+
+List<GroupInviteReqList> list = await user.sentJoinReq();
+
+//to load more use the last item of the pre fetch
+List<GroupInviteReqList> listPageTwo = await user.sentJoinReq(list.last);
+```
+:::
+
+::::
+
+A user can also delete an already sent join request. The group id can be fetched from the `sentJoinReq()` function.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+await user.deleteJoinReq("<group_id>");
+```
+:::
+
+::: tab Flutter
+```dart
+await user.deleteJoinReq("<group_id>");
+```
+:::
+
+::::
+
+
 ### Auto invite
 
 A group administrator can use this function to automatically invite and accept a non-group member, 
@@ -639,6 +698,84 @@ List<ListGroups> connectedGroupsPageTwo = await await group.getGroups(connectedG
 :::
 
 ::::
+
+Like users, groups can also send join requests to connected groups.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+await group.groupJoinRequest("<group_id>");
+```
+:::
+
+::: tab Flutter
+```dart
+await group.groupJoinRequest("<group_id>");
+```
+:::
+
+::::
+
+Groups can also fetch the sent join requests.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+interface GroupInviteListItem
+{
+	group_id: string,
+    time: number
+}
+
+const list: GroupInviteListItem[] = await group.sentJoinReq();
+
+//to load more use the last item of the pre fetch
+const list_page_two: GroupInviteListItem[] = await group.sentJoinReq(list[list.length -1]);
+```
+:::
+
+::: tab Flutter
+```dart
+class GroupInviteReqList {
+  final String groupId;
+  final String time;
+
+  const GroupInviteReqList({
+    required this.groupId,
+    required this.time,
+  });
+}
+
+List<GroupInviteReqList> list = await group.sentJoinReq();
+
+//to load more use the last item of the pre fetch
+List<GroupInviteReqList> listPageTwo = await group.sentJoinReq(list.last);
+```
+:::
+
+::::
+
+A group can also delete an already sent join request. The group id can be fetched from the `sentJoinReq()` function.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+await group.deleteJoinReq("<group_id>");
+```
+:::
+
+::: tab Flutter
+```dart
+await group.deleteJoinReq("<group_id>");
+```
+:::
+
+::::
+
+
 
 ## Child groups vs connected groups, when use what?
 
