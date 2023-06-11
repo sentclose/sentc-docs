@@ -35,18 +35,21 @@ It is also available directly in the browser via CDN.
 
 <code-group>
 <code-block title="NPM" active>
+
 ```bash
 npm install @sentclose/sentc
 ```
 </code-block>
 
 <code-block title="YARN">
+
 ```bash
 yarn add @sentclose/sentc
 ```
 </code-block>
 
 <code-block title="Browser">
+
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@sentclose/sentc/dist/sentc.min.js"></script>
 ```
@@ -77,6 +80,7 @@ For javascript it is also necessary to load the wasm file.
 
 <code-group>
 <code-block title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -88,6 +92,7 @@ await Sentc.init({
 </code-block>
 
 <code-block title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -140,6 +145,7 @@ Please refer to the User documentation for more information.
 
 <code-group>
 <code-block title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -148,6 +154,7 @@ await Sentc.register("username", "password");
 </code-block>
 
 <code-block title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -184,6 +191,7 @@ After logging in, you will receive a user object.
 
 <code-group>
 <code-block title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -192,6 +200,7 @@ const user = await Sentc.login("username", "password");
 </code-block>
 
 <code-block title="Browser">
+
 ```html
 <script>
     //init the wasm

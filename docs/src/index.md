@@ -39,6 +39,7 @@ Easy to use, installed or in the browser:
 
 <code-group>
 <code-block title="JS" active>
+
 ```js
 import Sentc from "@sentclose/sentc";
 
@@ -70,6 +71,7 @@ console.log(decrypted_string);  //hello there!
 </code-block>
 
 <code-block title="Browser">
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
