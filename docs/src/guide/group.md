@@ -180,13 +180,28 @@ When a user is invited or their join request is accepted, the group keys are enc
 
 ### Invite a user
 
-Inviting a user is done by a group administrator (ranks 0-2) to a non-group member. The non-group member can choose to accept or reject the invitation.
+Inviting a user is done by a group administrator (ranks 0-2) to a non-group member. 
+The non-group member can choose to accept or reject the invitation.
+
+Optional, a rank can be set for the invited user.
 
 :::: tabs type:card
 
 ::: tab Javascript
 ```ts
 await group.invite("internal_user_id")
+
+//with optional rank, in this case rank 1
+await group.invite("internal_user_id", 1);
+```
+:::
+
+::: tab Flutter
+```dart
+await group.invite("internal_user_id")
+
+//with optional rank, in this case rank 1
+await group.invite("internal_user_id", 1);
 ```
 :::
 
@@ -324,6 +339,18 @@ The user id can get from the GroupJoinReqListItem.
 
 ```ts
 await group.acceptJoinRequest("user_id");
+
+//with optional rank, in this case rank 1
+await group.acceptJoinRequest("user_id", 1);
+```
+:::
+
+::: tab Flutter
+```dart
+await group.acceptJoinRequest("userId");
+
+//with optional rank, in this case rank 1
+await group.acceptJoinRequest("userId", 1);
 ```
 :::
 
