@@ -699,6 +699,35 @@ and call this endpoint to start the rotation with a post request: `https://api.s
 
 Still use the finishKeyRotation function to finish the rotation.
 
+## Re invite
+
+If there is an error during the key rotation, the corresponding user won't get the new keys. 
+This can happen if the user already done a user key rotation and the keys are not correctly created.
+
+Users can be re invited to a group. It is almost the same process as the invite but this time the user keeps the rank.
+
+:::: tabs type:card
+
+::: tab Javascript
+```ts
+await group.reInviteUser("<user id>");
+
+//to re invite a group
+await group.reInviteGroup("<group id");
+```
+:::
+
+::: tab Flutter
+```dart
+await group.reInviteUser("<user id>");
+
+//to re invite a group
+await group.reInviteGroup("<group id");
+```
+:::
+
+::::
+
 ## Delete a group
 
 Only the creator (rank 0) or the admins (rank 1) can delete a group.
