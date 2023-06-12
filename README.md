@@ -2,9 +2,7 @@
 
 <br>
 
-:::: tabs#p
-
-@tab Javascript
+For Javascript
 
 Easy to install:
 
@@ -113,7 +111,7 @@ console.log(decrypted_string);  //hello there!
 
 </code-group>
 
-@tab Flutter
+For Flutter
 
 Easy to install:
 
@@ -159,9 +157,6 @@ demo() async {
 }
 ```
 
-::::
-
-
 ## Limitations
 
 The protocol is designed for async long-running communication between groups.
@@ -169,5 +164,3 @@ The protocol is designed for async long-running communication between groups.
 - Group member should get decrypt all messages even if they were offline for years.
 
 The both requirements make perfect forward secrecy impossible. See more [at the Protocol](/protocol/) how we solved it.
-
-<br><br>
