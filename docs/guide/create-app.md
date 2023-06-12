@@ -94,3 +94,30 @@ As we use a worker to delete files, multiple file parts can be deleted at once.
 You can also set a token to ensure that the delete request comes from the Sentc API for your files.
 
 For more information about file handling in Sentc, please refer to the [Files](/guide/file/) section.
+
+## Groups (Beta)
+
+To work with others on an app, there are groups where all group member got access to the app secrets, but only high rak member can edit or delete apps.
+
+An app can be created in a group just like in your account.
+
+1. Login to your dashboard
+2. In the upper left corner click on the `GROUPS` tab
+3. Click on `NEW GROUP` to create a new group
+4. Optional give the group a name and a description
+5. Now the group shows up in your dashboard
+
+To create an app in this group use the `NEW APP IN GROUP` button
+
+### Manage member
+
+- To go to the member click on the member icon in the top right corner next to the group name.
+  1. In the member list click `INVITE MEMBER`
+  2. Pass in the user id and optional a rank of the user. The rank can be changed later on. The user id is in the user's menu (the cog symbol in the right corner)
+  3. Click on invite. Now the member is successfully added to your member list.
+- To kick a member
+  1. click on the pencil icon of the corresponding member
+  2. click on kick member
+  3. In this window you can also change the rank. This is only possible when you are the admin of this group.
+
+To change the group name or description, go to the pencil icon next to the member icon. In this window you can also delete the group.
