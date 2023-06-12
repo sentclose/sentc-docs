@@ -1,9 +1,10 @@
 ---
 home: true
 heroImage: /Sentc.png
-tagline: Encryption as a service
-actionText: Quick Start →
-actionLink: /guide/
+tagline: Encryption and group/user management sdk
+actions:
+  - text: Quick Start →
+    link: /guide/
 features:
 - title: Easy-to-use encryption
   details: Create secure applications with just a few lines of code.
@@ -11,34 +12,38 @@ features:
   details: Create groups where every member can encrypt content for all other members, including key rotation to renew the keys while still using the old ones.
 - title: User management
   details: Register and securely log in users with ease.
-footer: © 2022 - Sentclose
+  footer: © 2022 - Sentclose
 ---
 
-:::: tabs type:card
+<br>
 
-::: tab Javascript
+:::: tabs#p
+
+@tab Javascript
 
 Easy to install:
 
 <code-group>
-<code-block title="NPM" active>
+<code-group-item title="NPM" active>
+
 ```bash
 npm install @sentclose/sentc
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="YARN">
+<code-group-item title="YARN">
+
 ```bash
 yarn add @sentclose/sentc
 ```
-</code-block>
+</code-group-item>
 
 </code-group>
 
 Easy to use, installed or in the browser:
 
 <code-group>
-<code-block title="JS" active>
+<code-group-item title="JS" active>
 
 ```js
 import Sentc from "@sentclose/sentc";
@@ -68,9 +73,9 @@ const decrypted_string = await group.decryptString(encrypted_string);
 			
 console.log(decrypted_string);  //hello there!
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
 
 ```html
 <!DOCTYPE html>
@@ -119,12 +124,12 @@ console.log(decrypted_string);  //hello there!
 </body>
 </html>
 ```
-</code-block>
+</code-group-item>
 
 </code-group>
-:::
 
-::: tab Flutter
+@tab Flutter
+
 Easy to install:
 
 ```bash
@@ -168,14 +173,16 @@ demo() async {
   await user.deleteUser("password");
 }
 ```
-:::
 
 ::::
 
+
 ## Limitations
 
-The protocol is designed for async long-running communication between groups. 
-- A group member should be able to decrypt the whole communication even if they joined years after the beginning. 
+The protocol is designed for async long-running communication between groups.
+- A group member should be able to decrypt the whole communication even if they joined years after the beginning.
 - Group member should get decrypt all messages even if they were offline for years.
 
 The both requirements make perfect forward secrecy impossible. See more [at the Protocol](/protocol/) how we solved it.
+
+<br><br>

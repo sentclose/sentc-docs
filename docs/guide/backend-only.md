@@ -9,9 +9,9 @@ This feature provides flexibility for storing additional user data in your own b
 
 In general, every main function in sentc has two equivalent functions with a `prepare` and `done` prefix.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ::: tip Example
 ````javascript
 import Sentc from "@sentclose/sentc";
@@ -90,23 +90,22 @@ There is no need for an auth header for registration and login.
 
 When creating an account, call the prepare function and send the input string to our api to the endpoint with a post request: `https://api.sentc.com/api/v1/register`
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ````javascript
 import Sentc from "@sentclose/sentc";
 //call this before you do the request to your backend
 const input = Sentc.prepareRegister("username", "password");
 ````
-:::
 
 ::::
 
 After your user registration call this function in the client, to check the response:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ````javascript
 import Sentc from "@sentclose/sentc";
@@ -143,23 +142,22 @@ However, the validation for device registration is the same as described in the 
 To register a device, send the necessary input to our API endpoint 
 using a POST request without a JWT at: https://api.sentc.com/api/v1/user/prepare_register_device
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ````javascript
 import Sentc from "@sentclose/sentc";
 
 const input = Sentc.prepareRegisterDeviceStart("identifier", "password");
 ````
-:::
 
 ::::
 
 To check in the client if the request was correct, use the `done` function with the server output:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ````javascript
 import Sentc from "@sentclose/sentc";
@@ -189,13 +187,12 @@ such as group keys and the encrypted group key by the user's public key.
 
 Upon successful API request, the resulting group ID will be returned.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 const input = user.prepareGroupCreate();
 ```
-:::
 
 ::::
 
@@ -240,12 +237,14 @@ To refresh the token, make a PUT request to the refresh endpoint on the sentc AP
 Include the old JWT token in the Authorization Bearer header.
 
 When initializing the client, set the refresh endpoint option to "cookie" in the options.
-:::: tabs type:card
 
-::: tab Javascript
+:::: tabs#p
+
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -258,9 +257,10 @@ await Sentc.init({
     }
 });
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -279,9 +279,8 @@ await Sentc.init({
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-:::
 
 ::::
 
@@ -293,14 +292,15 @@ Then put the refresh token in a cookie.
 The sdk won't send any requests for refreshing jwt in this case.
 Instead, you can define a function to refresh the jwt, maybe do the refresh directly in your backend.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 Define a function which returns a promise and get the old jwt.
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -313,9 +313,10 @@ await Sentc.init({
     }
 });
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -334,9 +335,8 @@ await Sentc.init({
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-:::
 
 ::::
 

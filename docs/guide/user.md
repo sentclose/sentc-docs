@@ -21,20 +21,22 @@ Please refer to the "Register a Device" section for more information.
 The username/identifier can be anything, such as a name, email address, or random number. 
 The username is only required to log in to the correct device.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
 await Sentc.register("username", "password");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -51,7 +53,7 @@ await Sentc.register("username", "password");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
 
 ::: warning
@@ -64,12 +66,13 @@ The username and password can also be generated to ensure a unique and secure lo
 The following function will create a random device name and password. 
 However, these values are not stored, so please ensure that they are securely stored on the user's device.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -77,9 +80,10 @@ const [device_identifier, device_pw] = Sentc.generateRegisterData();
 
 await Sentc.register(device_identifier, device_pw);
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -98,10 +102,8 @@ await Sentc.register(device_identifier, device_pw);
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-
-:::
 
 ::::
 
@@ -109,20 +111,22 @@ The registration process will throw an error if the chosen username is already t
 To check if a username is still available, you can use the following function, 
 which will return true if the username is still available:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
 const available = await Sentc.checkUserIdentifierAvailable("identifier");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -139,10 +143,8 @@ const available = await Sentc.checkUserIdentifierAvailable("identifier");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-
-:::
 
 ::::
 
@@ -159,21 +161,23 @@ If you are using your own backend to store additional user information,
 you can use the prepare function to prepare the registration data. 
 Then, send the output to our API with a POST request to the following endpoint: `https://api.sentc.com/api/v1/register`
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
 //call this in the client
 const input = await Sentc.prepareRegister("identifier", "password");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -190,10 +194,8 @@ const input = await Sentc.prepareRegister("identifier", "password");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-
-:::
 
 ::::
 
@@ -209,20 +211,22 @@ This is accomplished by using a password derivation function in the client inste
 
 If the identifier or the password is incorrect, this function will throw an error.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
 const user = await Sentc.login("identifier", "password");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -239,7 +243,7 @@ const user = await Sentc.login("identifier", "password");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
 
 ::: warning
@@ -252,12 +256,13 @@ After successfully logging in, you will receive a user object, which is required
 
 You can obtain the actual user object by calling the init function as follows:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -266,9 +271,10 @@ const user = await Sentc.init({
     app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi"  // <-- your app token
 });
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     //init the wasm
@@ -283,28 +289,29 @@ const user = await Sentc.init({
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-:::
 
 ::::
 
 Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
 const user = await Sentc.getActualUser();
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     const sentc = window.Sentc.default;
@@ -316,9 +323,8 @@ const user = await Sentc.getActualUser();
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-:::
 
 ::::
 
@@ -338,9 +344,9 @@ For user account:
 
 To get the data, just access the data in the user class.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The devices are from type UserDeviceList
 
 ```ts
@@ -349,7 +355,6 @@ const refresh_token = user.data.refresh_token;
 const user_id = user.data.user_id;
 const device_id = user.data.device_id;
 ```
-:::
 
 ::::
 
@@ -375,20 +380,22 @@ The process has three parts: preparing the data on the new device, sending the d
 
 To produce the input on the new device, follow these steps. The identifier and password could be generated the same way as during user registration.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
+
 ```ts
 import Sentc from "@sentclose/sentc";
 
 const input = await Sentc.registerDeviceStart("device_identifier", "device_pw");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
+
 ```html
 <script>
     const sentc = window.Sentc.default;
@@ -400,7 +407,7 @@ const input = await Sentc.registerDeviceStart("device_identifier", "device_pw");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
 
 ::: warning
@@ -411,14 +418,13 @@ This function will also throw an error if the **username still exists for your a
 
 Send the Input to the Logged-In Device (possibly through a QR code, which the logged-in device can scan), and call this function with the input.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //the user obj from login
 await user.registerDevice(input);
 ```
-:::
 
 ::::
 
@@ -430,9 +436,9 @@ After this, the user can log in on the new device.
 
 The device list can be fetched through pagination.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const devices = await user.getDevices();
@@ -449,15 +455,13 @@ interface UserDeviceList
 }
 ````
 
-:::
-
 ::::
 
 To fetch the next pages, simply call this function with the last fetched device.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The devices are from type UserDeviceList
 
 ```ts
@@ -465,7 +469,6 @@ const last_item = devices[devices.length - 1];
 
 const devices = await user.getDevices(last_item);
 ```
-:::
 
 ::::
 
@@ -473,9 +476,9 @@ const devices = await user.getDevices(last_item);
 
 The user must enter the old and new passwords.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.changePassword("old_password", "new_password");
@@ -494,14 +497,13 @@ If the user doesn't have access, he/she can no longer decrypt the information be
 
 When resetting the password, the secret keys of the device will be encrypted again with the new password.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.resetPassword("new_password");
 ```
-:::
 
 ::::
 
@@ -510,9 +512,9 @@ await user.resetPassword("new_password");
 This will change the user identifier. The function will throw an error if the identifier is not available. 
 Only the identifier of the actual device will be changed.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.updateUser("new_identifier");
@@ -527,14 +529,13 @@ This function will also throw an error if **the identifier still exists for your
 
 After logging out, all local data will be deleted from the client.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.logOut();
 ```
-:::
 
 ::::
 
@@ -544,9 +545,9 @@ await user.logOut();
 To delete a device, a device password from any device and the device ID are needed.
 The ID can be obtained from the user data or by fetching the device list.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.deleteDevice("password", "device_id");
@@ -559,16 +560,15 @@ This function will also throw an error if **the password was not correct**
 
 Get the device id from the user data:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The devices are from type UserDeviceList
 
 ```ts
 //user from login
 const device_id = user.data.device_id;
 ```
-:::
 
 ::::
 
@@ -576,9 +576,9 @@ const device_id = user.data.device_id;
 
 To delete the entire account, use any device password. 
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.deleteUser("password");
@@ -595,9 +595,9 @@ Only the newest public key is used. You can just fetch the newest public key or 
 
 Public key:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -605,7 +605,6 @@ import Sentc from "@sentclose/sentc";
 //this retuns the key and the key id
 const {key, id} = await Sentc.getUserPublicKey("<user_id>");
 ```
-:::
 
 ::::
 
@@ -613,9 +612,9 @@ Verify Key:
 
 This key can only be fetched by id because to verify data you need a specific verify key.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -623,7 +622,6 @@ import Sentc from "@sentclose/sentc";
 //this retuns just the key
 const key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
 ```
-:::
 
 ::::
 
@@ -633,9 +631,9 @@ A safety number (or public fingerprint) can be used to check if another user is 
 Both users can create a safety number with each other and can then check if the number is the same. 
 This check should be done live in person or via video chat.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 const number = await user.createSafetyNumber({
 	user_id: "<user_to_compare_id>",
@@ -648,9 +646,8 @@ const number_2 = await user.createSafetyNumber({
 	verify_key_id: "<the_verify_key_id_to_compare>"
 });
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 final number = await await user.createSafetyNumber(
   UserVerifyKeyCompareInfo(
@@ -667,7 +664,6 @@ final number2 = await await user.createSafetyNumber(
   ),
 );
 ```
-:::
 
 ::::
 
@@ -676,9 +672,9 @@ final number2 = await await user.createSafetyNumber(
 To make sure that the public key which is used to encrypt the group keys really belongs to the user, this key can be verified.
 A safety number can be helpful to check if the verify key is the right one.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //fetch a public key of a user
 const public_key = await sentc.getUserPublicKey(user_id);
@@ -686,23 +682,21 @@ const public_key = await sentc.getUserPublicKey(user_id);
 //now verify if this key is from the same user
 const verify: boolean = await sentc.verifyUserPublicKey(user_id, public_key);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 final publicKey = await Sentc.getUserPublicKey(userId);
 
 final verify = await Sentc.verifyUserPublicKey(userId, publicKey);
 ```
-:::
 
 ::::
 
 To check the right verify key of this public key the user can get it:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 const public_key = await sentc.getUserPublicKey(user_id);
 
@@ -716,9 +710,8 @@ const number = await user.createSafetyNumber({
 
 const verify: boolean = await sentc.verifyUserPublicKey(user_id, public_key);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 final publicKey = await Sentc.getUserPublicKey(userId);
 
@@ -731,6 +724,5 @@ final number = await user.createSafetyNumber(
 
 final verify = await Sentc.verifyUserPublicKey(userId, publicKey);
 ```
-:::
 
 ::::

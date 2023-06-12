@@ -27,33 +27,33 @@ Create an account and an app. Use the public API token in your SDK options.
 
 ### Install the sdk.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 It is also available directly in the browser via CDN.
 
 <code-group>
-<code-block title="NPM" active>
+<code-group-item title="NPM" active>
 
 ```bash
 npm install @sentclose/sentc
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="YARN">
+<code-group-item title="YARN">
 
 ```bash
 yarn add @sentclose/sentc
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@sentclose/sentc/dist/sentc.min.js"></script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
 
 ::: warning
@@ -73,13 +73,13 @@ please refer to the module bundler WASM configuration in our documentation.
 ### Initialize the SDK. 
 This function checks if the user is logged in and verifies the JSON Web Token (JWT).
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 For javascript it is also necessary to load the wasm file.
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -89,9 +89,9 @@ await Sentc.init({
     app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi"  // <-- your app token
 });
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
 
 ```html
 <script>
@@ -107,9 +107,8 @@ await Sentc.init({
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-:::
 
 ::::
 
@@ -117,9 +116,9 @@ await Sentc.init({
 You are now ready to register, log in, delete a user, or a group.
 :::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ::: warning
 Every function that makes a request (in JavaScript with a Promise) will throw an error if the request or server output is not correct.
@@ -139,21 +138,21 @@ You can register a user from the client.
 It is also possible to register a user from your own backend. 
 Please refer to the User documentation for more information.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
 
 ```ts
 import Sentc from "@sentclose/sentc";
 
 await Sentc.register("username", "password");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
 
 ```html
 <script>
@@ -171,10 +170,8 @@ await Sentc.register("username", "password");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-
-:::
 
 ::::
 
@@ -185,21 +182,21 @@ After login, the user receives a JSON Web Token (JWT). It is also possible to im
 
 After logging in, you will receive a user object.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 <code-group>
-<code-block title="Installed" active>
+<code-group-item title="Installed" active>
 
 ```ts
 import Sentc from "@sentclose/sentc";
 
 const user = await Sentc.login("username", "password");
 ```
-</code-block>
+</code-group-item>
 
-<code-block title="Browser">
+<code-group-item title="Browser">
 
 ```html
 <script>
@@ -217,10 +214,8 @@ const user = await Sentc.login("username", "password");
     run();
 </script>
 ```
-</code-block>
+</code-group-item>
 </code-group>
-
-:::
 
 ::::
 
@@ -231,9 +226,9 @@ You can create a group using the user object. The group keys are automatically e
 With the group object, you can encrypt/decrypt content, invite or delete members, and perform key rotation. 
 For more information, please refer to the Groups documentation.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 This is the same for installed and browser.
 
@@ -245,17 +240,15 @@ const group_id = await user.createGroup();
 const group = await user.getGroup(group_id);
 ```
 
-:::
-
 ::::
 
 ### Encrypt in a group
 
 You can perform encryption and decryption of raw data or strings in a group.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 For javascript the format for raw data is Uint8Array.
 
@@ -274,7 +267,5 @@ const encrypted = await group.encrypt(new Uint8Array([1,1,1,1]));
 
 const decrypted = await group.decrypt(encrypted);
 ```
-
-:::
 
 ::::

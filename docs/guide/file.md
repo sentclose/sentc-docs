@@ -36,9 +36,9 @@ For each file, Sentc creates a new key that is used for encryption. To encrypt a
 It is important to store the `file id` to fetch the file later
 :::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```typescript
 // file must be the javascript File which extend from Blob
 const output = await group.createFile(file);
@@ -54,7 +54,6 @@ interface FileCreateOutput
 	encrypted_file_name: string
 }
 ````
-:::
 
 ::::
 
@@ -63,20 +62,19 @@ Note that this is not necessary when handling files only within your application
 
 When downloading and verifying the file, you will also need to store the user ID to fetch the right verify key
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```typescript
 // file must be the javascript File which extend from Blob
 const output = await group.createFile(file, true);
 ```
-:::
 
 ::::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ::: tip Upload progress
 To see the actual upload progress pass in the create file function a closure:
@@ -96,9 +94,9 @@ This will print the progress to the console. But you can use any other js elemen
 
 ::::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ::: tip Cancel upload
 To cancel the upload just set this static variable to true:
@@ -121,9 +119,9 @@ To download a file, simply use its file ID.
 The file key may be encrypted using either another created key or a group key. 
 The file creator will always provide you with the master key ID.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```typescript
 const [url, meta_info, file_key] = await group.downloadFile(file_id);
@@ -176,21 +174,19 @@ To also verify the file by put in the right verify key. Make sure you save the u
 
 To get the user verify key just fetch it see [user - Public user information](/guide/user/#public-user-information)
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```typescript
 const [url, meta_info, file_key] = await group.downloadFile(file_id, verify_key);
 ```
 
-:::
-
 ::::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ::: tip Download progress
 To see the actual download progress pass in the download file function a closure:
@@ -211,9 +207,9 @@ This will print the progress to the console. But you can use any other js elemen
 
 ::::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ::: tip Cancel download
 To cancel the download just set this static variable to true:
@@ -233,14 +229,13 @@ This will cancel the actual download of a file.
 
 Just pass in the file id of the file to delete.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ````typescript
 await group.deleteFile(file_id);
 ````
-:::
 
 ::::
 
@@ -266,9 +261,9 @@ See an example for using your own storage: [here](https://gitlab.com/sentclose/s
 
 ### Set your upload and download url in the sentc init options
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ````typescript
 await Sentc.init({
@@ -276,7 +271,6 @@ await Sentc.init({
 	file_part_url: "<your_url_to_your_storage>"
 });
 ````
-:::
 
 ::::
 
@@ -339,7 +333,7 @@ You can also call the sentc api first to register a part and then read the reque
 Then you will get the right id, and you can name your file correctly.
 
 
-### Set the delete endpoint for file parts 
+### Set to delete endpoint for file parts 
 
 This endpoint will be called with a `post` request and the deleted file part names in the body as json array:
 
