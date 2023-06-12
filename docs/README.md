@@ -26,14 +26,14 @@ Easy to install:
 <code-group>
 <code-group-item title="NPM" active>
 
-```bash
+```bash:no-line-numbers
 npm install @sentclose/sentc
 ```
 </code-group-item>
 
 <code-group-item title="YARN">
 
-```bash
+```bash:no-line-numbers
 yarn add @sentclose/sentc
 ```
 </code-group-item>
@@ -132,7 +132,7 @@ console.log(decrypted_string);  //hello there!
 
 Easy to install:
 
-```bash
+```bash:no-line-numbers
 flutter pub add sentc
 ```
 

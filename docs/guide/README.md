@@ -36,21 +36,21 @@ It is also available directly in the browser via CDN.
 <code-group>
 <code-group-item title="NPM" active>
 
-```bash
+```bash:no-line-numbers
 npm install @sentclose/sentc
 ```
 </code-group-item>
 
 <code-group-item title="YARN">
 
-```bash
+```bash:no-line-numbers
 yarn add @sentclose/sentc
 ```
 </code-group-item>
 
 <code-group-item title="Browser">
 
-```html
+```html:no-line-numbers
 <script src="https://cdn.jsdelivr.net/npm/@sentclose/sentc/dist/sentc.min.js"></script>
 ```
 </code-group-item>
