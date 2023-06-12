@@ -1,0 +1,175 @@
+# Content
+
+It is possible to create very complex groups and subgroups as well groups connected to [groups](/guide/group/). 
+Managing content within this connections can be very challenging.
+
+Sentc comes with an ID system to store identifier of your content related to a group.
+This Ids can be fetched via the sentc api.
+If a user has access to a group he/she is also able to fetch the Ids. 
+
+- You can fetch all content to a user from all groups/connected-groups/child-groups where the user got access
+- Fetch only content in a group and its subgroups
+
+The Ids can only be set with your secret token from your backend to make sure that the Ids are direct related to your content.
+
+## Create content
+
+To store the Ids make a POST request to the following url, with the users jwt: `https://api.sentc.com/api/v1/content/<group-id>`. <br>
+See at [own backend](/guilde/backend-only/) how to make requests to the sentc api.
+
+The following body is needed:
+
+```json lines
+{
+	item: string,
+	category: Option<String>
+}
+```
+
+- Item is the Identifier of your content to fetch it later
+- Category can be any string. See below how it works
+
+## Delete content
+
+To delete an ID, use this url: `https://api.sentc.com/api/v1/content/item/<ID>` with ID as the content id to delete.
+This endpoint can also only be used with your secret token from your backend, not the client. A jwt is also required.
+
+## Fetch content
+
+Fetching can be done in the client with the public token or on the server. 
+You can specify how many items should the api give back. 
+You can enable the endpoints to control how many items should be fetched via the [App options](/guide/create-app).
+
+Pass in the `last-fetched-time` (the timestamp of the last fetched item) and the id of the last item
+
+- `https://api.sentc.com/api/v1/content/small/all/<last-fetched-time>/<last-id>` The `small` returns max 20 items
+- `https://api.sentc.com/api/v1/content/med/all/<last-fetched-time>/<last-id>` The `med` returns max 50 items
+- `https://api.sentc.com/api/v1/content/large/all/<last-fetched-time>/<last-id>` The `large` returns max 70 items
+- `https://api.sentc.com/api/v1/content/xlarge/all/<last-fetched-time>/<last-id>` The `xlarge` returns max 100 items,
+
+The `all` endpoints means, fetch every content related to a user, where the user got access to. 
+All groups where the user is member, their child-groups and the connected groups of the groups and child groups.
+
+It returns a list with the following list items:
+
+```json lines
+{
+    id: string,
+    item: string, 
+    belongs_to_group: Option<String>,
+    belongs_to_user: Option<String>,
+    creator: string, 
+    time: number,
+    category: Option<String>,
+    access_from_group: Option<String>
+}
+```
+
+- `id` is the internal sentc id of your item and is used to fetch it with the requests
+- `item` is the Identifier you choose at creating content
+- `belongs_to_group` is optional and contains the group id if the content was created in a group
+- `belongs_to_user` is optional and contains the user id if the content was created for a specific user
+- `creator` the sentc api id of the user who created the item
+- `time` the created time of the item. This is used to fetch the content with the requests
+- `category` is optional and contains the category of the content if it was set
+- `access_from_group` is optional and contains the group id from where the user can access the content if the content was created in a connected-group
+
+### Fetch content in a group
+
+The endpoints are almost as the same as fetching all content but a `group-id` is required.
+
+- `https://api.sentc.com/api/v1/content/group/<group-id>/small/all/<last-fetched-time>/<last-id>` The `small` returns max 20 items
+- `https://api.sentc.com/api/v1/content/group/<group-id>/med/all/<last-fetched-time>/<last-id>` The `med` returns max 50 items
+- `https://api.sentc.com/api/v1/content/group/<group-id>/large/all/<last-fetched-time>/<last-id>` The `large` returns max 70 items
+- `https://api.sentc.com/api/v1/content/group/<group-id>/xlarge/all/<last-fetched-time>/<last-id>` The `xlarge` returns max 100 items,
+
+To simplify the fetching in groups you can also fetch it from the sdk:
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+// all options are optional but required to fetch more content 
+// or content (last_fetched_item) in a category (cat_id)
+const list: ListContentItem[] = await group.fetchContent({
+	last_fetched_item: ListContentItem,
+	cat_id: string,
+	limit: CONTENT_FETCH_LIMIT
+});
+
+//to fetch the next page
+const list_page_two: ListContentItem[] = await group.fetchContent({
+	last_fetched_item: list[list.length-1],
+	cat_id: string,
+	limit: CONTENT_FETCH_LIMIT
+});
+
+//the List item object
+interface ListContentItem
+{
+	id: string,
+	item: string,
+	belongs_to_group?: string,
+	belongs_to_user?: string,
+	creator: string,
+	time: number,
+	category?: string,
+	access_from_group?: string,
+}
+
+const enum CONTENT_FETCH_LIMIT {
+	small = "small",
+	medium = "med",
+	large = "large",
+	x_large = "xlarge"
+}
+```
+
+@tab Flutter
+```dart
+// all options are optional but required to fetch more content 
+// or content (lastFetchedItem) in a category (catId)
+List<ListContentItem> list = await group.fetchContent();
+
+//to fetch the next page
+List<ListContentItem> listPageTwo = await group.fetchContent(
+    lastFetchedItem: list.last
+);
+
+
+//the List item object
+class ListContentItem {
+  final String id;
+  final String item;
+  final String? belongsToGroup;
+  final String? belongsToUser;
+  final String creator;
+  final String time;
+  final String? category;
+  final String? accessFromGroup;
+
+  const ListContentItem({
+    required this.id,
+    required this.item,
+    this.belongsToGroup,
+    this.belongsToUser,
+    required this.creator,
+    required this.time,
+    this.category,
+    this.accessFromGroup,
+  });
+}
+
+enum ContentFetchLimit {
+  Small,
+  Medium,
+  Large,
+  XLarge,
+}
+```
+
+::::
+
+## Categories
+
