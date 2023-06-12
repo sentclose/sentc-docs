@@ -2,14 +2,11 @@
 	--c-brand: #ea7134;
 	--c-brand-light: #ea7d4a;
 
-	--search-input-width: 10rem;
-	--search-result-width: 25rem;
+	--search-input-width: 10rem !important;
+	--search-result-width: 25rem !important;
 }
 
 html.dark {
 	--c-brand: #ea7134;
 	--c-brand-light: #ea7d4a;
-
-	--search-input-width: 10rem;
-	--search-result-width: 25rem;
 }
