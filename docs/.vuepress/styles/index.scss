@@ -1,9 +1,15 @@
 :root {
 	--c-brand: #ea7134;
 	--c-brand-light: #ea7d4a;
+
+	--search-input-width: 10rem;
+	--search-result-width: 25rem;
 }
 
 html.dark {
 	--c-brand: #ea7134;
 	--c-brand-light: #ea7d4a;
+
+	--search-input-width: 10rem;
+	--search-result-width: 25rem;
 }

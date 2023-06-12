@@ -1,6 +1,7 @@
 import {defaultTheme, defineUserConfig} from 'vuepress'
 import {mdEnhancePlugin} from "vuepress-plugin-md-enhance";
 import * as path from "path";
+import {searchPlugin} from "@vuepress/plugin-search";
 
 export default defineUserConfig({
   lang: 'en-US',
@@ -10,6 +11,10 @@ export default defineUserConfig({
   plugins:[
       mdEnhancePlugin({
         tabs: true
+      }),
+      searchPlugin({
+          maxSuggestions: 10,
+          isSearchable: (page) => page.path !== '/',
       })
   ],
 
