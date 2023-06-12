@@ -862,6 +862,28 @@ await group.reInviteGroup("<group id");
 
 ::::
 
+## Public group information
+
+Only the newest public key is used. You can just fetch the newest group public key.
+
+:::: tabs#p
+
+@tab Javascript
+```ts
+const public_group_key: {key: string, id: string} = await Sentc.getGroupPublicKey("<group_id>");
+```
+
+@tab Flutter
+```dart
+class PublicGroupKeyData {
+  final String id;
+  final String key;
+}
+
+PublicGroupKeyData publicGroupKey = await Sentc.getGroupPublicKey("<group_id>");
+```
+::::
+
 ## Delete a group
 
 Only the creator (rank 0) or the admins (rank 1) can delete a group.
@@ -871,6 +893,12 @@ Only the creator (rank 0) or the admins (rank 1) can delete a group.
 @tab Javascript
 
 ```ts
+await group.deleteGroup();
+```
+
+@tab Flutter
+
+```dart
 await group.deleteGroup();
 ```
 
