@@ -34,9 +34,9 @@ For more information on auto-invite functionality, please see the [auto invite](
 
 Raw data are bytes.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 For javascript, Uint8Arrays are used for raw data.
 
 For a group:
@@ -91,15 +91,14 @@ For file upload you can also use the sentc [file handling](/guide/file/)
 
 For groups this is the same way around like encrypting data. Every group member can encrypt the data.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 For javascript, Uint8Arrays are used for raw data. The encrypted data should be a Uint8Array too.
 
 ```ts
 const decrypted = await group.decrypt(encrypted);
 ```
-:::
 
 ::::
 
@@ -107,15 +106,14 @@ For user this is a little more complicated. Only the user which user id was used
 
 But the right key is automatically fetched by sentc.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 For javascript, Uint8Arrays are used for raw data. The encrypted data should be a Uint8Array too.
 
 ```ts
 const decrypted = await user.decrypt(encrypted);
 ```
-:::
 
 ::::
 
@@ -125,9 +123,9 @@ Encrypting strings is a special case, as it requires converting the text to byte
 
 To simplify this process, Sentc offers string encryption functions that handle this conversion for you.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 For a group:
 ```ts
@@ -140,17 +138,15 @@ For a user:
 const encrypted = await user.encryptString("hello there!", "<reply_id>");
 ```
 
-:::
-
 ::::
 
 ## Decrypt strings
 
 The same as decrypt raw data but this time with a string as encrypted data.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 The encrypted strings are strings too.
 
@@ -164,8 +160,6 @@ For a user:
 ```ts
 const decrypted = await user.decryptString(encrypted);
 ```
-
-:::
 
 ::::
 
@@ -187,9 +181,9 @@ in order to fetch it later for decryption.
 For sentc file handling, the sdk will create a new key for every file the same way
 :::
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 The key is from type SymKey and has the `encrypt` and `decrypt` functions too
 
@@ -210,17 +204,15 @@ const key_id = key.key_id;
 const master_key_id = key.master_key_id;
 ```
 
-:::
-
 ::::
 
 ### Encrypt and decrypt with a registered key
 
 This works the same as group encrypt, decrypt.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 No promise here.
 
@@ -232,8 +224,6 @@ const encrypted = key.encrypt(data);
 const decrypted = key.decrypt(encrypted);
 ```
 
-:::
-
 ::::
 
 ### Fetch a key
@@ -243,9 +233,9 @@ If you have saved the master key ID (the key that was used to encrypt the key) a
 However, it is important to ensure that the user has access to the master key 
 (such as being a group member or having their public key used for encryption).
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 For group:
 
@@ -260,7 +250,6 @@ For user:
 //encrypt
 const key = await user.fetchKey("<key_id>", "<master_key_id>");
 ```
-:::
 
 ::::
 
@@ -273,9 +262,9 @@ This ensures the authenticity of the encrypted data and protects against potenti
 
 For sign, the newest sign key of the user is used.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 For a group:
 ```ts
@@ -290,17 +279,15 @@ For a user:
 const encrypted = await user.encryptString("hello there!", "<reply_id>", true);
 ```
 
-:::
-
 ::::
 
 ### Verify
 
 For verify, the right verify key is fetched, but you need to save the id of the user who encrypted the content.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 For a group:
 ```ts
@@ -314,7 +301,5 @@ For a user:
 ```ts
 const decrypted = await user.decryptString(encrypted, true, "<user_id>");
 ```
-
-:::
 
 ::::

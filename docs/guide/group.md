@@ -17,14 +17,13 @@ When creating a group, all group private keys are encrypted in the client by the
 
 Call createGroup() from the User object after logging in a user.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //the user obj from login
 const group_id = await user.createGroup();
 ```
-:::
 
 ::::
 
@@ -32,14 +31,13 @@ When you use your own backend, call the prepare function. This function returns 
 Make a POST request to our API (https://api.sentc.com/api/v1/group) with this data from your backend. 
 Don't forget to include the Authorization header with the JWT token.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //the user obj from login
 const group_data = await user.prepareGroupCreate();
 ```
-:::
 
 ::::
 
@@ -50,14 +48,13 @@ See more at [own backend](/guide/backend-only/)
 To access the keys of a group, a user can fetch them from the API and decrypt them for their own use. 
 To fetch a group, use the group ID as a parameter. This returns a group object that can be used for all group-related actions.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //the user obj from login
 const group = await user.getGroup(group_id);
 ```
-:::
 
 ::::
 
@@ -65,9 +62,9 @@ const group = await user.getGroup(group_id);
 
 To retrieve all group IDs where the user is a member, use this function:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 //the user obj from login
@@ -87,22 +84,19 @@ interface GroupList
 }
 ````
 
-:::
-
 ::::
 
 To fetch more groups use pagination and pass in the last fetched item:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 const last_item = groups[groups.length - 1];
 
 //the user obj from login
 const groups = await user.getGroups(last_item);
 ```
-:::
 
 ::::
 
@@ -112,9 +106,9 @@ Every group member has access to all group keys and can encrypt or decrypt data 
 To encrypt data, the group uses the most current group key. 
 To decrypt data, the group automatically retrieves the key that was used to encrypt the data.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //the group object from fetch group
 
@@ -124,7 +118,6 @@ const encrypted_string = await group.encryptString("hello there £ Я a a 👍")
 //decrypt a string. this can be a group obj from another group member
 const decrypted_string = await group.decryptString(encrypted_string);
 ```
-:::
 
 ::::
 
@@ -144,14 +137,13 @@ Ranks are assigned as numbers ranging from 0 to 4
 
 To change a user's rank, you need the Sentc API user ID and assign a new rank number:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //we set the rank to 2 here
 await group.updateRank("internal_user_id", 2)
 ```
-:::
 
 ::::
 
@@ -160,14 +152,13 @@ use this function to obtain the input data for the API.
 To change the rank, make a PUT request to the following URL with the group ID 
 and the input data from your backend: `https://api.sentc.com/api/v1/group/<the_group_id>/change_rank`
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 //we set the rank to 2 here
 const input = await group.prepareUpdateRank("internal_user_id", 2)
 ```
-:::
 
 ::::
 
@@ -185,33 +176,31 @@ The non-group member can choose to accept or reject the invitation.
 
 Optional, a rank can be set for the invited user.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 await group.invite("internal_user_id")
 
 //with optional rank, in this case rank 1
 await group.invite("internal_user_id", 1);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.invite("internal_user_id")
 
 //with optional rank, in this case rank 1
 await group.invite("internal_user_id", 1);
 ```
-:::
 
 ::::
 
 A user can get invites by fetching invites or from init the client.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const invites = await user.getGroupInvites();
@@ -227,50 +216,45 @@ interface GroupInviteListItem
 }
 ````
 
-:::
-
 ::::
 
 To fetch more invites just pass in the last fetched item from the function:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const last_item = invites[invites.length - 1];
 
 const invites = await user.getGroupInvites(last_item);
 ```
-:::
 
 ::::
 
 To accept an invitation as user call his function with the group id to accept:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The group id can be got from the GroupInviteListItem
 
 ```ts
 await user.acceptGroupInvite("group_id");
 ```
-:::
 
 ::::
 
 Or reject the invite
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The group id can be got from the GroupInviteListItem
 
 ```ts
 await user.rejectGroupInvite("group_id");
 ```
-:::
 
 ::::
 
@@ -280,22 +264,21 @@ A non-group member can request to join a group by calling this function.
 A group administrator can choose to accept or reject the request. 
 To request to join a group, call this function with the group ID.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await user.groupJoinRequest("group_id");
 ```
-:::
 
 ::::
 
 To fetch the join requests as a group admin use this function:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const req = await group.getJoinRequests();
@@ -311,30 +294,27 @@ interface GroupJoinReqListItem
 }
 ````
 
-:::
-
 ::::
 
 To fetch more requests just pass in the last fetched item from the function:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const last_item = req[req.length - 1];
 
 const req = await group.getJoinRequests(last_item);
 ```
-:::
 
 ::::
 
 A group admin can accept the request like this:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The user id can get from the GroupJoinReqListItem.
 
 ```ts
@@ -343,38 +323,35 @@ await group.acceptJoinRequest("user_id");
 //with optional rank, in this case rank 1
 await group.acceptJoinRequest("user_id", 1);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.acceptJoinRequest("userId");
 
 //with optional rank, in this case rank 1
 await group.acceptJoinRequest("userId", 1);
 ```
-:::
 
 ::::
 
 Or reject it:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 The user id can get from the GroupJoinReqListItem.
 
 ```ts
 await group.rejectJoinRequest("user_id");
 ```
-:::
 
 ::::
 
 A user can fetch the sent join requests:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 interface GroupInviteListItem
 {
@@ -387,9 +364,8 @@ const list: GroupInviteListItem[] = await user.sentJoinReq();
 //to load more use the last item of the pre fetch
 const list_page_two: GroupInviteListItem[] = await user.sentJoinReq(list[list.length -1]);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 class GroupInviteReqList {
   final String groupId;
@@ -406,25 +382,22 @@ List<GroupInviteReqList> list = await user.sentJoinReq();
 //to load more use the last item of the pre fetch
 List<GroupInviteReqList> listPageTwo = await user.sentJoinReq(list.last);
 ```
-:::
 
 ::::
 
 A user can also delete an already sent join request. The group id can be fetched from the `sentJoinReq()` function.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 await user.deleteJoinReq("<group_id>");
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await user.deleteJoinReq("<group_id>");
 ```
-:::
 
 ::::
 
@@ -435,14 +408,13 @@ A group administrator can use this function to automatically invite and accept a
 without requiring any additional actions from the new member. 
 This feature can be useful for one-on-one user sessions.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await group.inviteAuto("user_id");
 ```
-:::
 
 ::::
 
@@ -452,14 +424,13 @@ Calling this function will prevent non-group members from sending join requests 
 This feature can be useful for one-on-one user sessions. 
 After automatically inviting the other user, you can use this function to close the invitation process.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await group.stopInvites();
 ```
-:::
 
 ::::
 
@@ -467,9 +438,9 @@ await group.stopInvites();
 
 The fetch uses pagination to not fetch all members at once. 
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const members = await group.getMember();
@@ -486,15 +457,13 @@ interface GroupUserListItem
 }
 ````
 
-:::
-
 ::::
 
 To fetch more use the last fetched member item:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 Members are from type GroupUserListItem.
 
@@ -503,7 +472,6 @@ const last_item = members[members.length -1];
 
 const members = await group.getMember(last_item);
 ```
-:::
 
 ::::
 
@@ -513,14 +481,13 @@ const members = await group.getMember(last_item);
 A group member with a rank higher than 2 (0, 1, 2) can use this function to delete another member with the same or lower rank. 
 However, a member cannot delete themselves using this function.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const members = await group.kickUser("internal_user_id");
 ```
-:::
 
 ::::
 
@@ -528,14 +495,13 @@ const members = await group.kickUser("internal_user_id");
 
 Every member can leave a group except the creator.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await group.leave();
 ```
-:::
 
 ::::
 
@@ -557,9 +523,9 @@ parent
 
 To create a child group just call group create in the parent group not in the user scope
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const group_id = await group.createChildGroup();
@@ -570,7 +536,6 @@ const group = await user.getGroup(group_id);
 //or get it from the parent group
 const group_from_parent = await group.getChildGroup(group_id);
 ```
-:::
 
 ::::
 
@@ -578,14 +543,13 @@ If you want to create a child group from your own backend, you can use this func
 After generating the data, call your API with a POST request and include the input data. 
 The endpoint for creating a child group is: https://api.sentc.com/api/v1/group/<the_group_id>/child
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const input = await group.prepareCreateChildGroup();
 ```
-:::
 
 ::::
 
@@ -595,25 +559,23 @@ To get all children of the first level use the `getChildren()` function in the g
 
 It returns a List with the child group id, the child group created time and the parent id.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 const children: GroupChildrenListItem[] = await group.getChildren();
 
 //to get the 2nd page pass in the last child
 const children_page_two: GroupChildrenListItem[] = await group.getChildren(children[children.length -1]);
 ```
-::: 
 
-::: tab Flutter
+@tab Flutter
 ```dart
 List<GroupChildrenList> children = await group.getChildren();
 
 //to get the 2nd page pass in the last child
 final childrenPageTwo = await group.getChildren(children.last);
 ```
-:::
 
 ::::
 
@@ -628,29 +590,27 @@ Normal groups can't have other groups as member except their child groups.
 A connected group can be created from a normal group.
 
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const group_id = await group.createConnectedGroup();
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 final groupId = await group.createConnectedGroup();
 ```
-:::
 
 ::::
 
 To fetch the connected group you can either fetch it from the group or from the user. 
 From user requires the group id which was connected to the connected group.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 // from the group
 const connected_group = await group.getConnectedGroup(connected_group_id);
@@ -658,9 +618,8 @@ const connected_group = await group.getConnectedGroup(connected_group_id);
 //from the user, the group id is needed
 const connected_group_by_user = await user.getGroup(connected_group_id, group_id);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 // from the group
 final connectedGroup = await group.getConnectedGroup(connectedGroupId);
@@ -668,7 +627,6 @@ final connectedGroup = await group.getConnectedGroup(connectedGroupId);
 //from the user, the group id is needed
 final connectedGroupByUser = await user.getGroup(connectedGroupId, groupId);
 ```
-:::
 
 ::::
 
@@ -677,51 +635,47 @@ When accessing a child group of a connected group, make sure to load the parent 
 To get all connected groups to a group use the `getGroups()` function in the group object. 
 It returns a List of groups with the group id and the group created time.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 const connected_groups: GroupList[] = await group.getGroups();
 
 //to get the next pages, use the last item.
 const connected_groups_page_two: GroupList[] = await group.getGroups(connected_groups[connected_groups.length-1]);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 List<ListGroups> connectedGroups = await group.getGroups();
 
 //to get the next pages, use the last item.
 List<ListGroups> connectedGroupsPageTwo = await await group.getGroups(connectedGroups.last);
 ```
-:::
 
 ::::
 
 Like users, groups can also send join requests to connected groups.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 await group.groupJoinRequest("<group_id>");
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.groupJoinRequest("<group_id>");
 ```
-:::
 
 ::::
 
 Groups can also fetch the sent join requests.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 interface GroupInviteListItem
 {
@@ -734,9 +688,8 @@ const list: GroupInviteListItem[] = await group.sentJoinReq();
 //to load more use the last item of the pre fetch
 const list_page_two: GroupInviteListItem[] = await group.sentJoinReq(list[list.length -1]);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 class GroupInviteReqList {
   final String groupId;
@@ -753,25 +706,22 @@ List<GroupInviteReqList> list = await group.sentJoinReq();
 //to load more use the last item of the pre fetch
 List<GroupInviteReqList> listPageTwo = await group.sentJoinReq(list.last);
 ```
-:::
 
 ::::
 
 A group can also delete an already sent join request. The group id can be fetched from the `sentJoinReq()` function.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 await group.deleteJoinReq("<group_id>");
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.deleteJoinReq("<group_id>");
 ```
-:::
 
 ::::
 
@@ -813,9 +763,9 @@ When the other member finish the rotation, the signed keys can be verified to ma
 
 To start the rotation call this function from any group member account:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await group.keyRotation();
@@ -823,16 +773,14 @@ await group.keyRotation();
 //with sign
 await group.keyRotation(true);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.keyRotation();
 
 //with sign
 await group.keyRotation(true);
 ```
-:::
 
 ::::
 
@@ -846,9 +794,9 @@ It doesn't matter how many members are in this group because the user devices ar
 
 To get the new key for the other member just call this function for all group member:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await group.finishKeyRotation();
@@ -856,16 +804,14 @@ await group.finishKeyRotation();
 //optional verify the new keys if the starter signed the keys
 await group.finishKeyRotation(true);
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.finishKeyRotation();
 
 //optional verify the new keys if the starter signed the keys
 await group.finishKeyRotation(true);
 ```
-:::
 
 ::::
 
@@ -875,14 +821,13 @@ This will fetch all new keys for a group and prepares the new keys.
 
 If you want to control the rotation from your own backend, just call this function to start the rotation:
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 const input = await group.prepareKeyRotation();
 ```
-:::
 
 ::::
 
@@ -897,25 +842,23 @@ This can happen if the user already done a user key rotation and the keys are no
 
 Users can be re invited to a group. It is almost the same process as the invite but this time the user keeps the rank.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 ```ts
 await group.reInviteUser("<user id>");
 
 //to re invite a group
 await group.reInviteGroup("<group id");
 ```
-:::
 
-::: tab Flutter
+@tab Flutter
 ```dart
 await group.reInviteUser("<user id>");
 
 //to re invite a group
 await group.reInviteGroup("<group id");
 ```
-:::
 
 ::::
 
@@ -923,13 +866,12 @@ await group.reInviteGroup("<group id");
 
 Only the creator (rank 0) or the admins (rank 1) can delete a group.
 
-:::: tabs type:card
+:::: tabs#p
 
-::: tab Javascript
+@tab Javascript
 
 ```ts
 await group.deleteGroup();
 ```
-:::
 
 ::::

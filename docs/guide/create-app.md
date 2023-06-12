@@ -33,10 +33,6 @@ After registration, you will get your app tokens and the jwt keys.
 With the jwt keys you can create a jwt which is valid for your app at the sentc api (with the sign key) or verify a jwt (with the verify key).
 The jwt is structured the following:
 
-:::: tabs type:card
-
-::: tab Javascript
-
 ````json lines
 {
     aud: string,
@@ -47,10 +43,6 @@ The jwt is structured the following:
 	fresh: boolean
 }
 ````
-
-:::
-
-::::
 
 - aud is the user id
 - sub is the device id
