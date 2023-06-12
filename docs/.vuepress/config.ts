@@ -20,6 +20,7 @@ export default defineUserConfig({
         repo: "https://github.com/sentclose",
         editLink: false,
         editLinkText: "",
+       contributors: false,
         navbar: [
             {
                 text: 'Guide',
