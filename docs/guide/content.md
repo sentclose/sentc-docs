@@ -37,14 +37,15 @@ This endpoint can also only be used with your secret token from your backend, no
 ## Fetch content
 
 Fetching can be done in the client with the public token or on the server. 
+Items are ordered by the created time in DESC mode (the newest comes first).
 You can specify how many items should the api give back. 
 You can enable the endpoints to control how many items should be fetched via the [App options](/guide/create-app).
 
 - `https://api.sentc.com/api/v1/content/<items-limit>/all/<last-fetched-time>/<last-id>`
 
-Pass in the `last-fetched-time` (the timestamp of the last fetched item) and the id of the last item
+Pass in the `<last-fetched-time>` (the timestamp of the last fetched item) and the id of the last item
 
-The `items-limit` defines how many items the api maximal returns and is controlled with the App options. 
+The `<items-limit>` defines how many items the api maximal returns and is controlled with the App options. 
 Set one of the following:
 
 - The `small` returns max 20 items
@@ -81,7 +82,7 @@ It returns a list with the following list items:
 
 ### Fetch content in a group
 
-The endpoints are almost as the same as fetching all content but a `group-id` is required.
+The endpoints are almost as the same as fetching all content but a `<group-id>` is required.
 
 - `https://api.sentc.com/api/v1/content/group/<group-id>/<items-limit>/all/<last-fetched-time>/<last-id>`
 
@@ -179,3 +180,67 @@ enum ContentFetchLimit {
 
 ## Categories
 
+As mentioned above, content can be stored with a category. 
+This helps to fetch just the content of a specific category instead of fetching all content.
+
+An example could be a chat and cloud platform, where all chat messages Ids are stored under the chat category and all files in the cloud under file category.
+In the frontend it is possible to fetch just the chat messages or just the files.
+
+When creating new content just set a category in the body like this:
+
+```json lines
+{
+	item: "my-chat-message-id",
+	category: "chat"
+}
+```
+
+Category can be any string.
+
+### Fetching content with category
+
+The url and request is almost the same as the normal fetch or group fetch. 
+It is still a GET request and the items limit, last fetched time and last fetched id should be set.
+
+- `https://api.sentc.com/api/v1/content/small/<category>/<last-fetched-time>/<last-id>`
+
+At `<category>` set your category to fetch.
+
+To fetch content in groups:
+
+- `https://api.sentc.com/api/v1/content/group/<group-id>/small/<category>/<last-fetched-time>/<last-id>`
+
+To fetch the content with the sdk for groups use:
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+const list: ListContentItem[] = await group.fetchContent({
+	last_fetched_item: ListContentItem,
+	cat_id: "<category>",
+	limit: CONTENT_FETCH_LIMIT
+});
+
+//to fetch the next page
+const list_page_two: ListContentItem[] = await group.fetchContent({
+	last_fetched_item: list[list.length-1],
+	cat_id: "<category>",
+	limit: CONTENT_FETCH_LIMIT
+});
+```
+
+@tab Flutter
+```dart
+List<ListContentItem> list = await group.fetchContent(
+  catId: "<category>"
+);
+
+//to fetch the next page
+List<ListContentItem> listPageTwo = await group.fetchContent(
+    lastFetchedItem: list.last,
+    catId: "<category>"
+);
+```
+::::
