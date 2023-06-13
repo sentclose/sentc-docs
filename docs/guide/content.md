@@ -40,12 +40,17 @@ Fetching can be done in the client with the public token or on the server.
 You can specify how many items should the api give back. 
 You can enable the endpoints to control how many items should be fetched via the [App options](/guide/create-app).
 
+- `https://api.sentc.com/api/v1/content/<items-limit>/all/<last-fetched-time>/<last-id>`
+
 Pass in the `last-fetched-time` (the timestamp of the last fetched item) and the id of the last item
 
-- `https://api.sentc.com/api/v1/content/small/all/<last-fetched-time>/<last-id>` The `small` returns max 20 items
-- `https://api.sentc.com/api/v1/content/med/all/<last-fetched-time>/<last-id>` The `med` returns max 50 items
-- `https://api.sentc.com/api/v1/content/large/all/<last-fetched-time>/<last-id>` The `large` returns max 70 items
-- `https://api.sentc.com/api/v1/content/xlarge/all/<last-fetched-time>/<last-id>` The `xlarge` returns max 100 items,
+The `items-limit` defines how many items the api maximal returns and is controlled with the App options. 
+Set one of the following:
+
+- The `small` returns max 20 items
+- The `med` returns max 50 items
+- The `large` returns max 70 items
+- The `xlarge` returns max 100 items
 
 The `all` endpoints means, fetch every content related to a user, where the user got access to. 
 All groups where the user is member, their child-groups and the connected groups of the groups and child groups.
@@ -78,10 +83,7 @@ It returns a list with the following list items:
 
 The endpoints are almost as the same as fetching all content but a `group-id` is required.
 
-- `https://api.sentc.com/api/v1/content/group/<group-id>/small/all/<last-fetched-time>/<last-id>` The `small` returns max 20 items
-- `https://api.sentc.com/api/v1/content/group/<group-id>/med/all/<last-fetched-time>/<last-id>` The `med` returns max 50 items
-- `https://api.sentc.com/api/v1/content/group/<group-id>/large/all/<last-fetched-time>/<last-id>` The `large` returns max 70 items
-- `https://api.sentc.com/api/v1/content/group/<group-id>/xlarge/all/<last-fetched-time>/<last-id>` The `xlarge` returns max 100 items,
+- `https://api.sentc.com/api/v1/content/group/<group-id>/<items-limit>/all/<last-fetched-time>/<last-id>`
 
 To simplify the fetching in groups you can also fetch it from the sdk:
 
@@ -104,8 +106,11 @@ const list_page_two: ListContentItem[] = await group.fetchContent({
 	cat_id: string,
 	limit: CONTENT_FETCH_LIMIT
 });
+```
 
-//the List item object
+The List item object
+
+```ts
 interface ListContentItem
 {
 	id: string,
@@ -136,9 +141,11 @@ List<ListContentItem> list = await group.fetchContent();
 List<ListContentItem> listPageTwo = await group.fetchContent(
     lastFetchedItem: list.last
 );
+```
 
+The List item object
 
-//the List item object
+```dart
 class ListContentItem {
   final String id;
   final String item;
@@ -168,7 +175,6 @@ enum ContentFetchLimit {
   XLarge,
 }
 ```
-
 ::::
 
 ## Categories
