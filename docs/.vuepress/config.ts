@@ -67,7 +67,9 @@ export default defineUserConfig({
                         "/guide/encrypt.md",
                         "/guide/file.md",
                         "/guide/backend-only.md",
-                        "/guide/module-bundler.md"
+                        "/guide/module-bundler.md",
+                        "/guide/content.md",
+                        "/guide/searchable-encryption.md"
                     ]
                 },
             ],
