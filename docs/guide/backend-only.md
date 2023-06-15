@@ -27,6 +27,17 @@ const user_id = Sentc.doneRegister("server_output");
 ````
 :::
 
+@tab Flutter
+::: tip Example
+```dart
+//call this before you do the request to your backend
+final input = await Sentc.prepareRegister("username", "password");
+
+//call this after you call the api. in the client
+final userId = await Sentc.doneRegister("server_output");
+```
+:::
+
 ::::
 
 To retrieve the necessary server input for your API, call the `prepare` function in the client. 
@@ -99,6 +110,13 @@ import Sentc from "@sentclose/sentc";
 const input = Sentc.prepareRegister("username", "password");
 ````
 
+@tab Flutter
+
+```dart
+//call this before you do the request to your backend
+final input = await Sentc.prepareRegister("username", "password");
+```
+
 ::::
 
 After your user registration call this function in the client, to check the response:
@@ -112,6 +130,17 @@ import Sentc from "@sentclose/sentc";
 
 const user_id = Sentc.doneRegister("server_output");
 ````
+::: warning
+This function will throw an error if the server output is not correct.
+:::
+
+@tab Flutter
+
+```dart
+//call this after you call the api. in the client
+final userId = await Sentc.doneRegister("server_output");
+```
+
 ::: warning
 This function will throw an error if the server output is not correct.
 :::
@@ -151,6 +180,12 @@ import Sentc from "@sentclose/sentc";
 const input = Sentc.prepareRegisterDeviceStart("identifier", "password");
 ````
 
+@tab Flutter
+
+```dart
+final input = await Sentc.prepareRegisterDeviceStart("identifier", "password");
+```
+
 ::::
 
 To check in the client if the request was correct, use the `done` function with the server output:
@@ -167,6 +202,12 @@ const input = Sentc.doneRegisterDeviceStart("server_output");
 ::: warning
 This function will throw an error if the server output is not correct.
 :::
+
+@tab Flutter
+
+```dart
+final input = await Sentc.doneRegisterDeviceStart("server_output");
+```
 
 ::::
 
@@ -192,6 +233,12 @@ Upon successful API request, the resulting group ID will be returned.
 @tab Javascript
 ```ts
 const input = user.prepareGroupCreate();
+```
+
+@tab Flutter
+
+```dart
+final input = await user.prepareGroupCreate();
 ```
 
 ::::
@@ -270,7 +317,7 @@ await Sentc.init({
         await sentc.init({
            app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", // <-- your app token
            refresh: { 
-               endpoint: 1,
+               endpoint: 0,
                endpoint_url: "<your_endpoint>"
            }
         });
@@ -281,6 +328,18 @@ await Sentc.init({
 ```
 </code-group-item>
 </code-group>
+
+@tab Flutter
+
+```dart
+await Sentc.init(
+  appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",
+  refreshOptions: RefreshOptions(
+    endpoint: RefreshOption.cookie,
+    endpointUrl: "<your_endpoint>"
+  ),
+);
+```
 
 ::::
 
@@ -337,6 +396,20 @@ await Sentc.init({
 ```
 </code-group-item>
 </code-group>
+
+@tab Flutter
+
+```dart
+await Sentc.init(
+  appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", // <-- your app token
+  refreshOptions: RefreshOptions(
+    endpoint: RefreshOption.cookieFn,
+    endpointFn: (String oldJwt) {
+      //do something with the old jwt
+    }
+  ),
+);
+```
 
 ::::
 
