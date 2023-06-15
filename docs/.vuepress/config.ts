@@ -1,9 +1,8 @@
 import {defaultTheme, defineUserConfig} from 'vuepress'
 import {mdEnhancePlugin} from "vuepress-plugin-md-enhance";
 import * as path from "path";
-import {searchPlugin} from "@vuepress/plugin-search";
 import {copyCodePlugin} from "vuepress-plugin-copy-code2";
-
+import {searchProPlugin} from "vuepress-plugin-search-pro";
 
 export default defineUserConfig({
   lang: 'en-US',
@@ -15,10 +14,9 @@ export default defineUserConfig({
         tabs: true
       }),
       copyCodePlugin({}),
-      searchPlugin({
-          maxSuggestions: 10,
-          isSearchable: (page) => page.path !== '/',
-      })
+      searchProPlugin({
+          // your options
+      }),
   ],
 
     dest: path.resolve(__dirname, "../../dist"),
