@@ -150,7 +150,7 @@ interface SentcError
 ```
 :::
 
-@tag Flutter
+@tab Flutter
 
 ::: warning
 Every function that makes a request will throw an error if the request or server output is not correct.
