@@ -55,6 +55,32 @@ interface FileCreateOutput
 }
 ````
 
+@tab Flutter
+
+Create a file with the file object:
+
+```dart
+FileCreateOutput output = await group.createFile(file: file);
+```
+
+Create a file with a path:
+
+```dart
+FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>");
+```
+
+The output is from type FileCreateOutput.
+
+```dart
+class FileCreateOutput {
+  final String fileId;
+  final String masterKeyId;
+  final String? encryptedFileName;
+
+  const FileCreateOutput(this.fileId, this.masterKeyId, this.encryptedFileName);
+}
+```
+
 ::::
 
 To also sign a file, set the 'sign' parameter to 'true' in the function. This will use the user's sign key. 
@@ -71,6 +97,18 @@ const output = await group.createFile(file, true);
 ```
 
 ::::
+
+@tab Flutter
+
+```dart
+FileCreateOutput output = await group.createFile(file: file, sign: true);
+```
+
+Or with a path:
+
+```dart
+FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", sign: true);
+```
 
 :::: tabs#p
 
@@ -92,6 +130,28 @@ const output = await group.createFile(file, false, (progress: number) => {
 This will print the progress to the console. But you can use any other js element.
 :::
 
+@tab Flutter
+
+::: tip Upload progress
+To see the actual upload progress pass in the create file function a closure:
+
+```dart
+void Function(double progress)
+```
+
+```dart
+FileCreateOutput output = await group.createFile(
+  file: file,
+  sign: false,
+  uploadCallback: (progress) {
+    print(progress);
+  }
+);
+```
+
+This will print the progress to the console.
+:::
+
 ::::
 
 :::: tabs#p
@@ -106,6 +166,18 @@ import {Uploader} from "@sentclose/sentc";
 
 Uploader.cancel_upload = true;
 ````
+
+This will cancel the actual upload of a file. But this won't delete the file.
+:::
+
+@tab Flutter
+
+::: tip Cancel upload
+To cancel the upload just set this static variable to true:
+
+```dart
+Uploader.cancelUpload = true;
+```
 
 This will cancel the actual upload of a file. But this won't delete the file.
 :::
@@ -127,7 +199,7 @@ The file creator will always provide you with the master key ID.
 const [url, meta_info, file_key] = await group.downloadFile(file_id);
 ```
 
-- This fill return the file blob url, so you can use it in the browser, like set the url as an image src or download the file.
+- This will return the file blob url, so you can use it in the browser, like set the url as an image src or download the file.
 - meta info are from type FileMetaInformation. Most of the info is not really relevant for your application, just for sentc. 
 
 ````typescript
@@ -168,6 +240,57 @@ a.click();
 ````
 :::
 
+@tab Flutter
+
+Download a file with path. If the file exists, a number will be added to the filename: file -> file(1) -> file(2), and so on.
+
+```dart
+DownloadResult result = await group.downloadFile(path: "<your-download-path>", fileId: fileId);
+```
+
+Download with file object.
+
+```dart
+DownloadResult result = await group.downloadFileWithFile(file: file, fileId: fileId);
+```
+
+- The file will be stored at your local. The user can then access it. 
+- Using download with a file object can be handy if you just want to show an image, so you can store it on the tmp dir on the device.
+- meta info are from type FileMetaInformation. Most of the info is not really relevant for your application, just for sentc.
+
+```dart
+class DownloadResult {
+  final FileMetaInformation meta;
+  final SymKey key;
+
+  DownloadResult(this.meta, this.key);
+}
+
+class FileMetaInformation {
+  final String fileId;
+  final String masterKeyId;
+  final String? belongsTo;
+  final BelongsToType belongsToType;
+  final String encryptedKey;
+  final String encryptedKeyAlg;
+  final List<FilePartListItem> partList;
+  String? fileName;
+  final String? encryptedFileName;
+
+  FileMetaInformation({
+    required this.fileId,
+    required this.masterKeyId,
+    this.belongsTo,
+    required this.belongsToType,
+    required this.encryptedKey,
+    required this.encryptedKeyAlg,
+    required this.partList,
+    this.fileName,
+    this.encryptedFileName,
+  });
+}
+```
+
 ::::
 
 To also verify the file by put in the right verify key. Make sure you save the user id from the creator of the file when uploading a file.
@@ -180,6 +303,12 @@ To get the user verify key just fetch it see [user - Public user information](/g
 
 ```typescript
 const [url, meta_info, file_key] = await group.downloadFile(file_id, verify_key);
+```
+
+@tab Flutter
+
+```dart
+DownloadResult result = await group.downloadFile(path: "<your-download-path>", fileId: fileId, verifyKey: verifyKey);
 ```
 
 ::::
@@ -205,6 +334,22 @@ const output = await group.downloadFile(file, '', (progress: number) => {
 This will print the progress to the console. But you can use any other js element.
 :::
 
+@tab Flutter
+
+::: tip Download progress
+To see the actual download progress pass in the download file function a closure:
+
+```dart
+void Function(double progress)
+```
+
+```dart
+DownloadResult result = await group.downloadFile(path: "<your-download-path>", fileId: fileId, updateProgressCb: (progress) {
+  print(progress);
+});
+```
+:::
+
 ::::
 
 :::: tabs#p
@@ -223,6 +368,16 @@ Downloader.cancel_download = true;
 This will cancel the actual download of a file.
 :::
 
+@tab Flutter
+
+::: tip Cancel download
+To cancel the download just set this static variable to true:
+
+```dart
+Downloader.cancelDownload = true;
+```
+:::
+
 ::::
 
 ## Delete a file
@@ -236,6 +391,12 @@ Just pass in the file id of the file to delete.
 ````typescript
 await group.deleteFile(file_id);
 ````
+
+@tab Flutter
+
+```dart
+await group.deleteFile(fileId);
+```
 
 ::::
 
@@ -271,6 +432,12 @@ await Sentc.init({
 	file_part_url: "<your_url_to_your_storage>"
 });
 ````
+
+@tab Flutter
+
+```dart
+await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", filePartUrl: "<your_url_to_your_storage>");
+```
 
 ::::
 

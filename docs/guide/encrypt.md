@@ -85,6 +85,19 @@ async function fileLoadingAndEncryption(file: Blob) {
 For file upload you can also use the sentc [file handling](/guide/file/)
 :::
 
+@tab Flutter
+For javascript, Uint8List are used for raw data.
+
+For a group:
+
+```dart
+final encrypted = await group.encrypt(Uint8List.fromList(elements));
+```
+
+::: tip
+For file upload you can also use the sentc [file handling](/guide/file/)
+:::
+
 ::::
 
 ## Decrypt raw data
@@ -98,6 +111,13 @@ For javascript, Uint8Arrays are used for raw data. The encrypted data should be 
 
 ```ts
 const decrypted = await group.decrypt(encrypted);
+```
+
+@tab Flutter
+For flutter, Uint8List are used for raw data. The encrypted data should be a Uint8List too.
+
+```dart
+final decrypted = await group.decrypt(encrypted);
 ```
 
 ::::
@@ -138,6 +158,14 @@ For a user:
 const encrypted = await user.encryptString("hello there!", "<reply_id>");
 ```
 
+@tab Flutter
+
+For a group:
+
+```dart
+final encrypted = await group.encryptString("hello there!");
+```
+
 ::::
 
 ## Decrypt strings
@@ -159,6 +187,15 @@ For a user:
 
 ```ts
 const decrypted = await user.decryptString(encrypted);
+```
+
+@tab Flutter
+
+The encrypted strings are strings too.
+
+For a group:
+```dart
+final decrypted = await group.decryptString(encrypted);
 ```
 
 ::::
@@ -204,6 +241,16 @@ const key_id = key.key_id;
 const master_key_id = key.master_key_id;
 ```
 
+@tab Flutter
+
+For a group:
+```dart
+SymKey key = await group.registerKey();
+
+final keyId = key.keyId;
+final masterKeyId = key.masterKeyId;
+```
+
 ::::
 
 ### Encrypt and decrypt with a registered key
@@ -224,6 +271,16 @@ const encrypted = key.encrypt(data);
 const decrypted = key.decrypt(encrypted);
 ```
 
+@tab Flutter
+
+```dart
+//encrypt
+final encrypted = await key.encrypt(data);
+
+//decrypt
+final decrypted = key.decrypt(encrypted);
+```
+
 ::::
 
 ### Fetch a key
@@ -240,15 +297,21 @@ However, it is important to ensure that the user has access to the master key
 For group:
 
 ```ts
-//encrypt
 const key = await group.fetchKey("<key_id>", "<master_key_id>");
 ```
 
 For user:
 
 ```ts
-//encrypt
 const key = await user.fetchKey("<key_id>", "<master_key_id>");
+```
+
+@tab Flutter
+
+For group:
+
+```dart
+final key = await group.fetchKey("<key_id>", "<master_key_id>");
 ```
 
 ::::
@@ -279,6 +342,14 @@ For a user:
 const encrypted = await user.encryptString("hello there!", "<reply_id>", true);
 ```
 
+@tab Flutter
+
+```dart
+//just set sign to true
+
+final encrypted = await group.encryptString("hello there!", true);
+```
+
 ::::
 
 ### Verify
@@ -300,6 +371,12 @@ For a user:
 
 ```ts
 const decrypted = await user.decryptString(encrypted, true, "<user_id>");
+```
+
+@tab Flutter
+
+```dart
+final decrypted = await group.decryptString(encrypted, true, "<user_id>");
 ```
 
 ::::
