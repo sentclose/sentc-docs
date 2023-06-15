@@ -5,13 +5,23 @@ tagline: Encryption and group/user management sdk
 actions:
   - text: Quick Start →
     link: /guide/
+  - text: Protocol
+    link: /protocol/
+    type: secondary
 features:
 - title: Easy-to-use encryption
   details: Create secure applications with just a few lines of code.
 - title: Group management
-  details: Create groups where every member can encrypt content for all other members, including key rotation to renew the keys while still using the old ones.
+  details: Create groups where every member can encrypt content for all other members.
+  link: /guide/group/
 - title: User management
   details: Register and securely log in users with ease.
+- title: Key rotation
+  details: Renew the keys while still using the old ones.
+- title: Searchable encryption
+  details: Search and query content without decrypting it.
+- title: Encrypted files
+  details: Handle large files in groups. Encryption + upload / download + decryption for every group member.
   footer: © 2022 - Sentclose
 ---
 
