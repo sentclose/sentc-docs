@@ -96,8 +96,6 @@ When downloading and verifying the file, you will also need to store the user ID
 const output = await group.createFile(file, true);
 ```
 
-::::
-
 @tab Flutter
 
 ```dart
@@ -109,6 +107,8 @@ Or with a path:
 ```dart
 FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", sign: true);
 ```
+
+::::
 
 :::: tabs#p
 
@@ -242,7 +242,8 @@ a.click();
 
 @tab Flutter
 
-Download a file with path. If the file exists, a number will be added to the filename: file -> file(1) -> file(2), and so on.
+Download a file with path. If the file exists, a number will be added to the filename: 
+- file -> file(1) -> file(2), and so on.
 
 ```dart
 DownloadResult result = await group.downloadFile(path: "<your-download-path>", fileId: fileId);
