@@ -137,7 +137,7 @@ Use the following endpoint with a POST request to send your json encoded data to
 
 - `https://api.sentc.com/api/v1/search/group/<group-id>`
 - Set for `<group-id>` the corresponding group
-- Send the user jwt, [see more at own backend](/guide/backend-only/)
+- Send the user jwt, [see more at own backend](/guide/backend-only/). The jwt is needed to check if the user got access to this group.
 
 ## Delete keywords
 
