@@ -68,6 +68,12 @@ please refer to the module bundler WASM configuration in our documentation.
 
 :::
 
+@tab Flutter
+
+```bash:no-line-numbers
+flutter pub add sentc
+```
+
 ::::
 
 ### Initialize the SDK. 
@@ -110,6 +116,14 @@ await Sentc.init({
 </code-group-item>
 </code-group>
 
+@tab Flutter
+
+For flutter, it will load the dynamic libraries for each platform.
+
+```dart
+await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
+```
+
 ::::
 
 ::: tip Ready
@@ -124,6 +138,34 @@ You are now ready to register, log in, delete a user, or a group.
 Every function that makes a request (in JavaScript with a Promise) will throw an error if the request or server output is not correct.
 
 We have noted when the function will also throw an error.
+
+The Error is a json string which can be decode into the Error type:
+
+```ts
+interface SentcError
+{
+	status: string,
+	error_message: string
+}
+```
+:::
+
+@tag Flutter
+
+::: warning
+Every function that makes a request will throw an error if the request or server output is not correct.
+
+The Error is a string which can be transpiled into the `SentcError` class:
+
+```dart
+try {
+  //some function that returns the Sentc error
+} catch (e) {
+  final err = SentcError.fromError(e);
+
+  //do something with the error
+}
+```
 :::
 
 ::::
@@ -173,6 +215,12 @@ await Sentc.register("username", "password");
 </code-group-item>
 </code-group>
 
+@tab Flutter
+
+```dart
+await Sentc.register("username", "password");
+```
+
 ::::
 
 ### Login a user
@@ -217,6 +265,12 @@ const user = await Sentc.login("username", "password");
 </code-group-item>
 </code-group>
 
+@tab Flutter
+
+```dart
+final user = await Sentc.login("username", "password");
+```
+
 ::::
 
 ### Create a group
@@ -238,6 +292,16 @@ const group_id = await user.createGroup();
 
 //now fetch the group
 const group = await user.getGroup(group_id);
+```
+
+@tab Flutter
+
+```dart
+//the user obj from login
+final groupId = await user.createGroup();
+
+//now fetch the group
+final group = await user.getGroup(groupId);
 ```
 
 ::::
@@ -266,6 +330,22 @@ console.log(decrypted_string);  //hello there!
 const encrypted = await group.encrypt(new Uint8Array([1,1,1,1]));
 
 const decrypted = await group.decrypt(encrypted);
+```
+
+@tab Flutter
+
+```dart
+//encrypt a string for the group
+final encryptedString = await group.encryptString("hello there!");
+  
+//now every user in the group can decrypt the string
+final decryptedString = await group.decryptString(encryptedString);
+
+//or raw data
+
+final encrypted = await group.encrypt(Uint8List.fromList(elements));
+
+final decrypted = await group.decrypt(encrypted);
 ```
 
 ::::
