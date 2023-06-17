@@ -25,6 +25,12 @@ Call createGroup() from the User object after logging in a user.
 const group_id = await user.createGroup();
 ```
 
+@tab Flutter
+```dart
+//the user obj from login
+String groupId = await user.createGroup();
+```
+
 ::::
 
 When you use your own backend, call the prepare function. This function returns the client data for a new group. 
@@ -37,6 +43,12 @@ Don't forget to include the Authorization header with the JWT token.
 ```ts
 //the user obj from login
 const group_data = await user.prepareGroupCreate();
+```
+
+@tab Flutter
+```dart
+//the user obj from login
+String groupData = await user.prepareGroupCreate();
 ```
 
 ::::
@@ -54,6 +66,11 @@ To fetch a group, use the group ID as a parameter. This returns a group object t
 ```ts
 //the user obj from login
 const group = await user.getGroup(group_id);
+```
+
+@tab Flutter
+```dart
+Group group = await user.getGroup(groupId);
 ```
 
 ::::
@@ -84,6 +101,25 @@ interface GroupList
 }
 ````
 
+@tab Flutter
+
+```dart
+//the user obj from login
+List<ListGroups> groups = await user.getGroups();
+```
+
+The groups are a list and each item is from class ListGroups
+
+```dart
+class ListGroups {
+  final String groupId;
+  final String time;
+  final String joinedTime;
+  final int rank;
+  final String? parent;
+}
+```
+
 ::::
 
 To fetch more groups use pagination and pass in the last fetched item:
@@ -95,7 +131,12 @@ To fetch more groups use pagination and pass in the last fetched item:
 const last_item = groups[groups.length - 1];
 
 //the user obj from login
-const groups = await user.getGroups(last_item);
+const groups_page_two = await user.getGroups(last_item);
+```
+
+@tab Flutter
+```dart
+List<ListGroups> groupsPageTwo = await user.getGroups(groups.last);
 ```
 
 ::::
@@ -117,6 +158,17 @@ const encrypted_string = await group.encryptString("hello there £ Я a a 👍")
 
 //decrypt a string. this can be a group obj from another group member
 const decrypted_string = await group.decryptString(encrypted_string);
+```
+
+@tab Flutter
+```dart
+//the group object from fetch group
+
+//encrypt a string
+String encryptedString = await group.encryptString("hello there £ Я a a 👍");
+
+//decrypt a string. this can be a group obj from another group member
+String decryptedString = await group.decryptString(encrypted_string);
 ```
 
 ::::
@@ -142,7 +194,13 @@ To change a user's rank, you need the Sentc API user ID and assign a new rank nu
 @tab Javascript
 ```ts
 //we set the rank to 2 here
-await group.updateRank("internal_user_id", 2)
+await group.updateRank("internal_user_id", 2);
+```
+
+@tab Flutter
+```dart
+//we set the rank to 2 here
+await group.updateRank("internal_user_id", 2);
 ```
 
 ::::
@@ -157,7 +215,12 @@ and the input data from your backend: `https://api.sentc.com/api/v1/group/<the_g
 @tab Javascript
 ```ts
 //we set the rank to 2 here
-const input = await group.prepareUpdateRank("internal_user_id", 2)
+const input = await group.prepareUpdateRank("internal_user_id", 2);
+```
+
+@tab Flutter
+```dart
+String input = await group.prepareUpdateRank("internal_user_id", 2);
 ```
 
 ::::
@@ -180,7 +243,7 @@ Optional, a rank can be set for the invited user.
 
 @tab Javascript
 ```ts
-await group.invite("internal_user_id")
+await group.invite("internal_user_id");
 
 //with optional rank, in this case rank 1
 await group.invite("internal_user_id", 1);
@@ -188,7 +251,7 @@ await group.invite("internal_user_id", 1);
 
 @tab Flutter
 ```dart
-await group.invite("internal_user_id")
+await group.invite("internal_user_id");
 
 //with optional rank, in this case rank 1
 await group.invite("internal_user_id", 1);
@@ -216,6 +279,20 @@ interface GroupInviteListItem
 }
 ````
 
+@tab Flutter
+```dart
+List<GroupInviteReqList> invites = await user.getGroupInvites();
+```
+
+The invites are a list and each item is a class:
+
+```dart
+class GroupInviteReqList {
+  final String groupId;
+  final String time;
+}
+```
+
 ::::
 
 To fetch more invites just pass in the last fetched item from the function:
@@ -228,6 +305,11 @@ To fetch more invites just pass in the last fetched item from the function:
 const last_item = invites[invites.length - 1];
 
 const invites = await user.getGroupInvites(last_item);
+```
+
+@tab Flutter
+```dart:no-line-numbers
+List<GroupInviteReqList> invitesPageTwo = await user.getGroupInvites(invites.last);
 ```
 
 ::::
@@ -243,6 +325,13 @@ The group id can be got from the GroupInviteListItem
 await user.acceptGroupInvite("group_id");
 ```
 
+@tab Flutter
+The group id can be got from the GroupInviteReqList
+
+```dart
+await user.acceptGroupInvite("group_id");
+```
+
 ::::
 
 Or reject the invite
@@ -253,7 +342,14 @@ Or reject the invite
 The group id can be got from the GroupInviteListItem
 
 ```ts
-await user.rejectGroupInvite("group_id");
+await user.rejectGroupInvite("<group_id>");
+```
+
+@tab Flutter
+The group id can be got from the GroupInviteReqList
+
+```dart
+await user.rejectGroupInvite("<group_id>");
 ```
 
 ::::
@@ -269,7 +365,13 @@ To request to join a group, call this function with the group ID.
 @tab Javascript
 
 ```ts
-await user.groupJoinRequest("group_id");
+await user.groupJoinRequest("<group_id>");
+```
+
+@tab Flutter
+
+```dart
+await user.groupJoinRequest("<group_id>");
 ```
 
 ::::
@@ -294,6 +396,21 @@ interface GroupJoinReqListItem
 }
 ````
 
+@tab Flutter
+```dart
+List<GroupJoinReqList> req = await group.getJoinRequests();
+```
+
+The requests are a List of GroupJoinReqList
+
+```dart
+class GroupJoinReqList {
+  final String userId;
+  final String time;
+  final int userType;
+}
+```
+
 ::::
 
 To fetch more requests just pass in the last fetched item from the function:
@@ -306,6 +423,11 @@ To fetch more requests just pass in the last fetched item from the function:
 const last_item = req[req.length - 1];
 
 const req = await group.getJoinRequests(last_item);
+```
+
+@tab Flutter
+```dart
+List<GroupJoinReqList> reqPageTwo = await group.getJoinRequests(req.last);
 ```
 
 ::::
@@ -325,6 +447,8 @@ await group.acceptJoinRequest("user_id", 1);
 ```
 
 @tab Flutter
+The user id can get from the GroupJoinReqList.
+
 ```dart
 await group.acceptJoinRequest("userId");
 
@@ -342,6 +466,13 @@ Or reject it:
 The user id can get from the GroupJoinReqListItem.
 
 ```ts
+await group.rejectJoinRequest("user_id");
+```
+
+@tab Flutter
+The user id can get from the GroupJoinReqList.
+
+```dart
 await group.rejectJoinRequest("user_id");
 ```
 
@@ -416,6 +547,11 @@ This feature can be useful for one-on-one user sessions.
 await group.inviteAuto("user_id");
 ```
 
+@tab Flutter
+```dart
+await group.inviteAuto("user_id");
+```
+
 ::::
 
 ### Stop invite
@@ -429,6 +565,11 @@ After automatically inviting the other user, you can use this function to close 
 @tab Javascript
 
 ```ts
+await group.stopInvites();
+```
+
+@tab Flutter
+```dart
 await group.stopInvites();
 ```
 
@@ -457,6 +598,22 @@ interface GroupUserListItem
 }
 ````
 
+@tab Flutter
+```dart
+List<GroupUserListItem> member = await group.getMember(); 
+```
+
+Members are a list of class GroupUserListItem.
+
+```dart
+class GroupUserListItem {
+  final String userId;
+  final int rank;
+  final String joinedTime;
+  final int userType;
+}
+```
+
 ::::
 
 To fetch more use the last fetched member item:
@@ -470,7 +627,15 @@ Members are from type GroupUserListItem.
 ```ts
 const last_item = members[members.length -1];
 
-const members = await group.getMember(last_item);
+const members_page_two = await group.getMember(last_item);
+```
+
+@tab Flutter
+
+Members are from type GroupUserListItem.
+
+```dart
+List<GroupUserListItem> memberPageTwo = await group.getMember(member.last); 
 ```
 
 ::::
@@ -486,7 +651,12 @@ However, a member cannot delete themselves using this function.
 @tab Javascript
 
 ```ts
-const members = await group.kickUser("internal_user_id");
+await group.kickUser("internal_user_id");
+```
+
+@tab Flutter
+```dart
+await group.kickUser("internal_user_id");
 ```
 
 ::::
@@ -500,6 +670,11 @@ Every member can leave a group except the creator.
 @tab Javascript
 
 ```ts
+await group.leave();
+```
+
+@tab Flutter
+```dart
 await group.leave();
 ```
 
@@ -537,6 +712,18 @@ const group = await user.getGroup(group_id);
 const group_from_parent = await group.getChildGroup(group_id);
 ```
 
+@tab Flutter
+
+```dart
+final groupId = await group.createChildGroup();
+
+//get the group from a user, if not loaded, the parent group will be loaded automatically
+final group = await await user.getGroup(groupId);
+
+//or get it from the parent group
+final groupFromParent = await group.getChildGroup(groupId); 
+```
+
 ::::
 
 If you want to create a child group from your own backend, you can use this function to generate the necessary input data. 
@@ -549,6 +736,11 @@ The endpoint for creating a child group is: https://api.sentc.com/api/v1/group/<
 
 ```ts
 const input = await group.prepareCreateChildGroup();
+```
+
+@tab Flutter
+```dart
+String input = await group.prepareCreateChildGroup();
 ```
 
 ::::
@@ -677,19 +869,28 @@ Groups can also fetch the sent join requests.
 
 @tab Javascript
 ```ts
-interface GroupInviteListItem
-{
-	group_id: string,
-    time: number
-}
-
 const list: GroupInviteListItem[] = await group.sentJoinReq();
 
 //to load more use the last item of the pre fetch
 const list_page_two: GroupInviteListItem[] = await group.sentJoinReq(list[list.length -1]);
 ```
 
+```ts
+interface GroupInviteListItem
+{
+	group_id: string,
+    time: number
+}
+```
+
 @tab Flutter
+```dart
+List<GroupInviteReqList> list = await group.sentJoinReq();
+
+//to load more use the last item of the pre fetch
+List<GroupInviteReqList> listPageTwo = await group.sentJoinReq(list.last);
+```
+
 ```dart
 class GroupInviteReqList {
   final String groupId;
@@ -700,11 +901,6 @@ class GroupInviteReqList {
     required this.time,
   });
 }
-
-List<GroupInviteReqList> list = await group.sentJoinReq();
-
-//to load more use the last item of the pre fetch
-List<GroupInviteReqList> listPageTwo = await group.sentJoinReq(list.last);
 ```
 
 ::::
@@ -740,10 +936,10 @@ This can be used to connect resources and users together, e.g.:
 
 The recommended approach is to use normal groups for user and connected groups for resources.
 
-````
+````text:no-line-numbers
 parent
-    child from parent                               -->              connected group
-        child from child from parent                                    child from connected group
+    child from parent                       -->              connected group
+        child from child from parent                           child from connected group
             child from child from parent
     child from parent
 ````
@@ -829,6 +1025,11 @@ If you want to control the rotation from your own backend, just call this functi
 const input = await group.prepareKeyRotation();
 ```
 
+@tab Flutter
+```dart
+String input = await group.prepareKeyRotation();
+```
+
 ::::
 
 and call this endpoint to start the rotation with a post request: `https://api.sentc.com/api/v1/group/<group_id>/key_rotation`
@@ -875,13 +1076,17 @@ const public_group_key: {key: string, id: string} = await Sentc.getGroupPublicKe
 
 @tab Flutter
 ```dart
+PublicGroupKeyData publicGroupKey = await Sentc.getGroupPublicKey("<group_id>");
+```
+
+```dart
 class PublicGroupKeyData {
   final String id;
   final String key;
 }
 
-PublicGroupKeyData publicGroupKey = await Sentc.getGroupPublicKey("<group_id>");
 ```
+
 ::::
 
 ## Delete a group
