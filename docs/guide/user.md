@@ -60,6 +60,15 @@ await Sentc.register("username", "password");
 This function will also throw an error if the **chosen username already exists** within your app.
 :::
 
+@tab Flutter
+```dart
+await Sentc.register("username", "password");
+```
+
+::: warning
+This function will also throw an error if the **chosen username already exists** within your app.
+:::
+
 ::::
 
 The username and password can also be generated to ensure a unique and secure login for each device. 
@@ -105,6 +114,22 @@ await Sentc.register(device_identifier, device_pw);
 </code-group-item>
 </code-group>
 
+@tab Flutter
+```dart
+GeneratedRegisterData data = await Sentc.generateRegisterData();
+
+await Sentc.register(data.identifier, data.password);
+```
+
+The data looks like this:
+
+```dart
+class GeneratedRegisterData {
+  final String identifier;
+  final String password;
+}
+```
+
 ::::
 
 The registration process will throw an error if the chosen username is already taken. 
@@ -145,6 +170,11 @@ const available = await Sentc.checkUserIdentifierAvailable("identifier");
 ```
 </code-group-item>
 </code-group>
+
+@tab Flutter
+```dart
+bool available = await Sentc.checkUserIdentifierAvailable("identifier");
+```
 
 ::::
 
@@ -196,6 +226,11 @@ const input = await Sentc.prepareRegister("identifier", "password");
 ```
 </code-group-item>
 </code-group>
+
+@tab Flutter
+```dart
+String input = await Sentc.prepareRegister("identifier", "password");
+```
 
 ::::
 
@@ -250,6 +285,15 @@ const user = await Sentc.login("identifier", "password");
 This function will also throw an error if the **username is not found** or the **password is incorrect**.
 :::
 
+@tab Flutter
+```dart
+User user = await Sentc.login("identifier", "password");
+```
+
+::: warning
+This function will also throw an error if the **username is not found** or the **password is incorrect**.
+:::
+
 ::::
 
 After successfully logging in, you will receive a user object, which is required to perform all user actions, such as creating a group.
@@ -292,6 +336,12 @@ const user = await Sentc.init({
 </code-group-item>
 </code-group>
 
+@tab Flutter
+```dart
+//nullable user object.
+final user = await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
+```
+
 ::::
 
 Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
@@ -326,6 +376,11 @@ const user = await Sentc.getActualUser();
 </code-group-item>
 </code-group>
 
+@tab Flutter
+```dart
+final user = await Sentc.getActualUser();
+```
+
 ::::
 
 ## The User Data
@@ -354,6 +409,13 @@ The devices are from type UserDeviceList
 const refresh_token = user.data.refresh_token;
 const user_id = user.data.user_id;
 const device_id = user.data.device_id;
+```
+
+@tab Flutter
+```dart
+String refreshToken = user.refreshToken;
+String userId = user.userId;
+String deviceId = user.deviceId;
 ```
 
 ::::
@@ -414,6 +476,15 @@ const input = await Sentc.registerDeviceStart("device_identifier", "device_pw");
 This function will also throw an error if the **username still exists for your app**
 :::
 
+@tab Flutter
+```dart
+String input = await Sentc.registerDeviceStart("device_identifier", "device_pw");
+```
+
+::: warning
+This function will also throw an error if the **username still exists for your app**
+:::
+
 ::::
 
 Send the Input to the Logged-In Device (possibly through a QR code, which the logged-in device can scan), and call this function with the input.
@@ -422,6 +493,12 @@ Send the Input to the Logged-In Device (possibly through a QR code, which the lo
 
 @tab Javascript
 ```ts
+//the user obj from login
+await user.registerDevice(input);
+```
+
+@tab Flutter
+```dart
 //the user obj from login
 await user.registerDevice(input);
 ```
@@ -455,6 +532,22 @@ interface UserDeviceList
 }
 ````
 
+@tab Flutter
+```dart
+List<UserDeviceList> devices = await user.getDevices();
+```
+
+The devices are a list of class UserDeviceList
+
+```dart
+class UserDeviceList {
+  final String deviceId;
+  final String time;
+  final String deviceIdentifier;
+}
+
+```
+
 ::::
 
 To fetch the next pages, simply call this function with the last fetched device.
@@ -467,7 +560,14 @@ The devices are from type UserDeviceList
 ```ts
 const last_item = devices[devices.length - 1];
 
-const devices = await user.getDevices(last_item);
+const devices_page_two = await user.getDevices(last_item);
+```
+
+@tab Flutter
+The devices are from type UserDeviceList
+
+```dart
+List<UserDeviceList> devicesPageTwo = await user.getDevices(devices.last);
 ```
 
 ::::
@@ -483,6 +583,15 @@ The user must enter the old and new passwords.
 ```ts
 await user.changePassword("old_password", "new_password");
 ```
+::: warning
+This function will also throw an error if **the old password was not correct**
+:::
+
+@tab Flutter
+```dart
+await user.changePassword("old_password", "new_password");
+```
+
 ::: warning
 This function will also throw an error if **the old password was not correct**
 :::
@@ -505,6 +614,11 @@ When resetting the password, the secret keys of the device will be encrypted aga
 await user.resetPassword("new_password");
 ```
 
+@tab Flutter
+```dart
+await user.resetPassword("new_password");
+```
+
 ::::
 
 ## Update user or device identifier
@@ -523,6 +637,15 @@ await user.updateUser("new_identifier");
 This function will also throw an error if **the identifier still exists for your app**
 :::
 
+@tab Flutter
+```dart
+await user.updateUser("new_identifier");
+```
+
+::: warning
+This function will also throw an error if **the identifier still exists for your app**
+:::
+
 ::::
 
 ## Log out
@@ -534,6 +657,11 @@ After logging out, all local data will be deleted from the client.
 @tab Javascript
 
 ```ts
+await user.logOut();
+```
+
+@tab Flutter
+```dart
 await user.logOut();
 ```
 
@@ -556,6 +684,15 @@ await user.deleteDevice("password", "device_id");
 This function will also throw an error if **the password was not correct**
 :::
 
+@tab Flutter
+```dart
+await user.deleteDevice("password", "device_id");
+```
+
+::: warning
+This function will also throw an error if **the password was not correct**
+:::
+
 ::::
 
 Get the device id from the user data:
@@ -563,11 +700,14 @@ Get the device id from the user data:
 :::: tabs#p
 
 @tab Javascript
-The devices are from type UserDeviceList
-
 ```ts
 //user from login
 const device_id = user.data.device_id;
+```
+
+@tab Flutter
+```dart
+String deviceId = user.deviceId;
 ```
 
 ::::
@@ -587,6 +727,15 @@ await user.deleteUser("password");
 This function will also throw an error if **the password was not correct**
 :::
 
+@tab Flutter
+```dart
+await user.deleteUser("password");
+```
+
+::: warning
+This function will also throw an error if **the password was not correct**
+:::
+
 ::::
 
 ## Public user information
@@ -602,8 +751,34 @@ Public key:
 ```ts
 import Sentc from "@sentclose/sentc";
 
-//this retuns the key and the key id
-const {key, id} = await Sentc.getUserPublicKey("<user_id>");
+const key = await Sentc.getUserPublicKey("<user_id>");
+```
+
+This returns the public key data.
+
+```ts
+interface UserPublicKeyData {
+	public_key: string,
+	public_key_id: string,
+	public_key_sig_key_id?: string,
+	verified: boolean
+}
+```
+
+@tab Flutter
+```dart
+PublicKeyData key = await Sentc.getUserPublicKey("<user_id>");
+```
+
+This returns the public key data.
+
+```dart
+class PublicKeyData {
+  final String publicKeyId;
+  final String publicKey;
+  final String? publicKeySigKeyId;
+  bool verified;
+}
 ```
 
 ::::
@@ -615,12 +790,16 @@ This key can only be fetched by id because to verify data you need a specific ve
 :::: tabs#p
 
 @tab Javascript
-
 ```ts
 import Sentc from "@sentclose/sentc";
 
 //this retuns just the key
 const key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
+```
+
+@tab Flutter
+```dart
+String key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
 ```
 
 ::::
@@ -639,8 +818,11 @@ const number = await user.createSafetyNumber({
 	user_id: "<user_to_compare_id>",
 	verify_key_id: "<the_verify_key_id_to_compare>"
 });
+```
 
-//the other user side
+The other side:
+
+```ts
 const number_2 = await user.createSafetyNumber({
 	user_id: "<user_to_compare_id>",
 	verify_key_id: "<the_verify_key_id_to_compare>"
@@ -655,8 +837,11 @@ final number = await await user.createSafetyNumber(
     "<the_verify_key_id_to_compare>",
   ),
 );
+```
 
-//the other user side
+The other side:
+
+```dart
 final number2 = await await user.createSafetyNumber(
   UserVerifyKeyCompareInfo(
     "<user_to_compare_id>", 
