@@ -195,4 +195,10 @@ The protocol is designed for async long-running communication between groups.
 
 The both requirements make perfect forward secrecy impossible. See more [at the Protocol](/protocol/) how we solved it.
 
+### In Browser encryption
+
+- Make sure to protected your app against XSS attacks. The data is encrypted and can't be checked on the server. XSS attacks can also leak the private keys!
+- If you are using a CDN, make sure that the CDN will not inject malicious code that could leak information instead of your original code. 
+- In the browser we are using the indexed db to store the keys and the files. The db has only 2 gb of space. If the user needs to download larger files try to use a native app instead of the browser. 
+
 <br><br>
