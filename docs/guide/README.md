@@ -141,7 +141,7 @@ Every function that makes a request (in JavaScript with a Promise) will throw an
 
 We have noted when the function will also throw an error.
 
-The Error is a json string which can be decode into the Error type:
+The Error is a json string which can be decoded into the Error type:
 
 ```ts
 interface SentcError
