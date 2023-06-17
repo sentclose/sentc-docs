@@ -56,6 +56,8 @@ yarn add @sentclose/sentc
 </code-group-item>
 </code-group>
 
+<br>
+
 ::: warning
 
 #### Module bundler
