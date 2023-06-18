@@ -126,6 +126,58 @@ For flutter, it will load the dynamic libraries for each platform.
 await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
 ```
 
+#### Secure storage
+
+The standard storage for keys is shared preferences. This is however not secure and will leave the keys unencrypted on your device.
+
+We also provide another storage solution with [flutter_secure_storage](https://github.com/mogol/flutter_secure_storage). 
+This will encrypt the keys and stored them into a keychain.
+
+Install the storage:
+
+```bash:no-line-numbers
+flutter pub add sentc_flutter_secure_storage
+```
+
+and then just replace the storage in the option.
+
+```dart
+import 'package:sentc/sentc.dart';
+import 'package:sentc_flutter_secure_storage/sentc_flutter_secure_storage.dart';
+
+void main() async {
+  
+  await Sentc.init(
+    appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",   // <-- your app token
+    storage: SecureStorage(), //init with the other storage
+  );
+}
+```
+
+Please follow the instruction of [flutter_secure_storage](https://github.com/mogol/flutter_secure_storage). 
+
+You can also create a FlutterSecureStorage object and pass it in `SecureStorage()`. This can be useful if you must set options to your storage.
+
+```dart
+import 'package:sentc/sentc.dart';
+import 'package:sentc_flutter_secure_storage/sentc_flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+void main() async {
+  //set other android option to use android encryptedSharedPreferences (only for Android >= V5)
+  AndroidOptions getAndroidOptions() => const AndroidOptions(
+    encryptedSharedPreferences: true,
+  );
+
+  final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+  
+  await Sentc.init(
+    appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",
+    storage: SecureStorage(storage), //set the storage with options
+  );
+}
+```
+
 ::::
 
 ::: tip Ready
