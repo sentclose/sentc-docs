@@ -1,18 +1,21 @@
 {
-  "name": "sentc-doc",
-  "version": "0.8.0",
-  "description": "Sentc is a sdk for end-to-end encryption with user and group management",
-  "main": "index.js",
-  "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
-  },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "vuepress": "^2.0.0-beta.63",
-    "vuepress-plugin-copy-code2": "^2.0.0-beta.226",
-    "vuepress-plugin-md-enhance": "^2.0.0-beta.225",
-    "vuepress-plugin-search-pro": "^2.0.0-beta.226"
-  }
+	"name": "sentc-doc",
+	"version": "0.8.0",
+	"description": "Sentc is a sdk for end-to-end encryption with user and group management",
+	"main": "index.js",
+	"scripts": {
+		"docs:dev": "vuepress dev docs",
+		"docs:build": "vuepress build docs",
+		"lint": "eslint ./docs/.vuepress --ext .ts --fix"
+	},
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"vuepress": "^2.0.0-beta.63",
+		"vuepress-plugin-copy-code2": "^2.0.0-beta.226",
+		"vuepress-plugin-md-enhance": "^2.0.0-beta.225",
+		"vuepress-plugin-search-pro": "^2.0.0-beta.226",
+		"vuepress-plugin-seo2": "^2.0.0-beta.226",
+		"@joernheinemann/eslint-config-typescript": "1.0.0"
+	}
 }
