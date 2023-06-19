@@ -23,7 +23,20 @@ Sentc is currently available for JavaScript in the browser, but we are also work
 
 ## Quick start
 
-Create an account and an app. Use the public API token in your SDK options.
+### Create an account and an app
+
+To use the sdk, you need a public and secret token.
+
+The public token will be used in your sdk at the frontend and the secret token should only be used at your backend. 
+You can set what function should be called with which token.
+
+1. Got to [https://api.sentc.com/dashboard/register](https://api.sentc.com/dashboard/register) and create an account. You will be redirected to the account dashboard.
+2. Verify the email. We email you to make sure that your email address belongs to you.
+3. In your dashboard click on the blue button: New App. You will get the app tokens and the first jwt keys.
+
+Now you are ready to use the sdk.
+
+See [this guide](/guide/create-app/) for more information.
 
 ### Install the sdk.
 
