@@ -3,11 +3,12 @@ import {mdEnhancePlugin} from "vuepress-plugin-md-enhance";
 import * as path from "path";
 import {copyCodePlugin} from "vuepress-plugin-copy-code2";
 import {searchProPlugin} from "vuepress-plugin-search-pro";
+import {seoPlugin} from "vuepress-plugin-seo2";
 
 export default defineUserConfig({
   lang: 'en-US',
   title: 'Sentc documentation',
-  description: 'End-to-end encryption sdk',
+  description: 'End-to-end encryption sdk for developer.',
 
   plugins:[
       mdEnhancePlugin({
@@ -17,6 +18,10 @@ export default defineUserConfig({
       searchProPlugin({
           // your options
       }),
+      seoPlugin({
+          hostname: "sentc.com",
+          twitterID: "sentclose"
+      })
   ],
 
     dest: path.resolve(__dirname, "../../dist"),
