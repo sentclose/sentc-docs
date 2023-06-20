@@ -19,7 +19,7 @@ and call your backend with the data from `prepareRegister` or `doneRegister()` a
 See more at [own backend](/guide/backend-only/)
 :::
 
-Sentc is currently available for JavaScript in the browser, but we are also working on a Flutter SDK and more.
+Sentc is currently available for JavaScript in the browser and flutter on android and windows (linux will follow), but we are also working on more.
 
 ## Quick start
 
