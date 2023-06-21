@@ -3,7 +3,7 @@
 For each endpoint, you can specify which token is required to access it in the app options.
 
 By default, all endpoints can be accessed using the public token, except for "register" and "user delete", 
-which require the secret token. For more information, please refer to the "[Create an app](/guilde/create-app/)" documentation.
+which require the secret token. For more information, please refer to the "[Create an app](/guide/create-app/)" documentation.
 
 This feature provides flexibility for storing additional user data in your own backend while only sending necessary data to the sentc backend.
 
@@ -160,7 +160,7 @@ Alternatively, you can use your own backend's login process and then log in agai
 The sentc API login is a highly secure process because the user's password never leaves their client device.
 
 ::: tip Jwt check
-You can simply check the jwt from the sentc api with your jwt public key see more at [Create an app](/guilde/create-app/).
+You can simply check the jwt from the sentc api with your jwt public key see more at [Create an app](/guide/create-app/).
 :::
 
 ### Register device
@@ -169,7 +169,7 @@ The "Prepare register device" function is similar to the initial user registrati
 However, the validation for device registration is the same as described in the "User" section [here](/guide/user/#register-device).
 
 To register a device, send the necessary input to our API endpoint 
-using a POST request without a JWT at: https://api.sentc.com/api/v1/user/prepare_register_device
+using a POST request without a JWT at: `https://api.sentc.com/api/v1/user/prepare_register_device`
 
 :::: tabs#p
 
@@ -221,7 +221,7 @@ Do not forget to send an Authorization header with the Jwt as Bearer value.
 
 To create a group, call the "prepare" function from the user object as we need the user keys.
 
-Send the necessary input to this endpoint using a POST request: https://api.sentc.com/api/v1/group
+Send the necessary input to this endpoint using a POST request: `https://api.sentc.com/api/v1/group`
 
 The input should contain all the client-related values needed to create a group, 
 such as group keys and the encrypted group key by the user's public key.
@@ -250,7 +250,7 @@ To delete a group call this endpoint with the jwt in header and a delete request
 ### Check group access
 
 At your backend you can also check if a user got access to a group. 
-Use this endpoint: ``https://api.sentc.com/api/v1/group/<group_id>/light` with a GET request.
+Use this endpoint: `https://api.sentc.com/api/v1/group/<group_id>/light` with a GET request.
 
 The response is either an error with status code 310 or a json object:
 
@@ -280,7 +280,7 @@ Both the refresh and the jwt are stored in the client. When calling the api and 
 ### Refresh from a cookie
 
 In this scenario, a request is made to your endpoint with the old JWT token included in the Authorization header. 
-To refresh the token, make a PUT request to the refresh endpoint on the sentc API from your backend: https://api.sentc.com/api/v1/refresh. 
+To refresh the token, make a PUT request to the refresh endpoint on the sentc API from your backend: `https://api.sentc.com/api/v1/refresh`. 
 Include the old JWT token in the Authorization Bearer header.
 
 When initializing the client, set the refresh endpoint option to "cookie" in the options.
