@@ -4,6 +4,11 @@ import * as path from "path";
 import {copyCodePlugin} from "vuepress-plugin-copy-code2";
 import {searchProPlugin} from "vuepress-plugin-search-pro";
 import {seoPlugin} from "vuepress-plugin-seo2";
+import {registerComponentsPlugin} from "@vuepress/plugin-register-components";
+import { getDirname, path as vuepress_path } from '@vuepress/utils'
+
+// @ts-ignore
+const _dirname = getDirname(import.meta.url)
 
 export default defineUserConfig({
 	lang: "en-US",
@@ -22,6 +27,9 @@ export default defineUserConfig({
 			hostname: "sentc.com",
 			twitterID: "sentclose",
 			autoDescription: false
+		}),
+		registerComponentsPlugin({
+			componentsDir: vuepress_path.resolve(_dirname, "../../components")
 		})
 	],
 
@@ -41,6 +49,10 @@ export default defineUserConfig({
 			{
 				text: "Protocol",
 				link: "/protocol/"
+			},
+			{
+				text: "Playground",
+				link: "/playground/"
 			},
 			{
 				text: "Integrations",
