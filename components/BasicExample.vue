@@ -47,14 +47,46 @@
 		<button type="submit">Login</button>
 	</form>
 
+	<p v-if="user_id !== ''">Your user id = {{ user_id }}</p>
 	<br>
 
 	<h2>Create a group</h2><br>
 
 	<button @click="createGroup">Create a group</button>
 
-	<br>
-	<br>
+	<p v-if="group_id !== ''">Your group id = {{ group_id }}</p>
+
+	<br><br>
+
+	<h3>Optional invite other users to your group</h3><br>
+
+	<form @submit.prevent="inviteUser">
+		<label>
+			User id
+			<input type="text" v-model="user_to_invite_id" />
+		</label>
+
+		<br><br>
+
+		<button type="submit">Invite user</button>
+	</form>
+
+	<br><br>
+
+	<h3>Optional fetch other group</h3><br>
+
+	<form @submit.prevent="fetchGroup">
+		<label>
+			Group id
+			<input type="text" v-model="group_id_to_fetch" />
+		</label>
+
+		<br><br>
+
+		<button type="submit">fetch other group</button>
+	</form>
+
+	<br><br>
 
 	<h2>Encrypt and decrypt in a group</h2><br>
 
@@ -99,6 +131,8 @@ const ready = ref(false);
 const msg = ref("");
 const username = ref("");
 const pw = ref("");
+const user_to_invite_id = ref("");
+const group_id_to_fetch = ref("");
 
 const to_encrypt = ref("");
 const encrypted = ref("");
@@ -107,9 +141,13 @@ const to_decrypt = ref("");
 const decrypted = ref("");
 
 
-let user: User;
+let user_obj: User;
+const user_id = ref("");
 
 let group: Group;
+const group_id = ref("");
+
+let group1: Group;
 
 async function register()
 {
@@ -151,7 +189,9 @@ async function login()
 		//@ts-ignore
 		const sentc = window.Sentc.default;
 
-		user = await sentc.login(username.value, pw.value);
+		user_obj = await sentc.login(username.value, pw.value);
+
+		user_id.value = user_obj.user_data.user_id;
 	} catch (e) {
 		handle_err(e);
 	}
@@ -159,13 +199,49 @@ async function login()
 
 async function createGroup()
 {
-	if (!ready.value || !user){
+	if (!ready.value || !user_obj){
 		return;
 	}
 
 	try {
-		const group_id = await user.createGroup();
-		group = await user.getGroup(group_id);
+		group_id.value = await user_obj.createGroup();
+		group = await user_obj.getGroup(group_id.value);
+	}catch (e) {
+		handle_err(e);
+	}
+}
+
+async function inviteUser()
+{
+	if (!ready.value || !user_obj || !group){
+		return;
+	}
+
+	if (!user_to_invite_id.value || user_to_invite_id.value === ""){
+		msg.value = "User id";
+		return;
+	}
+
+	try {
+		await group.inviteAuto(user_to_invite_id.value);
+	}catch (e) {
+		handle_err(e);
+	}
+}
+
+async function fetchGroup()
+{
+	if (!ready.value || !user_obj){
+		return;
+	}
+
+	if (!group_id_to_fetch.value || group_id_to_fetch.value === ""){
+		msg.value = "User id";
+		return;
+	}
+
+	try {
+		group1 = await user_obj.getGroup(group_id_to_fetch.value);
 	}catch (e) {
 		handle_err(e);
 	}
@@ -173,7 +249,7 @@ async function createGroup()
 
 async function encrypt()
 {
-	if (!ready.value || !user || !group){
+	if (!ready.value || !user_obj || (!group && !group1)){
 		return;
 	}
 
@@ -183,7 +259,11 @@ async function encrypt()
 	}
 
 	try {
-		encrypted.value = await group.encryptString(to_encrypt.value);
+		if (group){
+			encrypted.value = await group.encryptString(to_encrypt.value);
+		}else if (group1){
+			encrypted.value = await group1.encryptString(to_encrypt.value);
+		}
 	}catch (e) {
 		handle_err(e);
 	}
@@ -191,7 +271,7 @@ async function encrypt()
 
 async function decrypt()
 {
-	if (!ready.value || !user || !group){
+	if (!ready.value || !user_obj || (!group && !group1)){
 		return;
 	}
 
@@ -201,7 +281,11 @@ async function decrypt()
 	}
 
 	try {
-		decrypted.value = await group.decryptString(to_decrypt.value);
+		if (group){
+			decrypted.value = await group.decryptString(to_decrypt.value);
+		}else if (group1){
+			decrypted.value = await group1.decryptString(to_decrypt.value);
+		}
 	}catch (e) {
 		handle_err(e);
 	}
@@ -217,8 +301,8 @@ async function end()
 		await group.deleteGroup();
 	}
 
-	if (user){
-		await user.deleteUser(pw.value);
+	if (user_obj){
+		await user_obj.deleteUser(pw.value);
 	}
 }
 
