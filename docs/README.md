@@ -5,8 +5,8 @@ tagline: Encryption and group/user management sdk
 actions:
   - text: Quick Start →
     link: /guide/
-  - text: Protocol
-    link: /protocol/
+  - text: Try it out
+    link: /playground/
     type: secondary
 features:
 - title: Easy-to-use encryption

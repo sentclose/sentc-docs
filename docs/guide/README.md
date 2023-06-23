@@ -23,6 +23,10 @@ Sentc is currently available for JavaScript in the browser and flutter on androi
 
 ## Quick start
 
+### Playground
+
+User and group functionalities can be tested in our [playground](/playground/) without creating an account.
+
 ### Create an account and an app
 
 To use the sdk, you need a public and secret token.
