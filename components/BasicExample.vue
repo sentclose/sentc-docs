@@ -25,6 +25,8 @@
 		<button type="submit">Register account</button>
 	</form>
 
+	<p v-if="registered_done">User successfully registered. You can now log in.</p>
+
 	<br>
 
 	<h2>Login</h2><br>
@@ -71,7 +73,9 @@
 		<button type="submit">Invite user</button>
 	</form>
 
-	<br><br>
+	<p v-if="user_invited">The user was successfully invited to your group.</p>
+
+	<br>
 
 	<h3>Optional fetch other group</h3><br>
 
@@ -86,6 +90,7 @@
 		<button type="submit">fetch other group</button>
 	</form>
 
+	<p v-if="group_fetched">Group was successfully fetched. You can now encrypt and decrypt in the group.</p>
 	<br><br>
 
 	<h2>Encrypt and decrypt in a group</h2><br>
@@ -134,6 +139,10 @@ const pw = ref("");
 const user_to_invite_id = ref("");
 const group_id_to_fetch = ref("");
 
+const registered_done = ref(false);
+const user_invited = ref(false);
+const group_fetched = ref(false);
+
 const to_encrypt = ref("");
 const encrypted = ref("");
 
@@ -167,6 +176,8 @@ async function register()
 		const sentc = window.Sentc.default;
 
 		await sentc.register(username.value, pw.value);
+
+		registered_done.value = true;
 	} catch (e) {
 		handle_err(e);
 	}
@@ -224,6 +235,7 @@ async function inviteUser()
 
 	try {
 		await group.inviteAuto(user_to_invite_id.value);
+		user_invited.value = true;
 	}catch (e) {
 		handle_err(e);
 	}
@@ -242,6 +254,7 @@ async function fetchGroup()
 
 	try {
 		group1 = await user_obj.getGroup(group_id_to_fetch.value);
+		group_fetched.value = true;
 	}catch (e) {
 		handle_err(e);
 	}
@@ -299,10 +312,13 @@ async function end()
 
 	if (group){
 		await group.deleteGroup();
+		group_id.value = "";
 	}
 
 	if (user_obj){
 		await user_obj.deleteUser(pw.value);
+		registered_done.value = false;
+		user_id.value = "";
 	}
 }
 
