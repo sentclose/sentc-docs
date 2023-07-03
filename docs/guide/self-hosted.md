@@ -63,3 +63,65 @@ docker-compose -f mysql/docker-compose.external_db.yml up -d
 
 Keep in mind that this will use the array cache as default not redis. If you have redis also running, set the Env `CACHE` to 2
 and the Env `REDIS_URL` to your running redis url instance.
+
+To use the sqlite container use this compose file:
+
+```bash:no-line-numbers
+docker-compose -f sqlite/docker-compose.yml up -d
+```
+
+This will start the sqlite version of the api. Make sure to place in the sqlite database in the folder: `db/sqlite`. 
+You can get it from the [api repo](https://github.com/sentclose/sentc-api/blob/master/db/sqlite/db.sqlite3).
+
+### Server
+
+This hosting approach not be directly access from the outside. Use a reverse proxy like nginx to handle tls. 
+Sentc itself will use http.
+
+```text
+server {
+    client_max_body_size 6m;    # to make sure the file upload works
+    
+    server_name <your_server_name>
+    
+    location / {
+        proxy_pass http://localhost:3002; # redirect to your running docker container. Sentc uses port 3002 as default.
+        proxy_http_version 1.1;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+## SDK change
+
+Set the base_url option in your SDK init to your hosted version to make sure that the sentc backend is not used.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+import Sentc from "@sentclose/sentc";
+
+//init the javascript client
+await Sentc.init({
+    app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",  // <-- your app token
+    base_url: "<your_api_url>"
+});
+```
+
+@tab Flutter
+
+```dart
+await Sentc.init(
+  appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi",
+  baseUrl: "<your_api_url>",
+);
+```
+
+::::
