@@ -88,7 +88,8 @@ export default defineUserConfig({
 						"/guide/backend-only.md",
 						"/guide/module-bundler.md",
 						"/guide/content.md",
-						"/guide/searchable-encryption.md"
+						"/guide/searchable-encryption.md",
+						"/guide/self-hosted.md"
 					]
 				}
 			],
