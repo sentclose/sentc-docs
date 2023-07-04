@@ -21,6 +21,11 @@ See more at [own backend](/guide/backend-only/)
 
 Sentc is currently available for JavaScript in the browser and flutter on android and windows (linux will follow), but we are also working on more.
 
+## Contact
+
+If you want to learn more, just contact me [contact@sentclose.com](mailto:contact@sentclose.com).
+
+
 ## Quick start
 
 ### Playground
