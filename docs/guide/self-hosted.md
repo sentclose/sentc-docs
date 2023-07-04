@@ -125,3 +125,21 @@ await Sentc.init(
 ```
 
 ::::
+
+## Register a self-hosted app
+
+You can access your dashboard by going to your address where your instance running. 
+Then simply follow the register an app [guide for creating an app](/guide/create-app/).
+
+Use your public and secret token from this app. 
+
+### Disable app creation
+
+Now the registration is still open for everyone. Set the Env `CUSTOMER_REGISTER` to `0` in your `sentc.env` file and restart your docker container.
+Now none can create a new account and register apps except your account.
+
+```bash:no-line-numbers
+docker-compose -f mysql/docker-compose.yml stop
+```
+
+And then start again.
