@@ -89,6 +89,7 @@ export default defineUserConfig({
 						"/guide/module-bundler.md",
 						"/guide/content.md",
 						"/guide/searchable-encryption.md",
+						"/guide/sortable.md",
 						"/guide/self-hosted.md"
 					]
 				}

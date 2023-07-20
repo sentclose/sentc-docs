@@ -18,8 +18,8 @@ features:
   details: Register and securely log in users with ease.
 - title: Key rotation
   details: Renew the keys while still using the old ones.
-- title: Searchable encryption
-  details: Search and query content without decrypting it.
+- title: Queryable encryption
+  details: Search or query sorted content without decrypting it, with searchable and sortable encryption.
 - title: Encrypted files
   details: Handle large files in groups. Encryption + upload / download + decryption for every group member.
   footer: © 2022 - Sentclose

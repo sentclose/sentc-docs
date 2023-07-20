@@ -1,0 +1,135 @@
+# Sortable encryption
+
+When the data is fully end-to-end encrypted, nobody even the server can decrypt and read / analyse the data.
+To do range queries like sort table by last name the server must know the decrypted value. The encryption only works in groups.
+
+With the sortable encryption it is not needed anymore. The encrypted produces output which follows the order of the plaintext.
+
+Like: `encrypt(1)` < `encrypt(2)` < `encrypt(3)` < `encrypt(5000)`
+
+Now it is possible to do range queries or sort rows without decrypt it.
+
+::: danger
+The encryption is not as secure as the symmetric or asymmetric encryption. This is why sentc never encrypt the whole plaintext.
+:::
+
+You can encrypt numbers or strings. Numbers are fully encrypted, for strings only the first 4 characters will be encrypted and the rest gets ignored.
+
+Use this technic only in combination with the symmetric encryption to encrypt a 
+value symmetrically so the user can decrypt it and also encrypt it with the sortable encryption to do range queries in your backend.
+
+## Encrypt a number
+
+The maximum number to encrypt is `65532`.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+const a = group.encryptSortableRawNumber(262);
+const b = group.encryptSortableRawNumber(263);
+const c = group.encryptSortableRawNumber(65321);
+
+//a < b < c
+```
+
+@tab Flutter
+
+For flutter, it is a future
+
+```dart
+final a = await group.encryptSortableRawNumber(262);
+final b = await group.encryptSortableRawNumber(263);
+final c = await group.encryptSortableRawNumber(65321);
+
+//a < b < c
+```
+
+::::
+
+To get more information about how the value is encrypted, you can use this function instead:
+
+:::: tabs#p
+
+@tab Javascript
+
+It returns the number as the first param, the used algorithms and the used key id.
+
+```ts
+const [number, alg, key_id] = group.encryptSortableNumber(262);
+```
+
+@tab Flutter
+
+It returns the number as the first param, the used algorithms and the used key id.
+
+```dart
+final out = await group.encryptSortableNumber(262);
+
+final number = out.number;
+final alg = out.alg;
+final keyId = out.keyId;
+```
+
+::::
+
+## Encrypt a string
+
+Only the first 4 characters will be used to encrypt the string the rest will be ignored.
+
+Strings with umlauts or other non english character are not supported. Alternative you can use the english version like `ö` ot `oe`
+
+But you can write your own function that creates a number and encrypt the number.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+const a = group.encryptSortableRawString("abc");
+const b = group.encryptSortableRawString("dfg");
+const c = group.encryptSortableRawString("hij");
+
+//a < b < c
+```
+
+@tab Flutter
+
+For flutter, it is a future
+
+```dart
+final a = await group.encryptSortableRawString("abc");
+final b = await group.encryptSortableRawString("dfg");
+final c = await group.encryptSortableRawString("hij");
+
+//a < b < c
+```
+
+::::
+
+To get more information from the encrypted strings use this function:
+
+:::: tabs#p
+
+@tab Javascript
+
+It returns the number as the first param, the used algorithms and the used key id.
+
+```ts
+const [number, alg, key_id] = group.encryptSortableString("abc");
+```
+
+@tab Flutter
+
+It returns the number as the first param, the used algorithms and the used key id.
+
+```dart
+final out = await group.encryptSortableString("abc");
+
+final number = out.number;
+final alg = out.alg;
+final keyId = out.keyId;
+```
+
+::::

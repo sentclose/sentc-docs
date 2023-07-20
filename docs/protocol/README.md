@@ -46,6 +46,8 @@ Here are the actual used algorithm.
   - hmac-sha 256
 - password hashing
   - argon2 with argon2id
+- sortable encryption
+  - ope
 
 ## User
 
