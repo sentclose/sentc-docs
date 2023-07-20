@@ -3,14 +3,17 @@
 When the data is fully end-to-end encrypted, nobody even the server can decrypt and read / analyse the data.
 To do range queries like sort table by last name the server must know the decrypted value. The encryption only works in groups.
 
-With the sortable encryption it is not needed anymore. The encrypted produces output which follows the order of the plaintext.
+With the sortable encryption it is not needed anymore. 
+The encrypted produces numbers which follows the order of the plaintext and can be used with any database or backend.
 
 Like: `encrypt(1)` < `encrypt(2)` < `encrypt(3)` < `encrypt(5000)`
 
 Now it is possible to do range queries or sort rows without decrypt it.
 
-::: danger
-The encryption is not as secure as the symmetric or asymmetric encryption. This is why sentc never encrypt the whole plaintext.
+::: warning
+The encryption is not as secure as the symmetric or asymmetric encryption. 
+
+This is why sentc never encrypt the whole plaintext.
 :::
 
 You can encrypt numbers or strings. Numbers are fully encrypted, for strings only the first 4 characters will be encrypted and the rest gets ignored.
