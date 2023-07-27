@@ -53,7 +53,7 @@ String groupData = await user.prepareGroupCreate();
 
 ::::
 
-See more at [own backend](/guide/backend-only/)
+See more at [own backend](/guide/advanced/backend-only/)
 
 ## Fetch a group
 
@@ -225,7 +225,7 @@ String input = await group.prepareUpdateRank("internal_user_id", 2);
 
 ::::
 
-See more at [own backend](/guide/backend-only/)
+See more at [own backend](/guide/advanced/backend-only/)
 
 ## Invite more user
 
@@ -745,7 +745,7 @@ String input = await group.prepareCreateChildGroup();
 
 ::::
 
-See more at [own backend](/guide/backend-only/)
+See more at [own backend](/guide/advanced/backend-only/)
 
 To get all children of the first level use the `getChildren()` function in the group object.
 

@@ -15,7 +15,7 @@ The Ids can only be set with your secret token from your backend to make sure th
 ## Create content
 
 To store the Ids make a POST request to the following url, with the users jwt: `https://api.sentc.com/api/v1/content/<group-id>`. <br>
-See at [own backend](/guilde/backend-only/) how to make requests to the sentc api.
+See at [own backend](/guilde/advanced/backend-only/) how to make requests to the sentc api.
 
 The following body is needed:
 

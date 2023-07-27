@@ -459,7 +459,7 @@ Please ensure that you transfer your data to the new URL.
 Call this endpoint when the upload is done: 
 - `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
 
-This endpoint needs your secret token and should only be called from your backend. See [own backend](/guide/backend-only) for sending the token as header.
+This endpoint needs your secret token and should only be called from your backend. See [own backend](/guide/advanced/backend-only) for sending the token as header.
 
 ```
 Header name: x-sentc-app-token

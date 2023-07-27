@@ -4,7 +4,7 @@ Sentc provides secure registration and login capabilities out of the box,
 but we do not store any additional data about the user. 
 If you require additional information, such as an email address or full name, you can register the user from your own backend.
 
-Please refer to the [own backend](/guide/backend-only/) section for more information.
+Please refer to the [own backend](/guide/advanced/backend-only/) section for more information.
 
 Users are required for encryption/decryption and group joining. 
 Each user has a public and private key, as well as a sign and verify key. 
@@ -234,7 +234,7 @@ String input = await Sentc.prepareRegister("identifier", "password");
 
 ::::
 
-See more at [own backend](/guide/backend-only/)
+See more at [own backend](/guide/advanced/backend-only/)
 
 ## Login
 
@@ -432,7 +432,7 @@ There are three strategies to refresh a JWT.
 However, this is only necessary if you must use HTTP-only cookies for the browser. 
 If you are using other implementations, stick with the default.
 
-See more at [own backend](/guide/backend-only/)
+See more at [own backend](/guide/advanced/backend-only/)
 
 
 ## Register Device
