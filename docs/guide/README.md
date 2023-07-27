@@ -1,12 +1,18 @@
-# Getting started
-
-## What is sentc
+# What is sentc
 
 Sentc is an end-to-end encryption SDK with user and group management.
 
 End-to-end encryption can be difficult to develop and maintain. 
 Fortunately, Sentc gives you full control of your application and provides easy-to-use encryption for groups or between users. 
+
 We also provide multi-device support, where a user can have multiple devices under one account but with different login identifiers and passwords for each device.
+
+::: tip
+There is also a sdk version without the encryption but with the user and group management. 
+This is very helpful to create secure login systems and to group users to manage their access to resources. 
+
+See more at [sdk-light](/guide/light/)
+:::
 
 ::: tip
 Sentc can also be used with another backend, such as Firebase or your own.
@@ -16,7 +22,7 @@ For backend-only function calls, use the equivalent of the function with a
 `prepare` or `done` prefix, such as `prepareRegister()` instead of `register` 
 and call your backend with the data from `prepareRegister` or `doneRegister()` after registration.
 
-See more at [own backend](/guide/backend-only/)
+See more at [own backend](/guide/advanced/backend-only/)
 :::
 
 Sentc is currently available for JavaScript in the browser and flutter on android and windows (linux will follow), but we are also working on more.
@@ -88,7 +94,7 @@ The core SDK uses WebAssembly (WASM) in the browser.
 
 If you are using a module bundler like Webpack and you are not using the browser import,
 please refer to the module bundler WASM configuration in our documentation.
-[see Module bundler](/guide/module-bundler/)
+[see Module bundler](/guide/advanced/module-bundler/)
 
 :::
 
