@@ -106,7 +106,7 @@ The identifier is hashed on the server via sha 256
 
 ### Login
 
-Login is split into two tasks.
+Login is split into three tasks.
 
 #### Prepare the login
 
@@ -130,14 +130,24 @@ If not then the identifier or the password may be wrong.
 
 It is important to not just return false if the identifier not exists to impede password brute force attacks. 
 
-If the auth key exists then the server will create a json web token (jwt) and return the encrypted private keys and the encrypted master key.
+If the auth key exists then the server will create a login challenge. 
+This is a randomly created string which is encrypted by the users device public key (not the user public key) on the server. 
+The device keys including: encrypted private keys and the encrypted master key and the challenge are returned to the client.
+
 The master key will be decrypted by the encryption key from the password and the decrypted master key decrypts the private keys.
 
-The user group is also downloaded from the server and the device private key is used to decrypt the group keys.
+The login challenge will then be decrypted with the decrypted private device key and send back to the server 
+to verify that the user not only got access to the auth key but also to the master key.
+
+#### Verify Login
+
+After the api verifies the login the server will create a json web token (jwt) and return the jwt, a refresh token and the user group keys.
+
+With the device private key, the group keys are decrypted.
 
 The jwt can be used to authenticate with the server.
 
-The is no key rotation for a single device but if a device get lost or compromised the device can be deleted 
+There is no key rotation for a single device but if a device get lost or compromised the device can be deleted
 and a key rotation can be done in the user-group for the other devices.
 
 ### Safety number / public fingerprint
