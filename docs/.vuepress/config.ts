@@ -76,21 +76,40 @@ export default defineUserConfig({
 		sidebar: {
 			"/guide/": [
 				{
-					text: "Guide",
-					collapsible: false,
+					text: "Getting Started",
+					//collapsible: true,
 					children: [
 						"/guide/README.md",
 						"/guide/create-app.md",
-						"/guide/user.md",
-						"/guide/group.md",
-						"/guide/encrypt.md",
-						"/guide/file.md",
-						"/guide/backend-only.md",
-						"/guide/module-bundler.md",
-						"/guide/content.md",
-						"/guide/searchable-encryption.md",
-						"/guide/sortable.md",
-						"/guide/self-hosted.md"
+					]
+				},
+				{
+					text: "End-to-end encryption SDK",
+					//collapsible: true,
+					children: [
+						"/guide/e2ee/user.md",
+						"/guide/e2ee/group.md",
+						"/guide/e2ee/encrypt.md",
+						"/guide/e2ee/file.md",
+						//"/guide/e2ee/content.md",
+						"/guide/e2ee/searchable-encryption.md",
+						"/guide/e2ee/sortable.md",
+					]
+				},
+				{
+					text: "SDK light",
+					children: [
+						"/guide/light/README.md",
+						"/guide/light/user.md",
+						"/guide/light/group.md"
+					]
+				},
+				{
+					text: "Advanced",
+					children:[
+						"/guide/advanced/backend-only.md",
+						"/guide/advanced/self-hosted.md",
+						"/guide/advanced/module-bundler.md",
 					]
 				}
 			],
