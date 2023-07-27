@@ -35,7 +35,7 @@ String groupId = await user.createGroup();
 
 When you use your own backend, call the prepare function. This function returns the client data for a new group. 
 Make a POST request to our API (https://api.sentc.com/api/v1/group) with this data from your backend. 
-Don't forget to include the Authorization header with the JWT token.
+Don't forget to include the Authorization header with the JWT.
 
 :::: tabs#p
 
