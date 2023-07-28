@@ -178,7 +178,7 @@ Now the length of the hashes is maximal 4.
 You can also set a boolean flag in your hashes table for the last hash of a word. 
 The last item in the hashes list is also the hash of the exact word.
 
-This helps to do quires where you need the equal value and not all values like this.
+This helps to do queries where you need the equal value and not all values like this.
 
 | item_id                   | hash                       | last  |
 |---------------------------|----------------------------|-------|
