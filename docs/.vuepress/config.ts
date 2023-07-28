@@ -91,8 +91,7 @@ export default defineUserConfig({
 						"/guide/e2ee/group.md",
 						"/guide/e2ee/encrypt.md",
 						"/guide/e2ee/file.md",
-						//"/guide/e2ee/content.md",
-						"/guide/e2ee/searchable-encryption.md",
+						"/guide/e2ee/searchable.md",
 						"/guide/e2ee/sortable.md",
 					]
 				},
@@ -107,6 +106,7 @@ export default defineUserConfig({
 				{
 					text: "Advanced",
 					children:[
+						"/guide/advanced/end-to-end-encrypted-database.md",
 						"/guide/advanced/backend-only.md",
 						"/guide/advanced/self-hosted.md",
 						"/guide/advanced/module-bundler.md",
