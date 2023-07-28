@@ -159,7 +159,7 @@ WHERE
     hash = ?
 ```
 
-The result would be all three users because everyone begins with `jo`.
+The result would be all three users because everyone begins with `jo`. The is equal to sql LIKE queries.
 
 To get exact values just check if it is the last hash (of the full word).
 
@@ -172,3 +172,5 @@ WHERE
 ```
 
 For the hash of `John` only the data with id 124 will be returned but not johnny (id 125).
+
+Now you still get the ability to do search queries and exact matches. With createSearch option full you can't do searching.
