@@ -416,3 +416,14 @@ await Sentc.init(
 ::: tip
 This are all recommended endpoints to call from your backend, if you need to.
 :::
+
+## Disable Mfa from server
+
+To disable the Multi-factor auth from your backend for a user call this endpoint: `https://api.sentc.com/api/v1/user/forced/disable_otp`
+with a delete request and the following body:
+
+```json lines
+{
+	"user_identifier": "<user to disable otp>"
+}
+```

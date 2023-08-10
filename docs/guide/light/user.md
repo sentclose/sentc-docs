@@ -664,6 +664,9 @@ List<String> keys = await user.getOtpRecoverKeys("<password>", "<recovery_key>",
 
 ::::
 
+Alternative you can disable the mfa from your backend, e.g. if the user looses the recovery keys and the device access.
+[See here for more details](/guide/advanced/backend-only#disable-mfa-from-server)
+
 ## Register Device
 
 To register a new device, the user must be logged in on another device.
