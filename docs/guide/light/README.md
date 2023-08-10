@@ -217,8 +217,8 @@ await Sentc.register("username", "password");
 
 ### Login a user
 
-Log in a user with their username and password.
-After login, the user receives a JSON Web Token (JWT). It is also possible to implement login functionality for your own backend.
+Log in a user with their username and password. The user can also enable Multi-factor auth. [learn more here](/guide/light/user)
+After login, the user receives a JSON Web Token (JWT).
 
 After logging in, you will receive a user object.
 
@@ -232,7 +232,8 @@ After logging in, you will receive a user object.
 ```ts
 import Sentc from "@sentclose/sentc-light";
 
-const user = await Sentc.login("username", "password");
+//login a user, ignoring possible Multi-factor auth
+const user = await Sentc.login("username", "password", true);
 ```
 </code-group-item>
 
@@ -247,8 +248,9 @@ const user = await Sentc.login("username", "password");
         await sentc.init({
            app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi" // <-- your app token
         });
-        
-        const user = await sentc.login("username", "password");
+
+		//login a user, ignoring possible Multi-factor auth
+        const user = await sentc.login("username", "password", true);
     }
 
     run();
@@ -260,7 +262,8 @@ const user = await Sentc.login("username", "password");
 @tab Flutter
 
 ```dart
-final user = await Sentc.login("username", "password");
+//login a user, ignoring possible Multi-factor auth
+final user = await Sentc.loginForced("username", "password");
 ```
 
 ::::

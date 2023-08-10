@@ -15,7 +15,7 @@ features:
   details: Create groups where every member can encrypt content for all other members.
   link: /guide/group/
 - title: User management
-  details: Register and securely log in users with ease.
+  details: Register and securely log in users with ease. Optional adding Multi-factor authentication via Totp.
 - title: Key rotation
   details: Renew the keys while still using the old ones.
 - title: Queryable encryption
@@ -66,8 +66,8 @@ await Sentc.init({
 //register a user
 await Sentc.register("username", "password");
 
-//login a user
-const user = await Sentc.login("username", "password");
+//login a user, ignoring possible Multi-factor auth
+const user = await Sentc.login("username", "password", true);
 
 //create a group
 const group_id = await user.createGroup();
@@ -110,9 +110,9 @@ console.log(decrypted_string);  //hello there!
             //now you are ready to go
             //register a user:
             await sentc.register("username", "password");
-			
-            //log in a user
-            const user = await sentc.login("username", "password");
+
+			//login a user, ignoring possible Multi-factor auth
+            const user = await sentc.login("username", "password", true);
 			
             //create a group
             const group_id = await user.createGroup();
@@ -156,8 +156,8 @@ demo() async {
   //register a user
   await Sentc.register("userIdentifier", "password");
 
-  //log in a user
-  final user = await Sentc.login("userIdentifier", "password");
+  //login a user, ignoring possible Multi-factor auth
+  final user = await Sentc.loginForced("userIdentifier", "password");
 
   //create a group
   final groupId = await user.createGroup();

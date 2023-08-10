@@ -11,7 +11,9 @@ Each user has a public and private key, as well as a sign and verify key.
 These keys are not available through the API, as they are encrypted using the provided password, 
 which the API does not have access to.
 
-A user account can have multiple devices with different logins, but any device can access the user's keys.
+A user account can have multiple devices with different logins, but any device can access the user's keys. 
+
+Using Multi-factor auth with an authentication app is also possible.
 
 ## Register
 
@@ -246,48 +248,101 @@ This is accomplished by using a password derivation function in the client inste
 
 If the identifier or the password is incorrect, this function will throw an error.
 
+The Login function returns an either the user type or data for the mfa validation process.
+
+If you disabled the Mfa in the app options then you can force login to get just the user object back.
+
+::: tip
+You can learn more about Multi-factor and how your users can enable it [below](/guide/e2ee/user/#multi-factor-authentication).
+:::
+
+### Login forced
+
+With this method the sdk will just return the user object or throw an exception or error
+if the user enabled mfa because this must be handled in order to get the user data.
+
 :::: tabs#p
 
 @tab Javascript
 
-<code-group>
-<code-group-item title="Installed" active>
+For js, just set an optional flag to true in the login function.
 
 ```ts
 import Sentc from "@sentclose/sentc";
 
-const user = await Sentc.login("identifier", "password");
+const user = await Sentc.login("identifier", "password", true);
 ```
-</code-group-item>
 
-<code-group-item title="Browser">
+@tab Flutter
 
-```html
-<script>
-    //init the wasm
-    const sentc = window.Sentc.default;
+For flutter, use the function loginForced instead of login.
 
-    async function run() {
-        await sentc.init({
-           app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi" // <-- your app token
-        });
-        
-        const user = await sentc.login("identifier", "password");
-    }
-
-    run();
-</script>
+```dart
+User user = await Sentc.loginForced("identifier", "password");
 ```
-</code-group-item>
-</code-group>
+
+::::
+
+### Login with mfa handling
+
+:::: tabs#p
+
+@tab Javascript
+
+For typescript, we are using the [Discriminated Unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions).
+
+An object with two properties is returned from the function: `kind` and `u`. 
+
+- `kind` described if it is the user class (mfa not active) or the data for the mfa process (mfa activated).
+- `u` contains either the user class (for no mfa) or the data for the mfa process (if mfa enabled).
+
+For `mfaLogin` use the token from the authentication app and the user information.
+
+```ts
+import Sentc from "@sentclose/sentc";
+
+let user: User;
+const user_data: LoginUser = await Sentc.login("identifier", "password");
+
+//to check if the user enabled mfa:
+if (user_data.kind === "mfa") {
+	//if true then user enabled mfa and this must be handeled
+	//here with the token from the auth app from the user
+	user = await Sentc.mfaLogin("<token-from-mfa-app>", user_data.u);
+} else {
+	user = user_data.u;
+}
+```
 
 ::: warning
 This function will also throw an error if the **username is not found** or the **password is incorrect**.
 :::
 
 @tab Flutter
+
+For Dart, we are using a sealed class `LoginUser`.  
+
+A class extend by two subclasses: `MfaLogin` and `UserLogin`.
+
+- `MfaLogin` contains the data for the mfa process
+- `UserLogin` contains the User class
+- both classes got a property u which holds each data.
+
+For `mfaLogin` use the token from the authentication app and the user information class.
+
 ```dart
-User user = await Sentc.login("identifier", "password");
+late User user;
+
+LoginUser userData = await Sentc.login("identifier", "password");
+
+if (userData is MfaLogin) {
+    //if true then user enabled mfa and this must be handeled
+    //here with the token from the auth app from the user
+    user = await Sentc.mfaLogin("<token-from-mfa-app>", userData.u);
+} else if (userData is UserLogin){
+    //another if because dart would not know which type userData has
+    user = userData.u;
+}
 ```
 
 ::: warning
@@ -295,6 +350,85 @@ This function will also throw an error if the **username is not found** or the *
 :::
 
 ::::
+
+### Login auth token
+
+If the user enabled mfa, you must handle it so that the user can continue the login process.
+
+In the above examples we already used the function that works with the auth app of the user.
+
+:::: tabs#p
+
+@tab Javascript
+
+If it is right, then the user must create a token. 
+The `user_data` is needed for the process, so store it somewhere until the user entered the mfa token. 
+
+```ts
+import Sentc from "@sentclose/sentc";
+
+let user: User;
+const user_data: LoginUser = await Sentc.login("identifier", "password");
+
+//to check if the user enabled mfa:
+if (user_data.kind === "mfa") {
+	user = await Sentc.mfaLogin("<token-from-mfa-app>", user_data.u);
+}
+```
+
+@tab Flutter
+
+If it is right, then the user must create a token.
+The `userData` is needed for the process, so store it somewhere until the user entered the mfa token.
+
+```dart
+late User user;
+
+LoginUser userData = await Sentc.login("identifier", "password");
+
+if (userData is MfaLogin) {
+    user = await Sentc.mfaLogin("<token-from-mfa-app>", userData.u);
+}
+```
+
+::::
+
+### Login with recovery key
+
+If the user is not able to create the token (e.g. the device is broken or stolen), then the user can also log in with a recovery key. 
+These keys are obtained after mfa was enabled. If the user uses one key then the key gets deleted and can't be used again.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+import Sentc from "@sentclose/sentc";
+
+let user: User;
+const user_data: LoginUser = await Sentc.login("identifier", "password");
+
+//to check if the user enabled mfa:
+if (user_data.kind === "mfa") {
+	user = await Sentc.mfaRecoveryLogin("<recovery-key>", user_data.u);
+}
+```
+
+@tab Flutter
+
+```dart
+late User user;
+
+LoginUser userData = await Sentc.login("identifier", "password");
+
+if (userData is MfaLogin) {
+    user = await Sentc.mfaRecoveryLogin("<recovery-key>", userData.u);
+}
+```
+
+::::
+
+### User object
 
 After successfully logging in, you will receive a user object, which is required to perform all user actions, such as creating a group.
 
@@ -304,9 +438,6 @@ You can obtain the actual user object by calling the init function as follows:
 
 @tab Javascript
 
-<code-group>
-<code-group-item title="Installed" active>
-
 ```ts
 import Sentc from "@sentclose/sentc";
 
@@ -315,26 +446,6 @@ const user = await Sentc.init({
     app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi"  // <-- your app token
 });
 ```
-</code-group-item>
-
-<code-group-item title="Browser">
-
-```html
-<script>
-    //init the wasm
-    const sentc = window.Sentc.default;
-
-    async function run() {
-        const user = await sentc.init({
-           app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi" // <-- your app token
-        });
-    }
-
-    run();
-</script>
-```
-</code-group-item>
-</code-group>
 
 @tab Flutter
 ```dart
@@ -350,31 +461,11 @@ Alternatively, you can obtain the actual user object by calling the getActualUse
 
 @tab Javascript
 
-<code-group>
-<code-group-item title="Installed" active>
-
 ```ts
 import Sentc from "@sentclose/sentc";
 
 const user = await Sentc.getActualUser();
 ```
-</code-group-item>
-
-<code-group-item title="Browser">
-
-```html
-<script>
-    const sentc = window.Sentc.default;
-
-    async function run() {
-        const user = await sentc.getActualUser();
-    }
-
-    run();
-</script>
-```
-</code-group-item>
-</code-group>
 
 @tab Flutter
 ```dart
@@ -434,6 +525,150 @@ If you are using other implementations, stick with the default.
 
 See more at [own backend](/guide/advanced/backend-only/)
 
+## Multi-Factor authentication
+
+Sentc uses Time-based one-time password (Totp) for Multi-factor auth. These tokens can easily be generated by any totp generator app like google authenticator, authy or free otp.
+
+A secret is generated alone side with six recovery keys (just in case if the user lost access to the auth device). 
+The user should print out or store the recovery keys to still get access to the account.
+
+The auth app needs the secret and information about the used algorithm. 
+The simplest way is to get an otpauth url and transform it into a qr code, so the auth app can scan it.
+
+The mfa is bind to all devices in the user account not just the actual one. 
+
+The user must be logged in, in order to activate mfa and has to enter the password again.
+`issuer` and `audience` are needed for the auth app. Issuer can be your app name and audience the username email or something else.
+
+:::: tabs#p
+
+@tab Javascript
+
+The url is for the auth app and the recovery_keys is an array of all six keys.
+
+```ts
+const [url, revocery_keys] = await user.registerOtp("<issuer>", "<audience>", "<password>");
+```
+
+@tab Flutter
+
+The url is for the auth app and the recoveryKeys is a list of all six keys.
+
+```dart
+final (user, recoveryKeys) = await user.registerOtp("<issuer>", "<audience>", "<password>");
+```
+
+::::
+
+### Reset mfa
+
+If the user only got one recovery key left or the device with the auth app ist stolen or lost then resetting the mfa is the best practice
+
+The old recovery keys and the old secret will be deleted and replaced by new one. 
+The return values are the same as in the register process.
+
+The user also needs to enter a totp from an auth app or a recovery key in order to reset it. 
+This will make sure that only a person with access can change it.
+
+:::: tabs #p
+
+@tab Javascript
+
+The last parameter `mfa_recovery` is for the function to know if a recovery key (true) or a normal totp (false) is used. 
+This value is required if a token is set.
+
+```ts
+//with totp
+const [url, recovery_keys] = await user.resetOtp("<issuer>", "<audience>", "<password>", "<totp>", false)
+```
+
+```ts
+//with recovery key
+const [url, recovery_keys] = await user.resetOtp("<issuer>", "<audience>", "<password>", "<recovery_key>", true)
+```
+
+@tab Flutter
+
+The last parameter `mfaRecovery` is for the function to know if a recovery key (true) or a normal totp (false) is used.
+This value is required if a token is set.
+
+```dart
+//with totp
+final (url, recoveryKeys) = await user.resetOtp("<issuer>", "<audience>", "<password>", "<totp>", false); 
+```
+
+```dart
+//with recovery key
+final (url, recoveryKeys) = await user.resetOtp("<issuer>", "<audience>", "<password>", "<recovery_key>", true); 
+```
+
+::::
+
+### Disable mfa
+
+To disable the mfa use this function:
+
+A totp or recovery key is also needed.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+//with totp
+await user.disableOtp("<password>", "<totp>", false)
+```
+
+```ts
+//with recovery key
+await user.disableOtp("<password>", "<recovery_key>", true)
+```
+
+@tab Flutter
+
+```dart
+//with totp
+await user.disableOtp("<password>", "<totp>", false); 
+```
+
+```dart
+//with recovery key
+await user.disableOtp("<password>", "<recovery_key>", true); 
+```
+
+::::
+
+To get the recovery keys so the user can later store them:
+
+A totp or recovery key is also needed.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+//with totp
+const keys = await user.getOtpRecoverKeys("<password>", "<totp>", false)
+```
+
+```ts
+//with recovery key
+const keys = await user.getOtpRecoverKeys("<password>", "<recovery_key>", true)
+```
+
+@tab Flutter
+
+```dart
+//with totp
+List<String> keys = await user.getOtpRecoverKeys("<password>", "<totp>", false); 
+```
+
+```dart
+//with recovery key
+List<String> keys = await user.getOtpRecoverKeys("<password>", "<recovery_key>", true); 
+```
+
+::::
 
 ## Register Device
 
@@ -598,6 +833,36 @@ This function will also throw an error if **the old password was not correct**
 
 ::::
 
+If the user enabled mfa then you also need to enter the token or a recovery key.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+//with totp
+await user.changePassword("old_password", "new_password", "<totp>", false);
+```
+
+```ts
+//with recovery key
+await user.changePassword("old_password", "new_password", "<recovery_key>", true);
+```
+
+@tab Flutter
+
+```dart
+//with totp
+await user.changePassword("old_password", "new_password", "<totp>", false);
+```
+
+```dart
+//with recovery key
+await user.changePassword("old_password", "new_password", "<recovery_key>", true);
+```
+
+::::
+
 ## Reset password
 
 To reset a password, the user must be logged in on the device. 
@@ -695,6 +960,37 @@ This function will also throw an error if **the password was not correct**
 
 ::::
 
+If the user enabled mfa then you also need to enter the token or a recovery key.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+//with totp
+await user.deleteDevice("password", "device_id", "<totp>", false);
+```
+
+```ts
+//with recovery key
+await user.deleteDevice("password", "device_id", "<recovery_key>", true);
+```
+
+@tab Flutter
+
+```dart
+//with totp
+await user.deleteDevice("password", "device_id", "<totp>", false);
+```
+
+```dart
+//with recovery key
+await user.deleteDevice("password", "device_id", "<recovery_key>", true);
+```
+
+::::
+
+
 Get the device id from the user data:
 
 :::: tabs#p
@@ -735,6 +1031,36 @@ await user.deleteUser("password");
 ::: warning
 This function will also throw an error if **the password was not correct**
 :::
+
+::::
+
+If the user enabled mfa then you also need to enter the token or a recovery key.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+//with totp
+await user.deleteUser("password", "<totp>", false);
+```
+
+```ts
+//with recovery key
+await user.deleteUser("password", "<recovery_key>", true);
+```
+
+@tab Flutter
+
+```dart
+//with totp
+await user.deleteUser("password", "<totp>", false);
+```
+
+```dart
+//with recovery key
+await user.deleteUser("password", "<recovery_key>", true);
+```
 
 ::::
 
