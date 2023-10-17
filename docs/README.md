@@ -9,8 +9,8 @@ actions:
     link: /playground/
     type: secondary
 features:
-- title: Easy-to-use encryption
-  details: Create secure applications with just a few lines of code.
+- title: Easy-to-use encryption with post quantum cryptography
+  details: Create secure applications with just a few lines of code and post quantum algorithm.
 - title: Group management
   details: Create groups where every member can encrypt content for all other members.
   link: /guide/group/

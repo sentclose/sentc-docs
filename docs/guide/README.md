@@ -2,10 +2,19 @@
 
 Sentc is an end-to-end encryption SDK with user and group management.
 
+::: tip
+Sentc now supports post quantum cryptography with CRYSTALS Kyber and CRYSTALS Dilithium. [See more here](/protocol/).
+
+CRYSTALS Kyber is used in hybrid with x25519
+
+CRYSTALS Dilithium is used in hybrid with ed25519
+:::
+
 End-to-end encryption can be difficult to develop and maintain. 
 Fortunately, Sentc gives you full control of your application and provides easy-to-use encryption for groups or between users. 
 
-We also provide multi-device support, where a user can have multiple devices under one account but with different login identifiers and passwords for each device.
+Sentc uses a flexible protocol to be able to change the underlying encryption algorithm in the feature. 
+To ensure backward compatibility, data that was encrypted with older algorithm can still be decrypted but new data will be encrypted by the newest.
 
 ::: tip
 There is also a sdk version without the encryption but with the user and group management. 
