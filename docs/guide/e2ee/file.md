@@ -457,7 +457,7 @@ Please ensure that you transfer your data to the new URL.
 ### When uploading file parts to your url, register the file part at sentc api 
 
 Call this endpoint when the upload is done: 
-- `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>`
+- `https://api.sentc.com/api/v1/file/part/<session_id>/<file_part_sequence>/<end>/<user_id>`
 
 This endpoint needs your secret token and should only be called from your backend. See [own backend](/guide/advanced/backend-only) for sending the token as header.
 
@@ -466,18 +466,12 @@ Header name: x-sentc-app-token
 Header value: <your_app_token>
 ```
 
-You need also pass in the jwt token of the user.
-
-````
-Header name: Authorization
-Header value: Bearer <the_jwt>
-````
-
 - session_id is the id of the file upload session, this is a string.
 - file_part_sequence is the sequence of the file part when downloading and decrypting the file. if this is wrong then the file can't be decrypted anymore.
 - end is a boolean. Pass in false if the file upload has not finished yet or true if it is.
+- user_id is the user that uploaded the file.
 
-The sdk will call your endpoint with these values in the url as parameter. 
+The sdk will call your endpoint with these values in the url as parameter and the user id from the user jwt or elsewhere.
 A request might look like: 
 - `https://your_url.com/<session_id>/<file_part_sequence>/<end>` 
 - or `https://your_url.com/abc_123/0/false` 
@@ -485,8 +479,8 @@ A request might look like:
 
 Just extract the values and call the sentc api to register the file part, so sentc can download the file. 
 In the example above: 
-- `https://api.sentc.com/api/v1/file/part/abc_123/0/false` 
-- and `https://api.sentc.com/api/v1/file/part/abc_123/1/true`
+- `https://api.sentc.com/api/v1/file/part/abc_123/0/false/<user_id>` 
+- and `https://api.sentc.com/api/v1/file/part/abc_123/1/true/<user_id>`
 
 ### After calling the sentc api you will get back the file part id
 
