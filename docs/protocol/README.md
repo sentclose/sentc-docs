@@ -28,7 +28,7 @@ While this solution may not be perfect for one-on-one or live communication, it 
 Sentc utilizes a combination of symmetric and asymmetric encryption algorithms, as well as signing and verification mechanisms.
 
 It's worth noting that the underlying algorithm used in Sentc can be changed in the future. 
-Despite such changes, data encrypted with the previous algorithm will still be decryptable, ensuring backward compatibility. 
+Despite such changes, data encrypted with the previous algorithm will still be able to decrypt, ensuring backward compatibility. 
 However, any new data will be encrypted using the new algorithm. 
 This flexibility is particularly valuable as it allows for future-proofing the system against potential quantum attacks.
 
@@ -40,8 +40,12 @@ Here are the actual used algorithm.
   - aes-gcm 256 bit 
 - asymmetric for the symmetric key exchange with static key pairs.
   - ecies with x25519
+  - CRYSTALS Kyber 768
+  - Hybrid with ecies and Kyber (default)
 - sign and verify for data integrity
   - ed25519
+  - CRYSTALS Dilithium 3
+  - Hybrid with ed25519 and Dilithium (default)
 - hmac for searchable encryption
   - hmac-sha 256
 - password hashing
