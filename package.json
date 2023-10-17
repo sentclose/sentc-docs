@@ -12,7 +12,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@joernheinemann/eslint-config-typescript": "1.0.0",
-		"@sentclose/sentc": "^0.8.0",
+		"@sentclose/sentc": "^0.11.0",
 		"@vuepress/plugin-register-components": "^2.0.0-beta.63",
 		"vuepress": "^2.0.0-beta.63",
 		"vuepress-plugin-copy-code2": "^2.0.0-beta.226",

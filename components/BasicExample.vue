@@ -130,7 +130,7 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue';
 import {Group, User} from "@sentclose/sentc";
-import {MemoryStorage} from "@sentclose/sentc/lib/core";
+import {MemoryStorage} from "@sentclose/sentc-common";
 
 const ready = ref(false);
 const msg = ref("");
@@ -200,7 +200,7 @@ async function login()
 		//@ts-ignore
 		const sentc = window.Sentc.default;
 
-		user_obj = await sentc.login(username.value, pw.value);
+		user_obj = await sentc.login(username.value, pw.value, true);
 
 		user_id.value = user_obj.user_data.user_id;
 	} catch (e) {
