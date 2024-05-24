@@ -895,7 +895,7 @@ To reset the user password from your backend call this endpoint (for the request
 - `https://api.sentc.com/api/v1/user/forced/reset_user` with a put request
 - the data is the same string that the user got from the `prepareRegister` function.
 - All user devices will be deleted and the user can't decrypt any of the old data or any of the data inside groups but the user stays in all groups.
-- The user has to be re invited to all groups see more here: [re invite](/guide/e2ee/group#re-invite)
+- The user has to be re invited to all groups see more here: [re invite](/guide/e2ee/group/#re-invite)
 
 
 ## Update user or device identifier
