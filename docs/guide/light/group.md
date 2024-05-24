@@ -874,3 +874,15 @@ await group.deleteGroup();
 ```
 
 ::::
+
+## Backend endpoints
+
+To create and delete groups from your backend the jwt of the creator is always required.
+If the jwt is not available in some situations you can use the following endpoints to call it with your secret token.
+
+- Deleting a group with a delete request: `https://api.sentc.com/api/v1/group/forced/<group_id_to_delete`
+    - This endpoint will delete the group
+- Creating a group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/light`
+    - This endpoint will return the group_id
+- Creating a child group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child/light`
+- Create a connected group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected/light`

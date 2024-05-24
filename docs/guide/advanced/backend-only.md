@@ -386,7 +386,7 @@ await Sentc.init({
            app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", // <-- your app token
            refresh: { 
                endpoint: 1,
-               endpoint_fn: (old_jwt: string) => Promise<string>
+               endpoint_fn: (old_jwt) => Promise<string>
            }
         });
     }

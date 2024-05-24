@@ -869,8 +869,8 @@ await user.changePassword("old_password", "new_password", "<recovery_key>", true
 ## Reset password
 
 To reset a password, the user must be logged in on the device. 
-A normal reset without being logged in is not possible because the user must have access to the device keys. 
-If the user doesn't have access, he/she can no longer decrypt the information because the sentc API doesn't have access to the keys either.
+A normal reset without being logged in is not possible without losing access to all data because the user must have access to the device keys. 
+If the user doesn't have access, they can no longer decrypt the information because the sentc API doesn't have access to the keys either.
 
 When resetting the password, the secret keys of the device will be encrypted again with the new password.
 
@@ -888,6 +888,15 @@ await user.resetPassword("new_password");
 ```
 
 ::::
+
+## Reset user password with data loss
+
+To reset the user password from your backend call this endpoint (for the request configuration see more at [own backend](/guide/advanced/backend-only/))
+- `https://api.sentc.com/api/v1/user/forced/reset_user` with a put request
+- the data is the same string that the user got from the `prepareRegister` function.
+- All user devices will be deleted and the user can't decrypt any of the old data or any of the data inside groups but the user stays in all groups.
+- The user has to be re invited to all groups see more here: [re invite](/guide/e2ee/group#re-invite)
+
 
 ## Update user or device identifier
 

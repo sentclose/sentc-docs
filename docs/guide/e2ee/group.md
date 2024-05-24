@@ -532,7 +532,6 @@ await user.deleteJoinReq("<group_id>");
 
 ::::
 
-
 ### Auto invite
 
 A group administrator can use this function to automatically invite and accept a non-group member, 
@@ -639,7 +638,6 @@ List<GroupUserListItem> memberPageTwo = await group.getMember(member.last);
 ```
 
 ::::
-
 
 ## Delete group member
 
@@ -1108,3 +1106,17 @@ await group.deleteGroup();
 ```
 
 ::::
+
+## Backend endpoints
+
+To create and delete groups from your backend the jwt of the creator is always required. 
+If the jwt is not available in some situations you can use the following endpoints to call it with your secret token.
+
+- Deleting a group with a delete request: `https://api.sentc.com/api/v1/group/forced/<group_id_to_delete>`
+  - This endpoint will delete the group
+- Creating a group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>`
+  - use the `prepareGroupCreate` function in the group section to get the encrypted keys for the creator and call this endpoint with the returned string
+  - This endpoint will return the group_id
+- Creating a child group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child`
+  - do the same as for creating a normal group but use `prepareCreateChildGroup` in the parent group to get the decrypted keys
+- Create a connected group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected`
