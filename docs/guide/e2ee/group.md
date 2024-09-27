@@ -31,6 +31,16 @@ const group_id = await user.createGroup();
 String groupId = await user.createGroup();
 ```
 
+@tab Rust
+```rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let group_id = user.create_group().await.unwrap();
+}
+```
+
 ::::
 
 When you use your own backend, call the prepare function. This function returns the client data for a new group. 
@@ -50,6 +60,16 @@ const group_data = await user.prepareGroupCreate();
 //the user obj from login
 String groupData = await user.prepareGroupCreate();
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser)
+{
+	let input = user.prepare_create_group().unwrap();
+}
+````
 
 ::::
 
@@ -72,6 +92,28 @@ const group = await user.getGroup(group_id);
 ```dart
 Group group = await user.getGroup(groupId);
 ```
+
+@tab Rust
+In the rust version there are two different functions to call.
+Data are the group data to decrypt and res will signal if you need to fetch more keys for the user. This can happen if
+the device of the user missed a key rotation and the group invite was done by the new keys of the user. In this case,
+just finish the key rotation on this device.
+
+The 2nd function will then decrypt the group keys when the user got all keys.
+
+````rust
+use sentc::keys::StdUser;
+use sentc::group::net::GroupFetchResult;
+
+async fn example(user: &StdUser)
+{
+	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
+
+	assert!(matches!(res, GroupFetchResult::Ok));
+
+	let group = user.done_get_group(data, None).unwrap();
+}
+````
 
 ::::
 
@@ -120,6 +162,16 @@ class ListGroups {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let list = user.get_groups().await.unwrap();
+}
+````
+
 ::::
 
 To fetch more groups use pagination and pass in the last fetched item:
@@ -138,6 +190,17 @@ const groups_page_two = await user.getGroups(last_item);
 ```dart
 List<ListGroups> groupsPageTwo = await user.getGroups(groups.last);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	//To fetch more groups use pagination and pass in the last fetched item:
+	let list = user.get_groups(Some(list.last().unwrap())).await.unwrap();
+}
+````
 
 ::::
 
@@ -171,6 +234,23 @@ String encryptedString = await group.encryptString("hello there £ Я a a 👍")
 String decryptedString = await group.decryptString(encrypted_string);
 ```
 
+@tab Rust
+Decrypt will fail when the key that was used is not in the group key vec. The error tells you what key is missing:
+SentcError::KeyRequired. Just do a key rotation in this case to fetch the key.
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	//encrypt a string
+	let encrypted_string = group.encrypt_string_sync("hello there £ Я a a 👍").unwrap();
+
+	//decrypt a string. this can be a group obj from another group member
+	let decrypted_string = group.decrypt_string_sync(encrypted_string).unwrap();
+}
+````
+
 ::::
 
 See more at [encrypt decrypt](/guide/encrypt/).
@@ -203,6 +283,16 @@ await group.updateRank("internal_user_id", 2);
 await group.updateRank("internal_user_id", 2);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.update_rank(jwt_from_user, "user_id_to_update", rank).await.unwrap();
+}
+````
+
 ::::
 
 If you have your own backend and want to change a user's rank using a secret token, 
@@ -222,6 +312,16 @@ const input = await group.prepareUpdateRank("internal_user_id", 2);
 ```dart
 String input = await group.prepareUpdateRank("internal_user_id", 2);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	group.prepare_update_rank("user_id_to_update", rank).unwrap();
+}
+````
 
 ::::
 
@@ -256,6 +356,21 @@ await group.invite("internal_user_id");
 //with optional rank, in this case rank 1
 await group.invite("internal_user_id", 1);
 ```
+
+@tab Rust
+Get the user public key first.
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.invite("user_id_to_invite", user_public_key, None).await.unwrap();
+
+	//with optional rank, in this case rank 1
+	group.invite("user_id_to_invite", user_public_key, Some(1)).await.unwrap();
+}
+````
 
 ::::
 
@@ -293,6 +408,16 @@ class GroupInviteReqList {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let list = user.get_group_invites(None).await.unwrap();
+}
+````
+
 ::::
 
 To fetch more invites just pass in the last fetched item from the function:
@@ -311,6 +436,16 @@ const invites = await user.getGroupInvites(last_item);
 ```dart:no-line-numbers
 List<GroupInviteReqList> invitesPageTwo = await user.getGroupInvites(invites.last);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+  let list = user.get_group_invites(list.last()).await.unwrap();
+}
+````
 
 ::::
 
@@ -332,6 +467,16 @@ The group id can be got from the GroupInviteReqList
 await user.acceptGroupInvite("group_id");
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.accept_group_invite("group_id").await.unwrap();
+}
+````
+
 ::::
 
 Or reject the invite
@@ -351,6 +496,16 @@ The group id can be got from the GroupInviteReqList
 ```dart
 await user.rejectGroupInvite("<group_id>");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.reject_group_invite("group_id").await.unwrap();
+}
+````
 
 ::::
 
@@ -373,6 +528,16 @@ await user.groupJoinRequest("<group_id>");
 ```dart
 await user.groupJoinRequest("<group_id>");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.group_join_request("group_id").await.unwrap();
+}
+````
 
 ::::
 
@@ -411,6 +576,18 @@ class GroupJoinReqList {
 }
 ```
 
+@tab Rust
+To fetch the join requests as a group admin use this function:
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let list = group.get_join_requests(jwt_from_user, None).await.unwrap();
+}
+````
+
 ::::
 
 To fetch more requests just pass in the last fetched item from the function:
@@ -429,6 +606,14 @@ const req = await group.getJoinRequests(last_item);
 ```dart
 List<GroupJoinReqList> reqPageTwo = await group.getJoinRequests(req.last);
 ```
+
+@tab Rust
+````rust
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let list = group.get_join_requests(jwt_from_user, list.last()).await.unwrap();
+}
+````
 
 ::::
 
@@ -456,6 +641,21 @@ await group.acceptJoinRequest("userId");
 await group.acceptJoinRequest("userId", 1);
 ```
 
+@tab Rust
+Fetch the public key of the user first.
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.accept_join_request(jwt_from_user, user_key, "user_id", None).await.unwrap();
+
+	//with optional rank, in this case rank 1
+	group.accept_join_request(jwt_from_user, user_key, "user_id", Some(1)).await.unwrap();
+}
+````
+
 ::::
 
 Or reject it:
@@ -475,6 +675,16 @@ The user id can get from the GroupJoinReqList.
 ```dart
 await group.rejectJoinRequest("user_id");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.reject_join_request(jwt_from_user, "user_id").await.unwrap();
+}
+````
 
 ::::
 
@@ -514,6 +724,20 @@ List<GroupInviteReqList> list = await user.sentJoinReq();
 List<GroupInviteReqList> listPageTwo = await user.sentJoinReq(list.last);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let list = user.get_sent_join_req(None).await.unwrap();
+
+	//to load more use the last item of the pre-fetch
+
+	let list = user.get_sent_join_req(list.last()).await.unwrap();
+}
+````
+
 ::::
 
 A user can also delete an already sent join request. The group id can be fetched from the `sentJoinReq()` function.
@@ -529,6 +753,16 @@ await user.deleteJoinReq("<group_id>");
 ```dart
 await user.deleteJoinReq("<group_id>");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.delete_join_req("group_id").await.unwrap();
+}
+````
 
 ::::
 
@@ -551,6 +785,18 @@ await group.inviteAuto("user_id");
 await group.inviteAuto("user_id");
 ```
 
+@tab Rust
+Get the user public key.
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.invite_auto(jwt_from_user, "user_id", user_key, None).await.unwrap()
+}
+````
+
 ::::
 
 ### Stop invite
@@ -571,6 +817,16 @@ await group.stopInvites();
 ```dart
 await group.stopInvites();
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.stop_invites(jwt_from_user).await.unwrap()
+}
+````
 
 ::::
 
@@ -612,6 +868,20 @@ class GroupUserListItem {
   final int userType;
 }
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let list = group.get_member(jwt_from_user, None).await.unwrap();
+
+	//To fetch more use the last fetched member item:
+
+	let list = group.get_member(jwt_from_user, list.last()).await.unwrap();
+}
+````
 
 ::::
 
@@ -657,6 +927,16 @@ await group.kickUser("internal_user_id");
 await group.kickUser("internal_user_id");
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.kick_user(jwt_from_user, "user_id").await.unwrap();
+}
+````
+
 ::::
 
 ## Leave a group
@@ -675,6 +955,16 @@ await group.leave();
 ```dart
 await group.leave();
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.leave(jwt_from_user).await.unwrap();
+}
+````
 
 ::::
 
@@ -722,6 +1012,16 @@ final group = await await user.getGroup(groupId);
 final groupFromParent = await group.getChildGroup(groupId); 
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let group_id = group.create_child_group(jwt_from_user).await.unwrap();
+}
+````
+
 ::::
 
 If you want to create a child group from your own backend, you can use this function to generate the necessary input data. 
@@ -740,6 +1040,16 @@ const input = await group.prepareCreateChildGroup();
 ```dart
 String input = await group.prepareCreateChildGroup();
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let (input, used_key_id) = group.create_child_group(jwt_from_user).await.unwrap();
+}
+````
 
 ::::
 
@@ -767,6 +1077,19 @@ List<GroupChildrenList> children = await group.getChildren();
 final childrenPageTwo = await group.getChildren(children.last);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let list = group.get_children(jwt_from_user, None).await.unwrap();
+
+	//to get the 2nd page pass in the last child
+	let list = group.get_children(jwt_from_user, list.last()).await.unwrap();
+}
+````
+
 ::::
 
 ## Connected groups
@@ -793,6 +1116,16 @@ const group_id = await group.createConnectedGroup();
 final groupId = await group.createConnectedGroup();
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let group_id = group.create_connected_group(jwt_from_user).await.unwrap();
+}
+````
+
 ::::
 
 To fetch the connected group you can either fetch it from the group or from the user. 
@@ -817,6 +1150,21 @@ final connectedGroup = await group.getConnectedGroup(connectedGroupId);
 //from the user, the group id is needed
 final connectedGroupByUser = await user.getGroup(connectedGroupId, groupId);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+use sentc::group::net::GroupFetchResult;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let (data, res) = group.prepare_get_connected_group("connected_group_id", jwt_from_user).await.unwrap();
+
+	assert!(matches!(res, GroupFetchResult::Ok));
+
+	let group = group.done_get_connected_group(data).unwrap();
+}
+````
 
 ::::
 
@@ -843,6 +1191,19 @@ List<ListGroups> connectedGroups = await group.getGroups();
 List<ListGroups> connectedGroupsPageTwo = await await group.getGroups(connectedGroups.last);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let list = group.get_groups(jwt_from_user, None).await.unwrap();
+
+	//to get the next pages, use the last item.
+	let list = group.get_groups(jwt_from_user, list.last()).await.unwrap();
+}
+````
+
 ::::
 
 Like users, groups can also send join requests to connected groups.
@@ -858,6 +1219,16 @@ await group.groupJoinRequest("<group_id>");
 ```dart
 await group.groupJoinRequest("<group_id>");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.group_join_request(jwt_from_user, "group_id_to_join").await.unwrap();
+}
+````
 
 ::::
 
@@ -901,6 +1272,19 @@ class GroupInviteReqList {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let list = group.get_group_sent_join_req(jwt_from_user, None).await.unwrap();
+
+	//to load more use the last item of the pre-fetch
+	let list = group.get_group_sent_join_req(jwt_from_user, list.last()).await.unwrap();
+}
+````
+
 ::::
 
 A group can also delete an already sent join request. The group id can be fetched from the `sentJoinReq()` function.
@@ -916,6 +1300,16 @@ await group.deleteJoinReq("<group_id>");
 ```dart
 await group.deleteJoinReq("<group_id>");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	group.delete_join_req("group_id_to_delete", jwt_from_user).await.unwrap();
+}
+````
 
 ::::
 
@@ -976,6 +1370,64 @@ await group.keyRotation();
 await group.keyRotation(true);
 ```
 
+@tab Rust
+In the rust version, you need to pass in:
+
+- the jwt from the user
+- user id that started the rotation
+- and a ref to the user to get the keys
+
+You can get everything from the user struct as it is shown below.
+
+The function will return a result enum of the key fetch that tells the user if they need to fetch keys from the backend
+if the key was encrypted by a user key that is not found on the client. Normally this should not happen because the user
+did the rotation with their newest key.
+
+````rust
+use sentc::keys::{StdGroup, StdUser};
+
+async fn example(group: &StdGroup, user: &StdUser)
+{
+	//first prepare to check if there are keys missing for the user
+	let res = group.prepare_key_rotation(user.get_jwt().unwrap(), false, user.get_user_id().to_string(), Some(user), None).await.unwrap();
+
+	//end the rotation by fetching the new key
+	let data = match res {
+		GroupKeyFetchResult::Ok(data) => data,
+		_ => {
+			panic!("should be no missing key or done");
+		}
+	};
+
+	//decrypt the newest group key by the user key.
+	group.done_fetch_group_key_after_rotation(data, Some(user), None).unwrap();
+}
+````
+
+Rotation with signing the public group key:
+
+````rust
+use sentc::keys::{StdGroup, StdUser};
+use sentc::group::net::GroupKeyFetchResult;
+
+async fn example(group: &StdGroup, user: &StdUser)
+{
+	//first prepare to check if there are keys missing for the user
+	let res = group.prepare_key_rotation(user.get_jwt().unwrap(), true, user.get_user_id().to_string(), Some(user), None).await.unwrap();
+
+	//end the rotation by fetching the new key
+	let data = match res {
+		GroupKeyFetchResult::Ok(data) => data,
+		_ => {
+			panic!("should be no missing key or done");
+		}
+	};
+
+	//decrypt the newest group key by the user key.
+	group.done_fetch_group_key_after_rotation(data, Some(user), None).unwrap();
+}
+````
+
 ::::
 
 The new keys will be created on your device, encrypted by the starter public key, and sent to the API. 
@@ -1007,6 +1459,39 @@ await group.finishKeyRotation();
 await group.finishKeyRotation(true);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::{StdGroup, StdUser};
+use sentc::group::net::{GroupFinishKeyRotation, GroupKeyFetchResult};
+
+async fn example(group: &StdGroup, user: &StdUser)
+{
+	//This fn checks if the user needs to fetch the newest user key. if no continue
+	let res = group.prepare_finish_key_rotation(user.get_jwt().unwrap(), Some(user), None).await.unwrap();
+
+	//check if the user needs to fetch keys first
+	let data = match res {
+		GroupFinishKeyRotation::Ok(data) => data,
+		_ => {
+			panic!("Should be ok")
+		}
+	};
+
+	//This function will fetch all new group keys
+	let res = group.done_key_rotation(user.get_jwt().unwrap(), data, None, Some(user), None).await.unwrap();
+
+	//fetch each new key after all rotations
+	for key in res {
+		let data = match key {
+			GroupKeyFetchResult::Ok(data) => data,
+			_ => panic!("should be ok"),
+		};
+
+		group.done_fetch_group_key_after_rotation(data, Some(user), None).unwrap();
+	}
+}
+````
+
 ::::
 
 This will fetch all new keys for a group and prepares the new keys.
@@ -1027,6 +1512,16 @@ const input = await group.prepareKeyRotation();
 ```dart
 String input = await group.prepareKeyRotation();
 ```
+
+@tab Rust
+````rust
+use sentc::keys::{StdGroup, StdUser};
+
+fn example(group: &StdGroup, user: &StdUser)
+{
+	let input = group.manually_key_rotation(false, user.get_user_id().to_string(), Some(user), None).unwrap();
+}
+````
 
 ::::
 
@@ -1059,6 +1554,16 @@ await group.reInviteUser("<user id>");
 await group.reInviteGroup("<group id");
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup)
+{
+	group.re_invite_user("user_id", user_public_key).await.unwrap();
+}
+````
+
 ::::
 
 ## Public group information
@@ -1085,6 +1590,16 @@ class PublicGroupKeyData {
 
 ```
 
+@tab Rust
+````rust
+use sentc::net_helper::get_group_public_key;
+
+async fn example()
+{
+	let public_group_key = get_group_public_key("base_url", "app_token", "group_id").await.unwrap();
+}
+````
+
 ::::
 
 ## Delete a group
@@ -1104,6 +1619,16 @@ await group.deleteGroup();
 ```dart
 await group.deleteGroup();
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str)
+{
+	group.delete_group(jwt).await.unwrap();
+}
+````
 
 ::::
 
