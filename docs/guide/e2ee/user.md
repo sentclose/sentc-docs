@@ -71,6 +71,20 @@ await Sentc.register("username", "password");
 This function will also throw an error if the **chosen username already exists** within your app.
 :::
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn register()
+{
+	let user_id = StdUser::register("the-username", "the-password").unwrap();
+}
+````
+
+::: warning
+This function will also throw an error if the **chosen username already exists** within your app.
+:::
+
 ::::
 
 The username and password can also be generated to ensure a unique and secure login for each device. 
@@ -132,6 +146,16 @@ class GeneratedRegisterData {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::user::generate_register_data;
+
+fn main()
+{
+	let (username, password) = generate_register_data().unwrap();
+}
+````
+
 ::::
 
 The registration process will throw an error if the chosen username is already taken. 
@@ -177,6 +201,16 @@ const available = await Sentc.checkUserIdentifierAvailable("identifier");
 ```dart
 bool available = await Sentc.checkUserIdentifierAvailable("identifier");
 ```
+
+@tab Rust
+````rust
+use sentc::user::net::check_user_name_available;
+
+async fn example()
+{
+	let available = check_user_name_available("base_url", "app_token", "user_identifier").await.unwrap();
+}
+````
 
 ::::
 
@@ -234,6 +268,14 @@ const input = await Sentc.prepareRegister("identifier", "password");
 String input = await Sentc.prepareRegister("identifier", "password");
 ```
 
+@tab Rust
+````rust
+fn example()
+{
+	let input = StdUser::prepare_register("identifier", "password").unwrap();
+}
+````
+
 ::::
 
 See more at [own backend](/guide/advanced/backend-only/)
@@ -280,6 +322,16 @@ For flutter, use the function loginForced instead of login.
 ```dart
 User user = await Sentc.loginForced("identifier", "password");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example()
+{
+	let user = StdUser::login_forced("base_url".to_string(), "app_token", "username", "password").await.unwrap();
+}
+````
 
 ::::
 
@@ -349,6 +401,28 @@ if (userData is MfaLogin) {
 This function will also throw an error if the **username is not found** or the **password is incorrect**.
 :::
 
+@tab Rust
+For rust an enum is returned with either the User data or mfa data.
+
+````rust
+use sentc::keys::{StdUser, StdUserLoginReturn};
+
+async fn login()
+{
+	let login_res = StdUser::login("base_url".to_string(), "app_token", "username", "password").await.unwrap();
+
+	//check if the enum is PreLoginOut::Otp, if so call mfa_login with the token from the user auth device
+	match login_res {
+		StdUserLoginReturn::Direct(user) => {
+			//the user
+		}
+		StdUserLoginReturn::Otp(data) => {
+			//handle otp
+		}
+	}
+}
+````
+
 ::::
 
 ### Login auth token
@@ -391,6 +465,32 @@ if (userData is MfaLogin) {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::keys::{StdUser, StdPrepareLoginOtpOutput, StdUserLoginReturn};
+
+async fn login()
+{
+	let login_res = StdUser::login("base_url".to_string(), "app_token", "username", "password").await.unwrap();
+
+	let user = match login_res {
+		StdUserLoginReturn::Direct(user) => {
+			user
+		}
+		StdUserLoginReturn::Otp(data) => {
+			//get the token first
+			mfa_login("<token-from-mfa-app>".to_string(), data).await
+		}
+	};
+}
+
+//token from the auth app
+async fn mfa_login(token: String, login_data: StdPrepareLoginOtpOutput) -> StdUser
+{
+	StdUser::mfa_login("base_url".to_string(), "app_token", token, "username", login_data).await.unwrap()
+}
+````
+
 ::::
 
 ### Login with recovery key
@@ -426,17 +526,42 @@ if (userData is MfaLogin) {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::keys::{StdUser, StdPrepareLoginOtpOutput, StdUserLoginReturn};
+
+async fn login()
+{
+	let login_res = StdUser::login("base_url".to_string(), "app_token", "username", "password").await.unwrap();
+
+	let user = match login_res {
+		StdUserLoginReturn::Direct(user) => {
+			user
+		}
+		StdUserLoginReturn::Otp(data) => {
+			//get the token first
+			mfa_recovery_login("<recovery-key>".to_string(), data).await
+		}
+	};
+}
+
+//token from the auth app
+async fn mfa_recovery_login(recovery_key: String, login_data: StdPrepareLoginOtpOutput) -> StdUser
+{
+	StdUser::mfa_recovery_login("base_url".to_string(), "app_token", recovery_key, "username", login_data).await.unwrap()
+}
+````
+
 ::::
 
 ### User object
 
 After successfully logging in, you will receive a user object, which is required to perform all user actions, such as creating a group.
 
-You can obtain the actual user object by calling the init function as follows:
-
 :::: tabs#p
 
 @tab Javascript
+You can obtain the actual user object by calling the init function as follows:
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -447,19 +572,7 @@ const user = await Sentc.init({
 });
 ```
 
-@tab Flutter
-```dart
-//nullable user object.
-final user = await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
-```
-
-::::
-
 Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
-
-:::: tabs#p
-
-@tab Javascript
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -468,9 +581,41 @@ const user = await Sentc.getActualUser();
 ```
 
 @tab Flutter
+You can obtain the actual user object by calling the init function as follows:
+
+```dart
+//nullable user object.
+final user = await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
+```
+
+Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
+
 ```dart
 final user = await Sentc.getActualUser();
 ```
+
+@tab Rust
+You can export the user struct either when owning the struct or from its ref and import it with the parse fn from
+String:
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: StdUser)
+{
+	let export = user.to_string().unwrap();
+
+	//don't forget the type
+	let imported_user: StdUser = export.parse().unwrap();
+}
+
+fn example_ref(user: &StdUser)
+{
+	let export = user.to_string_ref().unwrap();
+
+	let imported_user: StdUser = export.parse().unwrap();
+}
+````
 
 ::::
 
@@ -488,11 +633,11 @@ For user account:
 - The refresh token for this session.
 - User ID
 
-To get the data, just access the data in the user class.
-
 :::: tabs#p
 
 @tab Javascript
+To get the data, just access the data in the user class.
+
 The devices are from type UserDeviceList
 
 ```ts
@@ -503,11 +648,25 @@ const device_id = user.data.device_id;
 ```
 
 @tab Flutter
+To get the data, just access the data in the user class.
+
 ```dart
 String refreshToken = user.refreshToken;
 String userId = user.userId;
 String deviceId = user.deviceId;
 ```
+
+@tab Rust
+To get the data, just access the data in the user struct.
+
+````rust
+fn example_ref(user: &StdUser)
+{
+    let refresh_token = user.get_refresh_token();
+    let user_id = user.get_user_id();
+    let device_id = user.get_device_id();
+}
+````
 
 ::::
 
@@ -524,6 +683,30 @@ However, this is only necessary if you must use HTTP-only cookies for the browse
 If you are using other implementations, stick with the default.
 
 See more at [own backend](/guide/advanced/backend-only/)
+
+### Refresh the jwt
+
+:::: tabs#p
+@tab Javascript
+
+The javascript sdk will always automatically check the jwt before each request and refresh the jwt if needed.
+
+@tab Flutter
+The javascript sdk will always automatically check the jwt before each request and refresh the jwt if needed.
+
+@tab Rust
+If a function returned this error: SentcError::JwtExpired then
+you have to refresh the jwt to make the request. Jwt needs to be refreshed manually.
+
+````rust
+use sentc::keys::StdUser;
+
+async fn refresh_jwt(user: &mut StdUser)
+{
+	let fresh_jwt = user.refresh_jwt().await.unwrap();
+}
+````
+::::
 
 ## Multi-Factor authentication
 
@@ -557,6 +740,18 @@ The url is for the auth app and the recoveryKeys is a list of all six keys.
 ```dart
 final (user, recoveryKeys) = await user.registerOtp("<issuer>", "<audience>", "<password>");
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+//get the user object after login
+async fn example(user: &mut StdUser)
+{
+	let (url, recover_codes) = user.register_otp("issuer", "audience", "password", None, None).await.unwrap();
+}
+````
 
 ::::
 
@@ -602,6 +797,19 @@ final (url, recoveryKeys) = await user.resetOtp("<issuer>", "<audience>", "<pass
 final (url, recoveryKeys) = await user.resetOtp("<issuer>", "<audience>", "<password>", "<recovery_key>", true); 
 ```
 
+@tab Rust
+
+The last parameter is for the function to know if a recovery key (Some(true)) or a normal top (None) is used.
+
+````rust
+use sentc::keys::StdUser;
+
+async fn reset_otp(user: &StdUser)
+{
+	let (url, recover_codes) = user.reset_otp("issuer", "audience", "password", Some("token from auth app".to_string()), None).await.unwrap();
+}
+````
+
 ::::
 
 ### Disable mfa
@@ -636,7 +844,20 @@ await user.disableOtp("<password>", "<totp>", false);
 await user.disableOtp("<password>", "<recovery_key>", true); 
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &mut StdUser)
+{
+	user.disable_otp("password", Some("token from auth app".to_string()), None).await.unwrap();
+}
+````
+
 ::::
+
+### Get totp recovery keys
 
 To get the recovery keys so the user can later store them:
 
@@ -667,6 +888,17 @@ List<String> keys = await user.getOtpRecoverKeys("<password>", "<totp>", false);
 //with recovery key
 List<String> keys = await user.getOtpRecoverKeys("<password>", "<recovery_key>", true); 
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let keys = user.get_otp_recover_keys("password", Some("token from auth app".to_string()), None).await.unwrap();
+}
+````
 
 ::::
 
@@ -723,6 +955,21 @@ String input = await Sentc.registerDeviceStart("device_identifier", "device_pw")
 This function will also throw an error if the **username still exists for your app**
 :::
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn start_register_new_device()
+{
+	let server_res = StdUser::register_device_start("base_url".to_string(), "app_token", "device_identifier", "device_password").await.unwrap();
+}
+````
+
+::: warning
+This function will also throw an error if the **username still exists for your app**
+:::
+
 ::::
 
 Send the Input to the Logged-In Device (possibly through a QR code, which the logged-in device can scan), and call this function with the input.
@@ -740,6 +987,17 @@ await user.registerDevice(input);
 //the user obj from login
 await user.registerDevice(input);
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, server_res: String)
+{
+	user.register_device(server_res).await.unwrap();
+}
+````
 
 ::::
 
@@ -786,6 +1044,17 @@ class UserDeviceList {
 
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let list = user.get_devices(None).await.unwrap();
+}
+````
+
 ::::
 
 To fetch the next pages, simply call this function with the last fetched device.
@@ -808,6 +1077,17 @@ The devices are from type UserDeviceList
 List<UserDeviceList> devicesPageTwo = await user.getDevices(devices.last);
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let list = user.get_devices(Some(&list.last().unwrap())).await.unwrap();
+}
+````
+
 ::::
 
 ## Change password
@@ -829,6 +1109,21 @@ This function will also throw an error if **the old password was not correct**
 ```dart
 await user.changePassword("old_password", "new_password");
 ```
+
+::: warning
+This function will also throw an error if **the old password was not correct**
+:::
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.change_password("old_password", "new_password", Some("auth_token_if_any".to_string()), None).await.unwrap();
+}
+````
 
 ::: warning
 This function will also throw an error if **the old password was not correct**
@@ -864,6 +1159,20 @@ await user.changePassword("old_password", "new_password", "<totp>", false);
 await user.changePassword("old_password", "new_password", "<recovery_key>", true);
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.change_password("old_password", "new_password", Some("auth_token_if_any".to_string()), None).await.unwrap();
+    
+    //with recovery key
+	user.change_password("old_password", "new_password", Some("recovery_key".to_string()), Some(true)).await.unwrap();
+}
+````
+
 ::::
 
 ## Reset password
@@ -886,6 +1195,17 @@ await user.resetPassword("new_password");
 ```dart
 await user.resetPassword("new_password");
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.reset_password("new_password").await.unwrap();
+}
+````
 
 ::::
 
@@ -918,6 +1238,21 @@ This function will also throw an error if **the identifier still exists for your
 ```dart
 await user.updateUser("new_identifier");
 ```
+
+::: warning
+This function will also throw an error if **the identifier still exists for your app**
+:::
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &mut StdUser)
+{
+	user.update_user("new_user_name".to_string()).await.unwrap();
+}
+````
 
 ::: warning
 This function will also throw an error if **the identifier still exists for your app**
@@ -970,6 +1305,21 @@ await user.deleteDevice("password", "device_id");
 This function will also throw an error if **the password was not correct**
 :::
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, device_id: &str)
+{
+	user.delete_device("password", device_id, None, None).await.unwrap();
+}
+````
+
+::: warning
+This function will also throw an error if **the password was not correct**
+:::
+
 ::::
 
 If the user enabled mfa then you also need to enter the token or a recovery key.
@@ -1000,6 +1350,19 @@ await user.deleteDevice("password", "device_id", "<totp>", false);
 await user.deleteDevice("password", "device_id", "<recovery_key>", true);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, device_id: &str)
+{
+	user.delete_device("password", device_id, Some("auth_token_if_any".to_string()), None).await.unwrap();
+
+    //with recovery key
+	user.delete_device("password", device_id, Some("recovery_key".to_string()), Some(true)).await.unwrap();
+}
+````
+
 ::::
 
 
@@ -1017,6 +1380,16 @@ const device_id = user.data.device_id;
 ```dart
 String deviceId = user.deviceId;
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser)
+{
+	let device_id = user.get_device_id();
+}
+````
 
 ::::
 
@@ -1044,6 +1417,20 @@ await user.deleteUser("password");
 This function will also throw an error if **the password was not correct**
 :::
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.delete("password", None, None).await.unwrap();
+}
+````
+
+::: warning
+This function will also throw an error if **the password was not correct**
+:::
+
 ::::
 
 If the user enabled mfa then you also need to enter the token or a recovery key.
@@ -1073,6 +1460,19 @@ await user.deleteUser("password", "<totp>", false);
 //with recovery key
 await user.deleteUser("password", "<recovery_key>", true);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	user.delete("password", Some("auth_token_if_any".to_string()), None).await.unwrap();
+
+    //with recovery key
+	user.delete("password", Some("recovery_key".to_string()), Some(true)).await.unwrap();
+}
+````
 
 ::::
 
@@ -1119,6 +1519,16 @@ class PublicKeyData {
 }
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, user_id: &str)
+{
+	let public_key = user.get_user_public_key_data(user_id).await.unwrap();
+}
+````
+
 ::::
 
 Verify Key:
@@ -1139,6 +1549,17 @@ const key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
 ```dart
 String key = await Sentc.getUserVerifyKey("<user_id>", "<verify_key_id>");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+use sentc::crypto_common::user::UserVerifyKeyData;
+
+async fn example(user: &StdUser, user_id: &str, verify_key_id: &str)
+{
+	let verify_key: UserVerifyKeyData = user.get_user_verify_key_data(user_id, verify_key_id).await.unwrap();
+}
+````
 
 ::::
 
@@ -1188,6 +1609,29 @@ final number2 = await await user.createSafetyNumber(
 );
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+use sentc::crypto_common::user::UserVerifyKeyData;
+
+fn example(user: &StdUser, other_user_id: &str, other_user_key: &UserVerifyKeyData)
+{
+	let number = user.create_safety_number_sync(Some(other_user_id), Some(other_user_key)).unwrap();
+}
+````
+
+The other side:
+
+````rust
+use sentc::keys::StdUser;
+use sentc::crypto_common::user::UserVerifyKeyData;
+
+fn example(user: &StdUser, first_user_id: &str, first_user_key: &UserVerifyKeyData)
+{
+	let number2 = user.create_safety_number_sync(Some(first_user_id), Some(first_user_key)).unwrap();
+}
+````
+
 ::::
 
 ## Verify a users public key
@@ -1212,6 +1656,19 @@ final publicKey = await Sentc.getUserPublicKey(userId);
 
 final verify = await Sentc.verifyUserPublicKey(userId, publicKey);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, user_id: &str)
+{
+	//fetch a public key of a user
+	let public_key = user.get_user_public_key_data(user_id).await.unwrap();
+
+	let verify = StdUser::verify_user_public_key("base_url".to_string(), "app_token", user_id, &public_key).await.unwrap();
+}
+````
 
 ::::
 
@@ -1247,5 +1704,27 @@ final number = await user.createSafetyNumber(
 
 final verify = await Sentc.verifyUserPublicKey(userId, publicKey);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+use sentc::crypto_common::user::{UserVerifyKeyData, UserPublicKeyData};
+
+async fn example(user: &StdUser, user_id: &str)
+{
+	//fetch a public key of a user
+	let public_key: UserPublicKeyData = user.get_user_public_key_data(user_id).await.unwrap();
+
+	//is an Option
+	let verify_key_id = public_key.public_key_sig_key_id.unwrap();
+
+	let verify_key: UserVerifyKeyData = user.get_user_verify_key_data(user_id, verify_key_id).await.unwrap();
+
+	//create a safety number with this key
+	let number = user.create_safety_number_sync(Some(user_id), Some(&verify_key)).unwrap();
+
+	let verify = StdUser::verify_user_public_key("base_url".to_string(), "app_token", user_id, &public_key).await.unwrap();
+}
+````
 
 ::::
