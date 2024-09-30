@@ -86,7 +86,7 @@ For file upload you can also use the sentc [file handling](/guide/file/)
 :::
 
 @tab Flutter
-For javascript, Uint8List are used for raw data.
+For Flutter, Uint8List are used for raw data.
 
 For a group:
 
@@ -103,6 +103,32 @@ final encrypted = await user.encrypt(Uint8List.fromList(elements), "<reply_id>")
 ::: tip
 For file upload you can also use the sentc [file handling](/guide/file/)
 :::
+
+@tab Rust
+
+Raw data are bytes (&[u8]).
+
+For a group:
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &[u8])
+{
+	let encrypted = group.encrypt_sync(data).unwrap();
+}
+````
+
+For a user:
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser, data: &[u8])
+{
+	let encrypted = user.encrypt_sync(data, user_public_key, false).unwrap();
+}
+````
 
 ::::
 
@@ -126,6 +152,18 @@ For flutter, Uint8List are used for raw data. The encrypted data should be a Uin
 final decrypted = await group.decrypt(encrypted);
 ```
 
+@tab Rust
+Raw data are bytes (&[u8]).
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &[u8])
+{
+	let decrypted = group.decrypt_sync(data, None).unwrap();
+}
+````
+
 ::::
 
 For user this is a little more complicated. Only the user which user id was used in encrypt can decrypt the content.
@@ -148,6 +186,17 @@ For flutter, Uint8List are used for raw data. The encrypted data should be a Uin
 ```dart
 final decrypted = await user.decrypt(encrypted);
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser, encrypted: &[u8])
+{
+	let decrypted = user.decrypt_sync(encrypted, None).unwrap();
+}
+````
 
 ::::
 
@@ -186,6 +235,28 @@ For a user:
 final encrypted = await user.encryptString("hello there!", "<reply_id>");
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let encrypted = group.encrypt_string_sync(data).unwrap();
+}
+````
+
+For user:
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser, data: &str)
+{
+	let encrypted = user.encrypt_string_sync(data, user_public_key, false).unwrap();
+}
+````
+
 ::::
 
 ## Decrypt strings
@@ -223,135 +294,27 @@ For a user:
 final decrypted = await user.decryptString(encrypted);
 ```
 
-::::
+@tab Rust
 
-## Register a key
+````rust
+use sentc::keys::StdGroup;
 
-In addition to using existing keys, you can also create a new key specifically for encrypting content. 
-This can be particularly useful for asymmetric encryption, where data length is limited.
-
-### Create a new symmetric key
-
-When creating a new key for a group, the key will be encrypted using the group's current key. 
-For another user, the key will be encrypted using the user's public key.
-
-There is no need to store this key, as Sentc will handle this for you. 
-Simply fetch the key and store the used key ID and the master key ID that was used to encrypt the key for the encrypted content, 
-in order to fetch it later for decryption.
-
-::: tip
-For sentc file handling, the sdk will create a new key for every file the same way
-:::
-
-:::: tabs#p
-
-@tab Javascript
-
-The key is from type SymKey and has the `encrypt` and `decrypt` functions too
-
-For a group:
-```ts
-const key = await group.registerKey();
-
-const key_id = key.key_id;
-const master_key_id = key.master_key_id;
-```
-
-For a user:
-
-```ts
-const key = await user.registerKey("<replyId>");
-
-const key_id = key.key_id;
-const master_key_id = key.master_key_id;
-```
-
-@tab Flutter
-
-The key is from class SymKey and has the `encrypt` and `decrypt` functions too
-
-For a group:
-```dart
-SymKey key = await group.registerKey();
-
-final keyId = key.keyId;
-final masterKeyId = key.masterKeyId;
-```
-
-For a user:
-
-```dart
-SymKey key = await user.registerKey("<replyId>");
-```
-
-::::
-
-### Encrypt and decrypt with a registered key
-
-This works the same as group encrypt, decrypt.
-
-:::: tabs#p
-
-@tab Javascript
-
-No promise here.
-
-```ts
-//encrypt
-const encrypted = key.encrypt(data);
-
-//decrypt
-const decrypted = key.decrypt(encrypted);
-```
-
-@tab Flutter
-
-```dart
-//encrypt
-final encrypted = await key.encrypt(data);
-
-//decrypt
-final decrypted = key.decrypt(encrypted);
-```
-
-::::
-
-### Fetch a key
-
-If you have saved the master key ID (the key that was used to encrypt the key) and the key ID, you can fetch the key.
-
-However, it is important to ensure that the user has access to the master key 
-(such as being a group member or having their public key used for encryption).
-
-:::: tabs#p
-
-@tab Javascript
-
-For group:
-
-```ts
-const key = await group.fetchKey("<key_id>", "<master_key_id>");
-```
+fn example(group: &StdGroup, data: &str)
+{
+	let decrypted = group.decrypt_string_sync(data, None).unwrap();
+}
+````
 
 For user:
 
-```ts
-const key = await user.fetchGeneratedKey("<key_id>", "<master_key_id>");
-```
+````rust
+use sentc::keys::StdUser;
 
-@tab Flutter
-
-For group:
-
-```dart
-final key = await group.fetchKey("<key_id>", "<master_key_id>");
-```
-
-For user:
-
-```dart
-final key = await user.fetchGeneratedKey("<key_id>", "<master_key_id>");
-```
+fn example(user: &StdUser, encrypted: &str)
+{
+	let decrypted = user.decrypt_string_sync(encrypted, None).unwrap();
+}
+````
 
 ::::
 
@@ -395,6 +358,30 @@ For a user:
 final encrypted = await user.encryptString("hello there!", "<reply_id>", true);
 ```
 
+@tab Rust
+
+For the rust version you need to get the sign key from the user for groups.
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let encrypted = group.encrypt_string_with_sign_sync(data, user_sign_key).unwrap();
+}
+````
+
+For user:
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser, data: &str)
+{
+	let encrypted = user.encrypt_string_sync(data, user_public_key, true).unwrap();
+}
+````
+
 ::::
 
 ### Verify
@@ -429,5 +416,29 @@ For a user:
 ```dart
 final decrypted = await user.decryptString(encrypted, true, "<user_id>");
 ```
+
+@tab Rust
+
+For verify, the right verify key needs to be fetched first.
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let decrypted = group.decrypt_string_sync(data, Some(user_verify_key)).unwrap();
+}
+````
+
+For user:
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser, encrypted: &str)
+{
+	let decrypted = user.decrypt_string_sync(encrypted, Some(user_verify_key)).unwrap();
+}
+````
 
 ::::
