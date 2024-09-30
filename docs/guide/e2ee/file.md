@@ -55,6 +55,11 @@ interface FileCreateOutput
 }
 ````
 
+For another user:
+````ts
+const output = await user.createFile(file, false, "<other-user-id>");
+````
+
 @tab Flutter
 
 Create a file with the file object:
@@ -81,6 +86,12 @@ class FileCreateOutput {
 }
 ```
 
+For another user:
+
+````dart
+FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", replyId: "<other-user-id>");
+````
+
 ::::
 
 To also sign a file, set the 'sign' parameter to 'true' in the function. This will use the user's sign key. 
@@ -96,6 +107,11 @@ When downloading and verifying the file, you will also need to store the user ID
 const output = await group.createFile(file, true);
 ```
 
+For another user:
+````ts
+const output = await user.createFile(file, true, "<other-user-id>");
+````
+
 @tab Flutter
 
 ```dart
@@ -107,6 +123,13 @@ Or with a path:
 ```dart
 FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", sign: true);
 ```
+
+For another user:
+
+````dart
+FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", replyId: "<other-user-id>", sign: true);
+````
+
 
 ::::
 
@@ -238,6 +261,13 @@ a.download = meta_info.file_name;
 a.href = url;
 a.click();
 ````
+
+Download file for another user:
+
+```typescript
+const [url, meta_info, file_key] = await user.downloadFile(file_id);
+```
+
 :::
 
 @tab Flutter
@@ -290,6 +320,12 @@ class FileMetaInformation {
     this.encryptedFileName,
   });
 }
+```
+
+Download file for another user:
+
+```dart
+DownloadResult result = await user.downloadFile(path: "<your-download-path>", fileId: fileId);
 ```
 
 ::::
