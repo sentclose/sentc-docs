@@ -49,6 +49,21 @@ final c = await group.encryptSortableRawNumber(65321);
 //a < b < c
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let a = group.encrypt_sortable_raw_number(262).unwrap();
+	let b = group.encrypt_sortable_raw_number(263).unwrap();
+	let c = group.encrypt_sortable_raw_number(65321).unwrap();
+
+	//a < b < c
+}
+````
+
 ::::
 
 To get more information about how the value is encrypted, you can use this function instead:
@@ -74,6 +89,17 @@ final number = out.number;
 final alg = out.alg;
 final keyId = out.keyId;
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let out = group.encrypt_sortable_number(262).unwrap();
+}
+````
 
 ::::
 
@@ -109,6 +135,21 @@ final c = await group.encryptSortableRawString("hij");
 //a < b < c
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let a = group.encrypt_sortable_raw_string("abc", None).unwrap();
+	let b = group.encrypt_sortable_raw_string("dfg", None).unwrap();
+	let c = group.encrypt_sortable_raw_string("hij", None).unwrap();
+
+	//a < b < c
+}
+````
+
 ::::
 
 To get more information from the encrypted strings use this function:
@@ -134,5 +175,16 @@ final number = out.number;
 final alg = out.alg;
 final keyId = out.keyId;
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let out = group.encrypt_sortable_string("abc").unwrap();
+}
+````
 
 ::::
