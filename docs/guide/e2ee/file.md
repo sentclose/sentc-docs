@@ -92,6 +92,50 @@ For another user:
 FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", replyId: "<other-user-id>");
 ````
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.create_file_with_file(jwt, file, None, None, None).await.unwrap();
+}
+````
+
+For another user:
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, file: File)
+{
+	let output = user.create_file_with_file(file, None, None, false).await.unwrap();
+}
+````
+
+Create a file with a path:
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, path: &str)
+{
+	let output = group.create_file_with_path(jwt, path, None, None).await.unwrap();
+}
+````
+
+For another user:
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, path: &str)
+{
+	let output = user.create_file_with_path(path, None, None).await.unwrap();
+}
+````
+
 ::::
 
 To also sign a file, set the 'sign' parameter to 'true' in the function. This will use the user's sign key. 
@@ -130,6 +174,27 @@ For another user:
 FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>", replyId: "<other-user-id>", sign: true);
 ````
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.create_file_with_file(jwt, file, None, None, Some(sign_key)).await.unwrap();
+}
+````
+
+For another user:
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, file: File)
+{
+	let output = user.create_file_with_file(file, None, None, true).await.unwrap();
+}
+````
 
 ::::
 
@@ -173,6 +238,22 @@ FileCreateOutput output = await group.createFile(
 ```
 
 This will print the progress to the console.
+:::
+
+@tab Rust
+::: tip Upload progress
+To see the actual upload progress pass in the create file function a closure:
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.create_file_with_file_and_upload_progress(jwt, file, None, None, None, |progress| {
+		//do something with the progress
+	}).await.unwrap();
+}
+````
 :::
 
 ::::
@@ -328,6 +409,28 @@ Download file for another user:
 DownloadResult result = await user.downloadFile(path: "<your-download-path>", fileId: fileId);
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.download_file(jwt, file, "file_id", None, None).await.unwrap();
+}
+````
+
+Download file for another user:
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser, file: File)
+{
+	let output = user.download_file(file, "file_id", None, None).await.unwrap();
+}
+````
+
 ::::
 
 To also verify the file by put in the right verify key. Make sure you save the user id from the creator of the file when uploading a file.
@@ -347,6 +450,16 @@ const [url, meta_info, file_key] = await group.downloadFile(file_id, verify_key)
 ```dart
 DownloadResult result = await group.downloadFile(path: "<your-download-path>", fileId: fileId, verifyKey: verifyKey);
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.download_file(jwt, file, "file_id", Some(verify_key), None).await.unwrap();
+}
+````
 
 ::::
 
@@ -385,6 +498,25 @@ DownloadResult result = await group.downloadFile(path: "<your-download-path>", f
   print(progress);
 });
 ```
+:::
+
+@tab Rust
+
+::: tip Download progress
+To see the actual download progress pass in the download file function a closure:
+
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.download_file_with_progress(jwt, file, "file_id", |progress| {
+		//do something with the progress
+	}, None, None).await.unwrap();
+}
+````
+
 :::
 
 ::::
@@ -435,6 +567,17 @@ await group.deleteFile(file_id);
 await group.deleteFile(fileId);
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str)
+{
+	let output = group.delete_file(jwt, "file_id").await.unwrap();
+}
+````
+
 ::::
 
 ## Setting up your storage
@@ -475,6 +618,19 @@ await Sentc.init({
 ```dart
 await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi", filePartUrl: "<your_url_to_your_storage>");
 ```
+
+@tab Rust
+
+In rust, you need to pass in the url with the parameter:
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt: &str, file: File)
+{
+	let output = group.download_file(jwt, file, "file_id", None, Some("file_url")).await.unwrap();
+}
+````
 
 ::::
 
