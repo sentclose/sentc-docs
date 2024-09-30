@@ -67,6 +67,17 @@ final hashes = await group.createSearchRaw("your-string");
 //each hash for each letter combination
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let hashes = group.create_search_raw(data, false, None).unwrap();
+}
+````
+
 ::::
 
 To get more information about how the value is encrypted, you can use this function instead:
@@ -93,6 +104,17 @@ final alg = out.alg;
 final keyId = out.keyId;
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let out = group.create_search(data, false, None).unwrap();
+}
+````
+
 ::::
 
 ## Search a value
@@ -113,6 +135,16 @@ const hash = group.search("your-string");
 ```dart
 final hash = await group.search("your-string");
 ```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let hash = group.search(data).unwrap();
+}
+````
 
 ::::
 
@@ -149,6 +181,16 @@ const hash = group.createSearchRaw("your-string", true);
 final hash = await group.createSearchRaw("your-string", true);
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let hashes = group.create_search_raw(data, true, None).unwrap();
+}
+````
+
 ::::
 
 Now the length of the hashes is only one.
@@ -168,6 +210,17 @@ const hash = group.createSearchRaw("your-string", false, 4);
 ```dart
 final hash = await group.createSearchRaw("your-string", false, 4);
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup, data: &str)
+{
+	let hashes = group.create_search_raw(data, false, Some(4)).unwrap();
+}
+````
 
 ::::
 
