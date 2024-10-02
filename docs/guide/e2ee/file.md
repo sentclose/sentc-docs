@@ -110,7 +110,7 @@ use sentc::keys::StdUser;
 
 async fn example(user: &StdUser, file: File)
 {
-	let output = user.create_file_with_file(file, None, None, false).await.unwrap();
+	let output = user.create_file_with_file(file, Some(reply_id), Some(reply_public_key), None, None, false).await.unwrap();
 }
 ````
 
@@ -132,7 +132,7 @@ use sentc::keys::StdUser;
 
 async fn example(user: &StdUser, path: &str)
 {
-	let output = user.create_file_with_path(path, None, None).await.unwrap();
+	let output = user.create_file_with_path(path, Some(reply_id), Some(reply_public_key), None, false).await.unwrap();
 }
 ````
 
@@ -192,7 +192,7 @@ use sentc::keys::StdUser;
 
 async fn example(user: &StdUser, file: File)
 {
-	let output = user.create_file_with_file(file, None, None, true).await.unwrap();
+	let output = user.create_file_with_file(file, Some(reply_id), Some(reply_public_key), None, None, true).await.unwrap();
 }
 ````
 
