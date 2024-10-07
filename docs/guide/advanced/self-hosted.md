@@ -124,6 +124,9 @@ await Sentc.init(
 );
 ```
 
+@tab Rust
+For rust sdk set it everywhere in the code where it is asked for the base_url like StdUser::register("base_url",...).
+
 ::::
 
 ## Register a self-hosted app

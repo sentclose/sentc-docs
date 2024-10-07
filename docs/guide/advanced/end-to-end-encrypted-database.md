@@ -66,6 +66,19 @@ final hashesJohnny = await group.createSearchRaw("Johnny");
 
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let hashes_jon = group.create_search_raw("Jon", false, None).unwrap();
+	let hashes_john = group.create_search_raw("John", false, None).unwrap();
+	let hashes_johnny = group.create_search_raw("Johnny", false, None).unwrap();
+}
+````
+
 ::::
 
 You can also set a boolean flag in your hashes table for the last hash of a word.
@@ -118,6 +131,19 @@ final sortJohn = await group.encryptSortableRawString("John");
 final sortJohnny = await group.encryptSortableRawString("Johnny");
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let sort_jon = group.encrypt_sortable_raw_string("Jon", None).unwrap();
+	let sort_john = group.encrypt_sortable_raw_string("John", None).unwrap();
+	let sort_johnny = group.encrypt_sortable_raw_string("Johnny", None).unwrap();
+}
+````
+
 ::::
 
 
@@ -148,6 +174,17 @@ const hash = group.search("jo");
 ```dart
 final hash = await group.search("jo");
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example(group: &StdGroup)
+{
+	let hash = group.search("jo").unwrap();
+}
+````
 
 ::::
 

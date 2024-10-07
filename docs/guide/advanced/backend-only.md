@@ -38,6 +38,34 @@ final userId = await Sentc.doneRegister("server_output");
 ```
 :::
 
+@tab Rust
+:::tip Example
+````rust
+use sentc::keys::StdUser;
+use sentc::user::done_register;
+
+async fn register()
+{
+	//normal register
+	let user_id = StdUser::register("the-username", "the-password").await.unwrap();
+}
+
+fn example()
+{
+	//no future here
+	//call this before you do the request to your backend
+	let input = StdUser::prepare_register("identifier", "password").unwrap();
+}
+
+fn done(input: &str)
+{
+	//call this after you call the api. in the client
+
+	let user_id = done_register(input).unwrap();
+}
+````
+:::
+
 ::::
 
 To retrieve the necessary server input for your API, call the `prepare` function in the client. 
@@ -68,7 +96,7 @@ Failed responses:
 
 The `done` functions will check every server response like this to get the right result.
 
-## Authentification
+## Authentication
 
 For some requests a jwt is needed. Just pass the jwt in Authorization header as Bearer token.
 
@@ -117,6 +145,19 @@ const input = Sentc.prepareRegister("username", "password");
 final input = await Sentc.prepareRegister("username", "password");
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+fn example()
+{
+	//no future here
+	//call this before you do the request to your backend
+	let input = StdUser::prepare_register("identifier", "password").unwrap();
+}
+````
+
 ::::
 
 After your user registration call this function in the client, to check the response:
@@ -144,6 +185,22 @@ final userId = await Sentc.doneRegister("server_output");
 ::: warning
 This function will throw an error if the server output is not correct.
 :::
+
+@tab Rust
+
+::: warning
+This function will throw an error if the server output is not correct.
+:::
+
+````rust
+use sentc::user::done_register;
+
+fn done(output: &str)
+{
+	//call this after you call the api. in the client
+	let user_id = done_register(output).unwrap();
+}
+````
 
 ::::
 
@@ -186,6 +243,16 @@ const input = Sentc.prepareRegisterDeviceStart("identifier", "password");
 final input = await Sentc.prepareRegisterDeviceStart("identifier", "password");
 ```
 
+@tab Rust
+````rust
+use sentc::keys::StdUser;
+
+async fn example()
+{
+	let input = StdUser::prepare_register_device_start("device_identifier", "device_password").unwrap();
+}
+````
+
 ::::
 
 To check in the client if the request was correct, use the `done` function with the server output:
@@ -208,6 +275,21 @@ This function will throw an error if the server output is not correct.
 ```dart
 final input = await Sentc.doneRegisterDeviceStart("server_output");
 ```
+
+@tab Rust
+
+````rust
+use sentc::user::done_register_device_start;
+
+fn example(server_output: &str)
+{
+	let input = done_register_device_start(server_output).unwrap();
+}
+````
+
+::: warning
+This function will throw an error if the server output is not correct.
+:::
 
 ::::
 
@@ -240,6 +322,17 @@ const input = user.prepareGroupCreate();
 ```dart
 final input = await user.prepareGroupCreate();
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+fn example()
+{
+	let input = StdUser::prepare_create_group().unwrap();
+}
+````
 
 ::::
 
@@ -341,6 +434,10 @@ await Sentc.init(
 );
 ```
 
+@tab Rust
+
+With the rust sdk you need to refresh it manually
+
 ::::
 
 To get the refresh token, just get it from the user object after login. The token won't store in the client, just in the object.
@@ -410,6 +507,10 @@ await Sentc.init(
   ),
 );
 ```
+
+@tab Rust
+
+With the rust sdk you need to refresh it manually
 
 ::::
 

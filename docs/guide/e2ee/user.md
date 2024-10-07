@@ -77,7 +77,7 @@ use sentc::keys::StdUser;
 
 async fn register()
 {
-	let user_id = StdUser::register("the-username", "the-password").unwrap();
+	let user_id = StdUser::register("the-username", "the-password").await.unwrap();
 }
 ````
 
