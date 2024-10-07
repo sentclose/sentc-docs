@@ -113,6 +113,24 @@ please refer to the module bundler WASM configuration in our documentation.
 flutter pub add sentc
 ```
 
+@tab Rust
+
+
+```bash:no-line-numbers
+cargo add sentc
+```
+
+Please choose an implementation of the algorithms. There are StdKeys, FIPS or Rec keys. The impl can not work together.
+
+- StdKeys (feature = std_keys) are a pure rust implementation of the algorithms. They can be used in the web with wasm
+  and on mobile.
+- FIPS keys (feature = fips_keys) are FIPS approved algorithms used from Openssl Fips. This impl does not support post
+  quantum.
+- Rec keys (feature = rec_keys) or recommended keys are a mix of FIPS keys for the classic algorithms and oqs (for post
+  quantum).
+
+The net feature is necessary for the requests to the backend. The library reqwest is used to do it.
+
 ::::
 
 ### Initialize the SDK. 
@@ -215,6 +233,10 @@ void main() async {
 }
 ```
 
+@tab Rust
+
+No init needed for the rust sdk
+
 ::::
 
 ::: tip Ready
@@ -312,6 +334,17 @@ await Sentc.register("username", "password");
 await Sentc.register("username", "password");
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example()
+{
+	let user_id = StdUser::register("base_url".to_string(), "app_token".to_string(), "the-username", "the-password").await.unwrap();
+}
+````
+
 ::::
 
 ### Login a user
@@ -365,6 +398,17 @@ const user = await Sentc.login("username", "password", true);
 final user = await Sentc.loginForced("username", "password");
 ```
 
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example()
+{
+	let user = StdUser::login_forced("base_url".to_string(), "app_token", "username", "password").await.unwrap();
+}
+````
+
 ::::
 
 ### Create a group
@@ -397,6 +441,26 @@ final groupId = await user.createGroup();
 //now fetch the group
 final group = await user.getGroup(groupId);
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::{StdUser, StdGroup};
+
+async fn example()
+{
+	//create a group
+	let group_id = user.create_group().await.unwrap();
+
+	//get a group. first check if there are any data that the user need before decrypting the group keys.
+	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
+
+	//if no data then just decrypt the group keys
+	assert!(matches!(res, GroupFetchResult::Ok));
+
+	let group = user.done_get_group(data, None).unwrap();
+}
+````
 
 ::::
 
@@ -441,5 +505,25 @@ final encrypted = await group.encrypt(Uint8List.fromList(elements));
 
 final decrypted = await group.decrypt(encrypted);
 ```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+fn example()
+{
+	//encrypt a string for the group
+	let encrypted = group.encrypt_string_sync("hello there!").unwrap();
+
+	//now every user in the group can decrypt the string
+	let decrypted = group.decrypt_string_sync(encrypted, None).unwrap();
+
+	//or raw data
+	let encrypted = group.encrypt_sync([0u8;4]).unwrap();
+
+    let decrypted = group.decrypt_sync(encrypted, None).unwrap();
+}
+````
 
 ::::
