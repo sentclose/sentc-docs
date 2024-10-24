@@ -450,7 +450,7 @@ use sentc::keys::{StdUser, StdGroup};
 async fn example()
 {
 	//create a group
-	let group_id = user.create_group().await.unwrap();
+	let group_id = user.create_group(false).await.unwrap();
 
 	//get a group. first check if there are any data that the user need before decrypting the group keys.
 	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
@@ -458,7 +458,7 @@ async fn example()
 	//if no data then just decrypt the group keys
 	assert!(matches!(res, GroupFetchResult::Ok));
 
-	let group = user.done_get_group(data, None).unwrap();
+	let group = user.done_get_group(data, None, None).unwrap();
 }
 ````
 

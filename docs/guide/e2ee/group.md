@@ -37,7 +37,7 @@ use sentc::keys::StdUser;
 
 async fn example(user: &StdUser)
 {
-	let group_id = user.create_group().await.unwrap();
+	let group_id = user.create_group(false).await.unwrap();
 }
 ```
 
@@ -67,13 +67,54 @@ use sentc::keys::StdUser;
 
 fn example(user: &StdUser)
 {
-	let input = user.prepare_create_group().unwrap();
+	let input = user.prepare_create_group(false).unwrap();
 }
 ````
 
 ::::
 
 See more at [own backend](/guide/advanced/backend-only/)
+
+### Sign a group key
+
+The group key can be signed by the creator to make sure that the key is not corrupted. Just set the sign value to true.
+All members can now verify the group key.
+
+:::: tabs#p
+
+@tab Javascript
+```ts
+//the user obj from login
+const group_id = await user.createGroup(true);
+```
+
+@tab Flutter
+```dart
+//the user obj from login
+String groupId = await user.createGroup(true);
+```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdUser;
+
+async fn example(user: &StdUser)
+{
+	let group_id = user.create_group(true).await.unwrap();
+}
+````
+
+````rust
+use sentc::keys::StdUser;
+
+fn example(user: &StdUser)
+{
+	let input = user.prepare_create_group(true).unwrap();
+}
+````
+
+::::
 
 ## Fetch a group
 
@@ -111,10 +152,67 @@ async fn example(user: &StdUser)
 
 	assert!(matches!(res, GroupFetchResult::Ok));
 
-	let group = user.done_get_group(data, None).unwrap();
+	let group = user.done_get_group(data, None, None).unwrap();
 }
 ````
 
+::::
+
+### Fetch a group and verify the group key
+
+
+:::: tabs#p
+
+@tab Javascript
+Set verify to `1` to verify the key but ignore it when the user was deleted. Set it to `2` to throw an error if the user is not found.
+
+```ts
+//the user obj from login
+const group = await user.getGroup(group_id, undefined, 1);
+```
+
+@tab Flutter
+Set verify to `1` to verify the key but ignore it when the user was deleted. Set it to `2` to throw an error if the user is not found.
+
+```dart
+Group group = await user.getGroup(groupId, null, 1);
+```
+
+@tab Rust
+The group keys are a vec. Each group key got the information if the key was signed and from which user and key.
+Just integrate over the group keys after calling `prepare_get_group` and fetch all verify keys, or the keys you like to
+verify. If you want to skip keys, then just set None in the vec of verify keys. The index of the verify key in the vec
+has to match the index of the group key in the group key vec.
+
+`done_get_group` will return the error client_31 if the verify key failed:
+SentcError::Sdk(SdkError::Util(SdkUtilError::Base(Error::KeyDecryptionVerifyFailed)))
+
+````rust
+use sentc::keys::StdUser;
+use sentc::group::net::GroupFetchResult;
+
+async fn example(user: &StdUser)
+{
+	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
+
+	assert!(matches!(res, GroupFetchResult::Ok));
+
+	let mut verify_keys = Vec::with_capacity(data.keys.len());
+
+	for key in &data.keys {
+		let verify_key = if let (Some(user_id), Some(key_id)) = (&key.signed_by_user_id, &key.signed_by_user_sign_key_id) {
+			//fetch here the verify key like this:
+			let verify_key: UserVerifyKeyData = user.get_user_verify_key_data(user_id, key_id).await.unwrap();
+
+			verify_key
+		} else { None };
+
+		verify_keys.push(verify_key);
+	}
+
+	let group = user.done_get_group(data, None, Some(&verify_keys)).unwrap();
+}
+````
 ::::
 
 ## Get all groups
@@ -1047,7 +1145,7 @@ use sentc::keys::StdGroup;
 
 async fn example(group: &StdGroup, jwt_from_user: &str)
 {
-	let (input, used_key_id) = group.create_child_group(jwt_from_user).await.unwrap();
+	let (input, used_key_id) = group.create_child_group(jwt_from_user, false, None).await.unwrap();
 }
 ````
 
@@ -1087,6 +1185,61 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 	//to get the 2nd page pass in the last child
 	let list = group.get_children(jwt_from_user, list.last()).await.unwrap();
+}
+````
+
+::::
+
+### Create a child group and sign the group key
+
+The sign key of the creator is needed. When a user creates a group, the sign key from the user data is used.
+Obtain the user who sign the key.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+const group_id = await group.createChildGroup(true);
+
+//get the group from a user, if not loaded, the parent group will be loaded automatically
+const group = await user.getGroup(group_id);
+
+//or get it from the parent group
+const group_from_parent = await group.getChildGroup(group_id, 1);
+```
+
+@tab Flutter
+
+```dart
+final groupId = await group.createChildGroup(true);
+
+//get the group from a user, if not loaded, the parent group will be loaded automatically
+final group = await await user.getGroup(groupId);
+
+//or get it from the parent group
+final groupFromParent = await group.getChildGroup(groupId, 1); 
+```
+
+@tab Rust
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let group_id = group.create_child_group_with_sign(jwt_from_user, Some(&user)).await.unwrap();
+}
+````
+
+For prepare obtain the user who should sign the group key.
+
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let (input, used_key_id) = group.prepare_create_child_group(jwt_from_user, true, Some(&user)).unwrap();
 }
 ````
 
@@ -1314,6 +1467,34 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 ::::
 
 
+### Create a connected group and sign the group key
+
+The sign key of the creator is needed. When a user creates a group, the sign key from the user data is used.
+
+:::: tabs#p
+
+@tab Javascript
+
+```ts
+const group_id = await group.createConnectedGroup(true);
+```
+
+@tab Flutter
+```dart
+final groupId = await group.createConnectedGroup(true);
+```
+
+@tab Rust
+````rust
+use sentc::keys::StdGroup;
+
+async fn example(group: &StdGroup, jwt_from_user: &str)
+{
+	let group_id = group.create_connected_group_with_sign(jwt_from_user, Some(&user)).await.unwrap();
+}
+````
+
+::::
 
 ## Child groups vs connected groups, when use what?
 
@@ -1374,7 +1555,6 @@ await group.keyRotation(true);
 In the rust version, you need to pass in:
 
 - the jwt from the user
-- user id that started the rotation
 - and a ref to the user to get the keys
 
 You can get everything from the user struct as it is shown below.
@@ -1385,35 +1565,12 @@ did the rotation with their newest key.
 
 ````rust
 use sentc::keys::{StdGroup, StdUser};
-
-async fn example(group: &StdGroup, user: &StdUser)
-{
-	//first prepare to check if there are keys missing for the user
-	let res = group.prepare_key_rotation(user.get_jwt().unwrap(), false, user.get_user_id().to_string(), Some(user), None).await.unwrap();
-
-	//end the rotation by fetching the new key
-	let data = match res {
-		GroupKeyFetchResult::Ok(data) => data,
-		_ => {
-			panic!("should be no missing key or done");
-		}
-	};
-
-	//decrypt the newest group key by the user key.
-	group.done_fetch_group_key_after_rotation(data, Some(user), None).unwrap();
-}
-````
-
-Rotation with signing the public group key:
-
-````rust
-use sentc::keys::{StdGroup, StdUser};
 use sentc::group::net::GroupKeyFetchResult;
 
 async fn example(group: &StdGroup, user: &StdUser)
 {
 	//first prepare to check if there are keys missing for the user
-	let res = group.prepare_key_rotation(user.get_jwt().unwrap(), true, user.get_user_id().to_string(), Some(user), None).await.unwrap();
+	let res = group.prepare_key_rotation(user.get_jwt().unwrap(), false, Some(user), None).await.unwrap();
 
 	//end the rotation by fetching the new key
 	let data = match res {
@@ -1424,7 +1581,7 @@ async fn example(group: &StdGroup, user: &StdUser)
 	};
 
 	//decrypt the newest group key by the user key.
-	group.done_fetch_group_key_after_rotation(data, Some(user), None).unwrap();
+	group.done_fetch_group_key_after_rotation(data, Some(user), None, None).unwrap();
 }
 ````
 
@@ -1448,7 +1605,7 @@ To get the new key for the other member just call this function for all group me
 await group.finishKeyRotation();
 
 //optional verify the new keys if the starter signed the keys
-await group.finishKeyRotation(true);
+await group.finishKeyRotation(1);
 ```
 
 @tab Flutter
@@ -1456,7 +1613,7 @@ await group.finishKeyRotation(true);
 await group.finishKeyRotation();
 
 //optional verify the new keys if the starter signed the keys
-await group.finishKeyRotation(true);
+await group.finishKeyRotation(1);
 ```
 
 @tab Rust
@@ -1478,7 +1635,7 @@ async fn example(group: &StdGroup, user: &StdUser)
 	};
 
 	//This function will fetch all new group keys
-	let res = group.done_key_rotation(user.get_jwt().unwrap(), data, None, Some(user), None).await.unwrap();
+	let res = group.done_key_rotation(user.get_jwt().unwrap(), data, Some(user), None).await.unwrap();
 
 	//fetch each new key after all rotations
 	for key in res {
@@ -1487,7 +1644,67 @@ async fn example(group: &StdGroup, user: &StdUser)
 			_ => panic!("should be ok"),
 		};
 
-		group.done_fetch_group_key_after_rotation(data, Some(user), None).unwrap();
+		group.done_fetch_group_key_after_rotation(data, Some(user), None, None).unwrap();
+	}
+}
+````
+
+
+Like for group create, a new group key can be signed too. Set the sign parameter to true and obtain always a user even
+for child or connected groups.
+
+````rust
+use sentc::keys::{StdGroup, StdUser};
+use sentc::group::net::GroupKeyFetchResult;
+
+async fn example(group: &StdGroup, user: &StdUser)
+{
+	//first prepare to check if there are keys missing for the user
+	let res = group.prepare_key_rotation(user.get_jwt().unwrap(), true, Some(user), None).await.unwrap();
+
+	//end the rotation by fetching the new key
+	let data = match res {
+		GroupKeyFetchResult::Ok(data) => data,
+		_ => {
+			panic!("should be no missing key or done");
+		}
+	};
+
+	//decrypt the newest group key by the user key.
+	group.done_fetch_group_key_after_rotation(data, Some(user), None, None).unwrap();
+}
+````
+
+To get the new key for the other member just call this function for all group member:
+
+````rust
+use sentc::keys::{StdGroup, StdUser};
+use sentc::group::net::{GroupFinishKeyRotation, GroupKeyFetchResult};
+
+async fn example(group: &StdGroup, user: &StdUser)
+{
+	//This fn checks if the user needs to fetch the newest user key. if no continue
+	let res = group.prepare_finish_key_rotation(user.get_jwt().unwrap(), Some(user), None).await.unwrap();
+
+	//check if the user needs to fetch keys first
+	let data = match res {
+		GroupFinishKeyRotation::Ok(data) => data,
+		_ => {
+			panic!("Should be ok")
+		}
+	};
+
+	//This function will fetch all new group keys
+	let res = group.done_key_rotation(user.get_jwt().unwrap(), data, Some(user), None).await.unwrap();
+
+	//fetch each new key after all rotations
+	for key in res {
+		let data = match key {
+			GroupKeyFetchResult::Ok(data) => data,
+			_ => panic!("should be ok"),
+		};
+
+		group.done_fetch_group_key_after_rotation(data, Some(user), None, Some(&verify_key_of_the_user)).unwrap();
 	}
 }
 ````
@@ -1519,7 +1736,7 @@ use sentc::keys::{StdGroup, StdUser};
 
 fn example(group: &StdGroup, user: &StdUser)
 {
-	let input = group.manually_key_rotation(false, user.get_user_id().to_string(), Some(user), None).unwrap();
+	let input = group.manually_key_rotation(false, Some(user), None).unwrap();
 }
 ````
 

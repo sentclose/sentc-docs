@@ -215,7 +215,7 @@ async fn example()
 	let user = StdUser::login_forced("base_url".to_string(), "app_token", "username", "password").await.unwrap();
 
 	//create a group
-	let group_id = user.create_group().await.unwrap();
+	let group_id = user.create_group(false).await.unwrap();
 
 	//get a group. first check if there are any data that the user need before decrypting the group keys.
 	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
@@ -223,7 +223,7 @@ async fn example()
 	//if no data then just decrypt the group keys
 	assert!(matches!(res, GroupFetchResult::Ok));
 
-	let group = user.done_get_group(data, None).unwrap();
+	let group = user.done_get_group(data, None, None).unwrap();
 
 	//invite another user to the group. Not here in the example because we only got one user so far
 	group.invite_auto(user.get_jwt().unwrap(), "user_id_to_invite", user_public_key, None).await.unwrap();
