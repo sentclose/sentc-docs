@@ -538,6 +538,6 @@ delete request with endpoint: `https://api.sentc.com/api/v1/user/forced/sessions
 
 ```json lines
 {
-	"user_identifier": "<user id>"
+	"user_identifier": "<user name>"
 }
 ```
