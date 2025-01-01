@@ -528,3 +528,16 @@ with a delete request and the following body:
 	"user_identifier": "<user to disable otp>"
 }
 ```
+
+## Delete all user sessions
+
+This can be helpful when the user changes their password to force all devices to log out and in again. 
+Keep in mind the devices that are logged in with device key and password to use the same from the device storage.
+
+delete request with endpoint: `https://api.sentc.com/api/v1/user/forced/sessions`
+
+```json lines
+{
+	"user_identifier": "<user id>"
+}
+```
