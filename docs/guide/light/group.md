@@ -886,3 +886,6 @@ If the jwt is not available in some situations you can use the following endpoin
     - This endpoint will return the group_id
 - Creating a child group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child/light`
 - Create a connected group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected/light`
+- Add a user to the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/invite_auto/<user_id_to_invite>/light` (post request)
+- Add a group to the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/invite_auto/<user_id_to_invite>/group_light` (post request)
+- Kick a user from the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/kick/<user_id_to_kick>` (delete request)
