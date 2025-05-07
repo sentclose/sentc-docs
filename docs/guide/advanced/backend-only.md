@@ -541,3 +541,17 @@ delete request with endpoint: `https://api.sentc.com/api/v1/user/forced/sessions
 	"user_identifier": "<user name>"
 }
 ```
+
+## Delete user from your backend
+
+You can delete a user directly from your server without the users jwt.
+
+Send a put request to our api to the endpoint: `https://api.sentc.com/api/v1/user/forced/delete` with the following body:
+
+```json lines
+{
+	"user_identifier": "<user name>"
+}
+```
+
+and your secret api token in the header.
