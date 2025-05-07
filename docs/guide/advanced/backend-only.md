@@ -2,7 +2,7 @@
 
 For each endpoint, you can specify which token is required to access it in the app options.
 
-By default, all endpoints can be accessed using the public token, except for "register" and "user delete", 
+By default, all endpoints can be accessed using the public token, except for "register" and "user delete" 
 which require the secret token. For more information, please refer to the "[Create an app](/guide/create-app/)" documentation.
 
 This feature provides flexibility for storing additional user data in your own backend while only sending necessary data to the sentc backend.
@@ -53,7 +53,7 @@ async fn register()
 fn example()
 {
 	//no future here
-	//call this before you do the request to your backend
+	//calls this before you do the request to your backend
 	let input = StdUser::prepare_register("identifier", "password").unwrap();
 }
 
@@ -73,7 +73,7 @@ Once you have this input, make a request to your own backend API using the secre
 
 ## Response
 
-The response from our api is always structured the same. It is in json format.
+The response from our api is always structured the same. It is in JSON format.
 
 Successfully response:
 
@@ -90,7 +90,7 @@ Failed responses:
 {
 	"status": false,
 	"err_msg": "<text of the error message from the api>",
-	"err_code": 0 //api error code as number
+	"err_code": 0 //api error code as a number
 }
 ````
 
@@ -98,7 +98,7 @@ The `done` functions will check every server response like this to get the right
 
 ## Authentication
 
-For some requests a jwt is needed. Just pass the jwt in Authorization header as Bearer token.
+For some requests a jwt is needed. Pass the jwt in the Authorization header as a Bearer token.
 
 ````
 Header name: Authorization
@@ -115,19 +115,19 @@ Header name: x-sentc-app-token
 Header value: <your_app_token>
 ```
 
-Use your public token for every frontend related requests and your secret token only for requests from your backend.
+Use your public token for every frontend-related request and your secret token only for requests from your backend.
 
 ## User
 
 ::: tip
-The default app settings for user register are from another backend because sentc won't save other data then the keys and the username.
+The default app settings for user register are from another backend because sentc won't save other data than the keys and the username.
 :::
 
 There is no need for an auth header for registration and login.
 
 ### Register
 
-When creating an account, call the prepare function and send the input string to our api to the endpoint with a post request: `https://api.sentc.com/api/v1/register`
+When creating an account, call the prepare function and send the input string to our api to the endpoint with a post-request: `https://api.sentc.com/api/v1/register`
 
 :::: tabs#p
 
@@ -153,14 +153,14 @@ use sentc::keys::StdUser;
 fn example()
 {
 	//no future here
-	//call this before you do the request to your backend
+	//calls this before you do the request to your backend
 	let input = StdUser::prepare_register("identifier", "password").unwrap();
 }
 ````
 
 ::::
 
-After your user registration call this function in the client, to check the response:
+After your user registration call this function in the client to check the response:
 
 :::: tabs#p
 
@@ -204,7 +204,7 @@ fn done(output: &str)
 
 ::::
 
-Or simply check the status of the json response in your backend.
+Or check the status of the JSON response in your backend.
 
 ### Login
 
@@ -217,12 +217,12 @@ Alternatively, you can use your own backend's login process and then log in agai
 The sentc API login is a highly secure process because the user's password never leaves their client device.
 
 ::: tip Jwt check
-You can simply check the jwt from the sentc api with your jwt public key see more at [Create an app](/guide/create-app/).
+You can check the jwt from the sentc api with your jwt public key see more at [Create an app](/guide/create-app/).
 :::
 
 ### Register device
 
-The "Prepare register device" function is similar to the initial user registration process. 
+The "Prepare to register device" function is similar to the initial user registration process. 
 However, the validation for device registration is the same as described in the "User" section [here](/guide/user/#register-device).
 
 To register a device, send the necessary input to our API endpoint 
@@ -299,7 +299,7 @@ This function will throw an error if the server output is not correct.
 Do not forget to send an Authorization header with the Jwt as Bearer value.
 :::
 
-### Create group
+### Create a group
 
 To create a group, call the "prepare" function from the user object as we need the user keys.
 
@@ -308,7 +308,7 @@ Send the necessary input to this endpoint using a POST request: `https://api.sen
 The input should contain all the client-related values needed to create a group, 
 such as group keys and the encrypted group key by the user's public key.
 
-Upon successful API request, the resulting group ID will be returned.
+Upon a successful API request, the resulting group ID will be returned.
 
 :::: tabs#p
 
@@ -336,16 +336,16 @@ fn example()
 
 ::::
 
-### Delete group
+### Delete a group
 
-To delete a group call this endpoint with the jwt in header and a delete request: `https://api.sentc.com/api/v1/group/<group_id>` 
+To delete a group, call this endpoint with the jwt in the header and a delete request: `https://api.sentc.com/api/v1/group/<group_id>` 
 
 ### Check group access
 
 At your backend you can also check if a user got access to a group. 
 Use this endpoint: `https://api.sentc.com/api/v1/group/<group_id>/light` with a GET request.
 
-The response is either an error with status code 310 or a json object:
+The response is either an error with status code 310 or a JSON object:
 
 ```
 {
@@ -359,16 +359,16 @@ The response is either an error with status code 310 or a json object:
 }
 ```
 
-Access by describes how the user access this group. Either direct, as member of a parent group or from a connected group.
+Access by describing how the user accesses this group. Either directly, as a member of a parent group or from a connected group.
 
 ## Refreshing the jwt
 
-Like we said in [user - Authentification and JWT](/guide/user/#authentification-and-jwt) there are three different strategies to handle the refreshing.
+Like we said in [user - Authentification and JWT](/guide/user/#authentification-and-jwt), there are three different strategies to handle the refreshing.
 
 ### Refresh directly by the sdk
 
 This is the default method.
-Both the refresh and the jwt are stored in the client. When calling the api and the jwt is invalid this token is used.
+Both the refresh and the jwt are stored in the client. When calling the api and the jwt is invalid, this token is used.
 
 ### Refresh from a cookie
 
@@ -440,7 +440,7 @@ With the rust sdk you need to refresh it manually
 
 ::::
 
-To get the refresh token, just get it from the user object after login. The token won't store in the client, just in the object.
+To get the refresh token, get it from the user object after login. The token won't be stored in the client, just in the object.
 Then put the refresh token in a cookie.
 
 ### Refresh with a function
@@ -452,7 +452,7 @@ Instead, you can define a function to refresh the jwt, maybe do the refresh dire
 
 @tab Javascript
 
-Define a function which returns a promise and get the old jwt.
+Define a function which returns a promise and gets the old jwt.
 
 <code-group>
 <code-group-item title="Installed" active>
@@ -515,7 +515,7 @@ With the rust sdk you need to refresh it manually
 ::::
 
 ::: tip
-This are all recommended endpoints to call from your backend, if you need to.
+ These are all recommended endpoints to call from your backend, if you need to.
 :::
 
 ## Disable Mfa from server
@@ -532,7 +532,7 @@ with a delete request and the following body:
 ## Delete all user sessions
 
 This can be helpful when the user changes their password to force all devices to log out and in again. 
-Keep in mind the devices that are logged in with device key and password to use the same from the device storage.
+Keep in mind the devices that are logged in with a device key and password to use the same from the device storage.
 
 delete request with endpoint: `https://api.sentc.com/api/v1/user/forced/sessions`
 
@@ -543,6 +543,8 @@ delete request with endpoint: `https://api.sentc.com/api/v1/user/forced/sessions
 ```
 
 ## Delete user from your backend
+
+### Delete it with the username
 
 You can delete a user directly from your server without the users jwt.
 
@@ -555,3 +557,7 @@ Send a put request to our api to the endpoint: `https://api.sentc.com/api/v1/use
 ```
 
 and your secret api token in the header.
+
+### Delete it with the user id
+
+In case you also got the user id you can send a delete request to: `https://api.sentc.com/api/v1/user/forced/delete/<the-user-id>` without a body.
