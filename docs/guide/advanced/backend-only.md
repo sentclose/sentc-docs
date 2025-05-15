@@ -343,7 +343,7 @@ To delete a group, call this endpoint with the jwt in the header and a delete re
 ### Check group access
 
 At your backend you can also check if a user got access to a group. 
-Use this endpoint: `https://api.sentc.com/api/v1/group/<group_id>/light` with a GET request.
+Use this endpoint: `https://api.sentc.com/api/v1/group/<group_id>/light` with a GET request and the users jwt.
 
 The response is either an error with status code 310 or a JSON object:
 
@@ -360,6 +360,21 @@ The response is either an error with status code 310 or a JSON object:
 ```
 
 Access by describing how the user accesses this group. Either directly, as a member of a parent group or from a connected group.
+
+### Check if a user is in a group
+
+Use this endpoint: `https://api.sentc.com/api/v1/group/forced/<group_id>/user/<user_id>` with your app secret token and a get request to check if the user in this group.
+
+The response is either an error with status code 300 or a JSON object:
+
+```
+{
+    "user_id",
+    "rank",
+    "joined_time",
+    "user_type"
+}
+```
 
 ## Refreshing the jwt
 
