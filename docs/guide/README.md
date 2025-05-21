@@ -68,7 +68,12 @@ See [this guide](/guide/create-app/) for more information.
 
 @tab Javascript
 
-It is also available directly in the browser via CDN.
+It is also available directly in the browser via CDN. 
+
+::: tip
+The Node.js client sdk is almost as the same as the browser sdk, but instead of using Uint8Array for binary, it uses Node's Buffer.
+
+:::
 
 <code-group>
 <code-group-item title="NPM" active>
@@ -89,6 +94,12 @@ yarn add @sentclose/sentc
 
 ```html:no-line-numbers
 <script src="https://cdn.jsdelivr.net/npm/@sentclose/sentc/dist/sentc.min.js"></script>
+```
+</code-group-item>
+<code-group-item title="Node js">
+
+```bash:no-line-numbers
+npm install @sentclose/sentc-nodejs
 ```
 </code-group-item>
 </code-group>

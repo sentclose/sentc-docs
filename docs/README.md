@@ -47,8 +47,18 @@ npm install @sentclose/sentc
 yarn add @sentclose/sentc
 ```
 </code-group-item>
+<code-group-item title="Node js">
+
+```bash:no-line-numbers
+npm install @sentclose/sentc-nodejs
+```
+</code-group-item>
 
 </code-group>
+
+::: tip
+The Node.js client sdk is almost as the same as the browser sdk, but instead of using Uint8Array for binary, it uses Node's Buffer.
+:::
 
 Easy to use, installed or in the browser:
 
