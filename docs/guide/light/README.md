@@ -4,8 +4,8 @@ This is a separate sdk package containing only the user and group management but
 
 ## Quick start
 
-To use the light sdk you also need a public and secret app token. 
-The same token and app can be used for both, end-to-end encryption sdk and light sdk.
+To use the light sdk, you also need a public and secret app token. 
+The same token and app can be used for both end-to-end encryption sdk and light sdk.
 
 1. Got to [https://api.sentc.com/dashboard/register](https://api.sentc.com/dashboard/register) and create an account. You will be redirected to the account dashboard.
 2. Verify the email. We email you to make sure that your email address belongs to you.
@@ -56,7 +56,7 @@ The core SDK uses WebAssembly (WASM) in the browser.
 
 If you are using a module bundler like Webpack and you are not using the browser import,
 please refer to the module bundler WASM configuration in our documentation.
-[see Module bundler](/guide/advanced/module-bundler/)
+[See Module bundler](/guide/advanced/module-bundler/)
 
 :::
 
@@ -131,7 +131,7 @@ Every function that makes a request (in JavaScript with a Promise) will throw an
 
 We have noted when the function will also throw an error.
 
-The Error is a json string which can be decoded into the Error type:
+The Error is a JSON string that can be decoded into the Error type:
 
 ```ts
 interface SentcError
@@ -147,7 +147,7 @@ interface SentcError
 ::: warning
 Every function that makes a request will throw an error if the request or server output is not correct.
 
-The Error is a string which can be transpiled into the `SentcError` class:
+The Error is a string that can be transpiled into the `SentcError` class:
 
 ```dart
 try {
@@ -215,9 +215,9 @@ await Sentc.register("username", "password");
 
 ::::
 
-### Login a user
+### Log in a user
 
-Log in a user with their username and password. The user can also enable Multi-factor auth. [learn more here](/guide/light/user)
+Log in a user with their username and password. The user can also enable Multi-factor auth. [Learn more here](/guide/light/user)
 After login, the user receives a JSON Web Token (JWT).
 
 After logging in, you will receive a user object.
@@ -249,7 +249,7 @@ const user = await Sentc.login("username", "password", true);
            app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi" // <-- your app token
         });
 
-		//login a user, ignoring possible Multi-factor auth
+		//log in a user, ignoring possible Multi-factor auth
         const user = await sentc.login("username", "password", true);
     }
 

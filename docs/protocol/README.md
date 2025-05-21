@@ -10,7 +10,7 @@ In the Sentc protocol, Perfect Forward Secrecy (PFS) is not implemented in the c
 The first challenge with PFS is that it requires synchronous communication, where all users need to be online simultaneously. 
 While this approach works well for live-streaming video or TLS (Transport Layer Security), 
 where every member must be online at the same time, it poses difficulties for asynchronous communication.
-The Signal-protocol solve this problem by using pre generated key pairs and use them if the user is offline.
+The Signal protocol solves this problem by using pre-generated key pairs and using them if the user is offline.
 
 The second challenge with PFS is that new members of a group are unable to decrypt past communications, 
 or at least cannot decrypt them at a given time. 
@@ -25,7 +25,7 @@ While this solution may not be perfect for one-on-one or live communication, it 
 
 ## Overview
 
-Sentc utilizes a combination of symmetric and asymmetric encryption algorithms, as well as signing and verification mechanisms.
+Sentc uses a combination of symmetric and asymmetric encryption algorithms, as well as signing and verification mechanisms.
 
 It's worth noting that the underlying algorithm used in Sentc can be changed in the future. 
 Despite such changes, data encrypted with the previous algorithm will still be able to decrypt, ensuring backward compatibility. 
@@ -34,7 +34,7 @@ This flexibility is particularly valuable as it allows for future-proofing the s
 
 ### The structure
 
-Here are the actual used algorithm. 
+Here are the actual used algorithms. 
 
 - symmetric for the data encryption and decryption.
   - aes-gcm 256 bit 
@@ -57,7 +57,7 @@ Here are the actual used algorithm.
 
 A user is defined as a group of devices. 
 The user-group operates using the same mechanism as a regular group, which will be explained in detail below. 
-The device's public key is utilized during the creation of the group.
+The device's public key is used during the creation of the group.
 
 ## Device
 
@@ -86,8 +86,8 @@ Regarding the password, it is hashed using password hashing algorithms, with the
 2. Generate a salt with crv. 
    - The salt contains a padded string (length 200 chars) and the crv.
    - Hash the salt with sha 256
-3. Derived a 512 bit long key from the password and the salt
-   - use the first half of the derived key as encryption key and the second half as auth key
+3. Derived a 512-bit long key from the password and the salt
+   - use the first half of the derived key as the encryption key and the second half as the auth key
    - the auth key will be hashed as well
 4. Finally, encrypt the master key with the first half of the derived key, the encryption key, via aes-gcm
 
@@ -96,15 +96,15 @@ The following is sent to the server:
 - user group data (more see group creation)
 - encrypted master key
 - device identifier (not hashed at this moment)
-- what derived key algorithms was used
+- what derived key algorithms were used?
 - client random value
 - hashed auth key
 - public key
 - encrypted private key
-- what algorithms has the asymmetric encryption key pair
+- what algorithms have the asymmetric encryption key pair
 - verify key
 - encrypted sign key
-- what algorithms has the sign/verify key pair
+- what algorithms have the sign/verify key pair
 
 The identifier is hashed on the server via sha 256
 
@@ -121,7 +121,7 @@ The salt is generated on the server side. Here's how the process works:
 
 2. Salt Retrieval: If the identifier exists in the server's records, the server generates the salt using the client's random value.
     - Existing Identifier: If the identifier exists, the server generates the salt based on the client's random value and the matching device registration data.
-    - Non-existing Identifier: If the identifier does not exist, a false identifier (for security purposes) is used in the padded string, and a generic client random value is utilized to generate a false salt.
+    - Non-existing Identifier: If the identifier does not exist, a false identifier (for security purposes) is used in the padded string, and a generic client random value is used to generate a false salt.
 
 3. Salt Transmission: Once generated, the salt is sent back to the client, completing the login preparation stage.
 
@@ -130,66 +130,66 @@ The salt is generated on the server side. Here's how the process works:
 
 At the client the salt is used to derive the encryption and auth key via the password hashing algorithms. 
 The auth key is not hashed and will be sent to the server. The server hashes the auth key and checks if the hashed key exists. 
-If not then the identifier or the password may be wrong.
+If not, then the identifier or the password may be wrong.
 
-It is important to not just return false if the identifier not exists to impede password brute force attacks. 
+It is important to not just return false if the identifier does not exist to impede password brute force attacks. 
 
-If the auth key exists then the server will create a login challenge. 
-This is a randomly created string which is encrypted by the users device public key (not the user public key) on the server. 
-The device keys including: encrypted private keys and the encrypted master key and the challenge are returned to the client.
+If the auth key exists, then the server will create a login challenge. 
+This is a randomly created string encrypted by the user device public key (not the user public key) on the server. 
+The device keys including encrypted private keys and the encrypted master key, and the challenge are returned to the client.
 
-The master key will be decrypted by the encryption key from the password and the decrypted master key decrypts the private keys.
+The master key will be decrypted by the encryption key from the password, and the decrypted master key decrypts the private keys.
 
-The login challenge will then be decrypted with the decrypted private device key and send back to the server 
+The login challenge will then be decrypted with the decrypted private device key and sent back to the server 
 to verify that the user not only got access to the auth key but also to the master key.
 
 #### Verify Login
 
-After the api verifies the login the server will create a json web token (jwt) and return the jwt, a refresh token and the user group keys.
+After the api verifies the login, the server will create a JSON web token (jwt) and return the jwt, a refresh token and the user group keys.
 
 With the device private key, the group keys are decrypted.
 
 The jwt can be used to authenticate with the server.
 
-There is no key rotation for a single device but if a device get lost or compromised the device can be deleted
+There is no key rotation for a single device, but if a device gets lost or compromised, the device can be deleted
 and a key rotation can be done in the user-group for the other devices.
 
 ### Safety number / public fingerprint
 
-A user can create a safety number (commonly known as public fingerprint) from its own verify key and another user.
-The verify-keys get combined and hashed. The hash is then shown as base64 encoded string. 
+A user can create a safety number (commonly known as public fingerprint) from its own verify-key and another user.
+The verify-keys get combined and hashed. The hash is then shown as a base64 encoded string. 
 
 The user which id comes first in the alphabet will always be the first in the hash. 
 
-### Verify public key
+### Verify the public key
 
-The public key of a user is used to encrypt the group keys. To make sure to use the right public key of the real user a public key can be verified.
-The safety number can identify the right verify key and the verify key can verify the public key.
+The public key of a user is used to encrypt the group keys. To make sure to use the right public key of the real user, a public key can be verified.
+The safety number can identify the right verify-key, and the verify-key can verify the public key.
 
-When a user was registered, the user group verifies the public key of the user. 
-After a user key rotation the new public key will also be verified by the new verify key (in this case a new safety number is needed).
+When a user is registered, the user group verifies the public key of the user. 
+After a user key rotation, the new public key will also be verified by the new verify-key (in this case a new safety number is needed).
 
 It is stored on each device if a public key was verified before. 
-To only allow verified user public keys for groups it can be checked in the client before inviting a new user.
+To only allow verified user public keys for groups, it can be checked in the client before inviting a new user.
 
 ## Groups
 
 Groups use symmetric keys to encrypt content among the members. Every user inside a group can encrypt and decrypt.
 
-There are also a public/private key pair for each group. For user groups there is also a sign/verify key pair. 
-The private key is encrypted by the group key.
+There is also a public/private key pair for each group. For user groups there is also a sign/verify key pair. 
+The group key encrypts the private key.
 
-The symmetric group key is encrypted by the public key of the creator of the group.
+The symmetric group key is encrypted by the public key of the group creator.
 
-### Adding more user to a group
+### Adding more users to a group
 
 Adding more users to a group can be done via join req from the user to the group or invite from the group to the user.
 For inviting a user or accepting a join req, 
-all group symmetric keys are encrypted by the users public key in the client and then send encrypted to the server.
-When the new member wants to load the group, the group keys are decrypted by the users private key. 
+all group symmetric keys are encrypted by the user's public key in the client and then sent encrypted to the server.
+When the new member wants to load the group, the group keys are decrypted by the user's private key. 
 
-When a user gets kicked out a group, all the encrypted group keys for this user will be deleted as well. 
-It is recommended to do a key rotation after a user leaves to encrypt newer content with keys that the old user not have.
+When a user gets kicked out of a group, all the encrypted group keys for this user will be deleted as well. 
+It is recommended to do a key rotation after a user leaves to encrypt newer content with keys that the old user does not have.
 
 ### Child and connected groups
 
@@ -207,10 +207,10 @@ Sentc provides a key rotation mechanism which is done on the server to relieve t
 
 #### Starting the rotation
 
-This is all done in the client.
+The client all does this.
 
 1. A new symmetric key, public/private key pair, and for user groups a new sign/verify key pair will be created.
-2. Like group create, the private key will be encrypted by the new group key
+2. Like group creation, the private key will be encrypted by the new group key
 3. An ephemeral key will be created to encrypt the new group symmetric key
 4. The ephemeral key is then encrypted by the previous group key
 5. Optional sign the encrypted group key with the user sign key
@@ -228,7 +228,7 @@ This section is done on the server.
 1. Insert the group keys
 2. Start a background worker to do the key rotation
 3. At the worker, fetch the encrypted ephemeral key
-4. Fetch the newest public key of first 100 group member (order by joined time)
+4. Fetch the newest public key of the first 100 group members (order by joined time)
 5. Encrypt the ephemeral key (which was encrypted by the previous group key before) with the public key of each user and store the encrypted ephemeral key by the public key.
 6. Continue until all member and parent / connected groups are done
 7. Delete the encrypted ephemeral key which was encrypted by the previous group key to not leak it for ex-member. 
@@ -238,11 +238,11 @@ This section is done on the server.
 This process is done in the client of the other member.
 
 1. Get the user private key (or group private key in case of parent or connected group), the user public key and the previous group key
-2. If the encrypted group key was signed then the member can verify the group key
+2. If the encrypted group key was signed, then the member can verify the group key
 3. Decrypt the encrypted ephemeral key with the users private key (the pair key from the used public key at the server)
 4. Decrypt the already decrypted ephemeral key but this time with the previous group key
 5. Decrypt the new encrypted group key with the now decrypted ephemeral key
-6. Encrypt the new group key with the users public key
+6. Encrypt the new group key with the user's public key
 7. Send the new encrypted group key by the public key to the server to store it like the keys before
 
 The process for parent and connected groups is the same as for member, but the group public key is used instead of a user public key.
@@ -251,7 +251,7 @@ The process for parent and connected groups is the same as for member, but the g
 
 A file is chunked into parts (each 4 m-bytes). Each part got its own symmetric key. 
 
-1. Create a symmetric key. This key is the starting key and is directly linked to the file and will be deleted when file is deleted. This key is encrypted by a group key if the file is created in a group, or with the user public key if not.
+1. Create a symmetric key. This key is the starting key and is directly linked to the file and will be deleted when a file is deleted. This key is encrypted by a group key if the file is created in a group, or with the user public key if not.
 2. Encrypt the first chunk with the new key and create a new symmetric key. Use the initial key to encrypt the created file key.
 3. Use the next key to encrypt the next part and also create another key and encrypt this key with the key from the part before.
 4. Do this until all chunks are done

@@ -30,7 +30,7 @@ After registration, you will get your app tokens and the jwt keys.
 
 ### Jwt keys
 
-With the jwt keys you can create a jwt which is valid for your app at the sentc api (with the sign key) or verify a jwt (with the verify key).
+With the jwt keys you can create a jwt which is valid for your app at the sentc api (with the sign key) or verify a jwt (with the verify-key).
 The jwt is structured the following:
 
 ````json lines
@@ -64,7 +64,7 @@ By default, the public token can access every endpoint except for register and d
 As Sentc only stores the required data, which includes only the username and encrypted keys, 
 you may require additional information from your users, such as an email address or their full name.
 
-To change the options, simply click on the row of the endpoint and choose public, secret, or block (which means no token can access this endpoint).
+To change the options, click on the row of the endpoint and choose public, secret, or block (which means no token can access this endpoint).
 
 Additionally, you can choose other quick options by clicking on the "LAX" button to allow the public token access to all endpoints.
 
@@ -97,21 +97,21 @@ For more information about file handling in Sentc, please refer to the [Files](/
 
 ## Groups (Beta)
 
-To work with others on an app, there are groups where all group member got access to the app secrets, but only high rak member can edit or delete apps.
+To work with others on an app, there are groups where all group members got access to the app secrets, but only high rak members can edit or delete apps.
 
 An app can be created in a group just like in your account.
 
 1. Login to your dashboard
-2. In the upper left corner click on the `GROUPS` tab
+2. In the upper-left corner click on the `GROUPS` tab
 3. Click on `NEW GROUP` to create a new group
-4. Optional give the group a name and a description
+4. Optional gives the group a name and a description
 5. Now the group shows up in your dashboard
 
 To create an app in this group use the `NEW APP IN GROUP` button
 
 ### Manage member
 
-- To go to the member click on the member icon in the top right corner next to the group name.
+- To go to the members, click on the member icon in the top right corner next to the group name.
   1. In the member list click `INVITE MEMBER`
   2. Pass in the user id and optional a rank of the user. The rank can be changed later on. The user id is in the user's menu (the cog symbol in the right corner)
   3. Click on invite. Now the member is successfully added to your member list.

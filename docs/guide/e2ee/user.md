@@ -282,17 +282,17 @@ See more at [own backend](/guide/advanced/backend-only/)
 
 ## Login
 
-To log in, you just need to provide the identifier (i.e., username, email, or random number) and the password that was used during registration. 
+To log in, you need to provide the identifier (i.e., username, email, or random number) and the password that was used during registration. 
 The user will then be logged in to the device associated with the given identifier.
 
 The password is not sent to the API, so we cannot access or retrieve the user's password. 
-This is accomplished by using a password derivation function in the client instead of on the server.
+This is achieved by using a password derivation function in the client instead of on the server.
 
 If the identifier or the password is incorrect, this function will throw an error.
 
-The Login function returns an either the user type or data for the mfa validation process.
+The Login function returns either the user type or data for the mfa validation process.
 
-If you disabled the Mfa in the app options then you can force login to get just the user object back.
+If you disabled the Mfa in the app options, then you can force login to get just the user object back.
 
 ::: tip
 You can learn more about Multi-factor and how your users can enable it [below](/guide/e2ee/user/#multi-factor-authentication).
@@ -301,13 +301,13 @@ You can learn more about Multi-factor and how your users can enable it [below](/
 ### Login forced
 
 With this method the sdk will just return the user object or throw an exception or error
-if the user enabled mfa because this must be handled in order to get the user data.
+if the user enabled mfa because this must be handled to get the user data.
 
 :::: tabs#p
 
 @tab Javascript
 
-For js, just set an optional flag to true in the login function.
+For js, set an optional flag to true in the login function.
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -341,7 +341,7 @@ async fn example()
 
 @tab Javascript
 
-For typescript, we are using the [Discriminated Unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions).
+For TypeScript, we are using the [Discriminated Unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions).
 
 An object with two properties is returned from the function: `kind` and `u`. 
 
@@ -402,7 +402,7 @@ This function will also throw an error if the **username is not found** or the *
 :::
 
 @tab Rust
-For rust an enum is returned with either the User data or mfa data.
+For rust enum is returned with either the User data or mfa data.
 
 ````rust
 use sentc::keys::{StdUser, StdUserLoginReturn};
@@ -411,7 +411,7 @@ async fn login()
 {
 	let login_res = StdUser::login("base_url".to_string(), "app_token", "username", "password").await.unwrap();
 
-	//check if the enum is PreLoginOut::Otp, if so call mfa_login with the token from the user auth device
+	//check if the enum is PreLoginOut::Otp, if so, call mfa_login with the token from the user auth device
 	match login_res {
 		StdUserLoginReturn::Direct(user) => {
 			//the user
@@ -493,10 +493,10 @@ async fn mfa_login(token: String, login_data: StdPrepareLoginOtpOutput) -> StdUs
 
 ::::
 
-### Login with recovery key
+### Login with the recovery key
 
-If the user is not able to create the token (e.g. the device is broken or stolen), then the user can also log in with a recovery key. 
-These keys are obtained after mfa was enabled. If the user uses one key then the key gets deleted and can't be used again.
+If the user is not able to create the token (e.g., the device is broken or stolen), then the user can also log in with a recovery key. 
+These keys are obtained after mfa was enabled. If the user uses one key, then the key gets deleted and can't be used again.
 
 :::: tabs#p
 
@@ -561,7 +561,7 @@ After successfully logging in, you will receive a user object, which is required
 :::: tabs#p
 
 @tab Javascript
-You can obtain the actual user object by calling the init function as follows:
+You can get the actual user object by calling the init function as follows:
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -572,7 +572,7 @@ const user = await Sentc.init({
 });
 ```
 
-Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
+Alternatively, you can get the actual user object by calling the getActualUser() function. This function will not check the JWT.
 
 ```ts
 import Sentc from "@sentclose/sentc";
@@ -581,14 +581,14 @@ const user = await Sentc.getActualUser();
 ```
 
 @tab Flutter
-You can obtain the actual user object by calling the init function as follows:
+You can get the actual user object by calling the init function as follows:
 
 ```dart
 //nullable user object.
 final user = await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
 ```
 
-Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
+Alternatively, you can get the actual user object by calling the getActualUser() function. This function will not check the JWT.
 
 ```dart
 final user = await Sentc.getActualUser();
@@ -605,7 +605,7 @@ fn example(user: StdUser)
 {
 	let export = user.to_string().unwrap();
 
-	//don't forget the type
+	//remember the type
 	let imported_user: StdUser = export.parse().unwrap();
 }
 
@@ -627,7 +627,7 @@ For the device:
 - Asymmetric key pairs only for the device.
 - Device ID.
 
-For user account:
+For a user account:
 - Asymmetric key pairs for the account (which are also used to join a group).
 - The actual JWT for this session.
 - The refresh token for this session.
@@ -636,9 +636,9 @@ For user account:
 :::: tabs#p
 
 @tab Javascript
-To get the data, just access the data in the user class.
+To get the data, access the data in the user class.
 
-The devices are from type UserDeviceList
+The devices are from the type UserDeviceList
 
 ```ts
 //user from login
@@ -688,11 +688,10 @@ See more at [own backend](/guide/advanced/backend-only/)
 
 :::: tabs#p
 @tab Javascript
-
-The javascript sdk will always automatically check the jwt before each request and refresh the jwt if needed.
+The JavaScript sdk will always automatically check the jwt before each request and refresh the jwt if needed.
 
 @tab Flutter
-The javascript sdk will always automatically check the jwt before each request and refresh the jwt if needed.
+The Flutter sdk will always automatically check the jwt before each request and refresh the jwt if needed.
 
 @tab Rust
 If a function returned this error: SentcError::JwtExpired then
@@ -710,7 +709,7 @@ async fn refresh_jwt(user: &mut StdUser)
 
 ## Multi-Factor authentication
 
-Sentc uses Time-based one-time password (Totp) for Multi-factor auth. These tokens can easily be generated by any totp generator app like google authenticator, authy or free otp.
+Sentc uses Time-based one-time password (Totp) for Multi-factor auth. These tokens can easily be generated by any totp generator app like Google authenticator, authy, or free otp.
 
 A secret is generated alone side with six recovery keys (just in case if the user lost access to the auth device). 
 The user should print out or store the recovery keys to still get access to the account.
@@ -718,16 +717,16 @@ The user should print out or store the recovery keys to still get access to the 
 The auth app needs the secret and information about the used algorithm. 
 The simplest way is to get an otpauth url and transform it into a qr code, so the auth app can scan it.
 
-The mfa is bind to all devices in the user account not just the actual one. 
+The mfa is assigned to all devices in the user account, not just the actual one. 
 
-The user must be logged in, in order to activate mfa and has to enter the password again.
+The user must be logged in to activate mfa and has to enter the password again.
 `issuer` and `audience` are needed for the auth app. Issuer can be your app name and audience the username email or something else.
 
 :::: tabs#p
 
 @tab Javascript
 
-The url is for the auth app and the recovery_keys is an array of all six keys.
+The url is for the auth app, and the recovery_keys is an array of all six keys.
 
 ```ts
 const [url, revocery_keys] = await user.registerOtp("<issuer>", "<audience>", "<password>");
@@ -735,7 +734,7 @@ const [url, revocery_keys] = await user.registerOtp("<issuer>", "<audience>", "<
 
 @tab Flutter
 
-The url is for the auth app and the recoveryKeys is a list of all six keys.
+The url is for the auth app, and the recoveryKeys is a list of all six keys.
 
 ```dart
 final (user, recoveryKeys) = await user.registerOtp("<issuer>", "<audience>", "<password>");
@@ -757,12 +756,12 @@ async fn example(user: &mut StdUser)
 
 ### Reset mfa
 
-If the user only got one recovery key left or the device with the auth app ist stolen or lost then resetting the mfa is the best practice
+If the user only got one recovery key left or the device with the auth app ist stolen or lost, then resetting the mfa is the best practice
 
-The old recovery keys and the old secret will be deleted and replaced by new one. 
+The old recovery keys and the old secret will be deleted and replaced by a new one. 
 The return values are the same as in the register process.
 
-The user also needs to enter a totp from an auth app or a recovery key in order to reset it. 
+The user also needs to enter a totp from an auth app or a recovery key to reset it. 
 This will make sure that only a person with access can change it.
 
 :::: tabs #p
@@ -902,7 +901,7 @@ async fn example(user: &StdUser)
 
 ::::
 
-Alternative you can disable the mfa from your backend, e.g. if the user looses the recovery keys and the device access. 
+Alternatively, you can disable the mfa from your backend, e.g., if the user loses the recovery keys and the device access. 
 [See here for more details](/guide/advanced/backend-only#disable-mfa-from-server)
 
 ## Register Device
@@ -1017,7 +1016,7 @@ The device list can be fetched through pagination.
 const devices = await user.getDevices();
 ```
 
-The devices are an array and each item is from type UserDeviceList
+The devices are an array, and each item is from the type UserDeviceList
 
 ````ts
 interface UserDeviceList
@@ -1057,12 +1056,12 @@ async fn example(user: &StdUser)
 
 ::::
 
-To fetch the next pages, simply call this function with the last fetched device.
+To fetch the next pages, call this function with the last fetched device.
 
 :::: tabs#p
 
 @tab Javascript
-The devices are from type UserDeviceList
+The devices are from the type UserDeviceList
 
 ```ts
 const last_item = devices[devices.length - 1];
@@ -1071,7 +1070,7 @@ const devices_page_two = await user.getDevices(last_item);
 ```
 
 @tab Flutter
-The devices are from type UserDeviceList
+The devices are from the type UserDeviceList
 
 ```dart
 List<UserDeviceList> devicesPageTwo = await user.getDevices(devices.last);
@@ -1131,7 +1130,7 @@ This function will also throw an error if **the old password was not correct**
 
 ::::
 
-If the user enabled mfa then you also need to enter the token or a recovery key.
+If the user enabled the mfa, then you also need to enter the token or a recovery key.
 
 :::: tabs#p
 
@@ -1211,10 +1210,10 @@ async fn example(user: &StdUser)
 
 ## Reset user password with data loss
 
-To reset the user password from your backend call this endpoint (for the request configuration see more at [own backend](/guide/advanced/backend-only/))
+To reset the user password from your backend, call this endpoint (for the request configuration see more at [own backend](/guide/advanced/backend-only/))
 - `https://api.sentc.com/api/v1/user/forced/reset_user` with a put request
 - the data is the same string that the user got from the `prepareRegister` function.
-- All user devices will be deleted and the user can't decrypt any of the old data or any of the data inside groups but the user stays in all groups.
+- All user devices will be deleted, and the user can't decrypt any of the old data or any of the data inside groups, but the user stays in all groups.
 - The user has to be re invited to all groups see more here: [re invite](/guide/e2ee/group/#re-invite)
 
 
@@ -1322,7 +1321,7 @@ This function will also throw an error if **the password was not correct**
 
 ::::
 
-If the user enabled mfa then you also need to enter the token or a recovery key.
+If the user enabled mfa, then you also need to enter the token or a recovery key.
 
 :::: tabs#p
 
@@ -1393,7 +1392,7 @@ fn example(user: &StdUser)
 
 ::::
 
-## Delete account
+## Delete an account
 
 To delete the entire account, use any device password. 
 
@@ -1433,7 +1432,7 @@ This function will also throw an error if **the password was not correct**
 
 ::::
 
-If the user enabled mfa then you also need to enter the token or a recovery key.
+If the user enabled mfa, then you also need to enter the token or a recovery key.
 
 :::: tabs#p
 
@@ -1478,7 +1477,7 @@ async fn example(user: &StdUser)
 
 ## Public user information
 
-Only the newest public key is used. You can just fetch the newest public key or a verify key by id.
+Only the newest public key is used. You can fetch the newest public key or a verify-key by id.
 
 Public key:
 
@@ -1533,7 +1532,7 @@ async fn example(user: &StdUser, user_id: &str)
 
 Verify Key:
 
-This key can only be fetched by id because to verify data you need a specific verify key.
+This key can only be fetched by its id because, to verify data, you need a specific verify-key.
 
 :::: tabs#p
 
@@ -1563,7 +1562,7 @@ async fn example(user: &StdUser, user_id: &str, verify_key_id: &str)
 
 ::::
 
-## Create safety number
+## Create a safety number
 
 A safety number (or public fingerprint) can be used to check if another user is the real user. 
 Both users can create a safety number with each other and can then check if the number is the same. 
@@ -1634,10 +1633,10 @@ fn example(user: &StdUser, first_user_id: &str, first_user_key: &UserVerifyKeyDa
 
 ::::
 
-## Verify a users public key
+## Verify a user public key
 
 To make sure that the public key which is used to encrypt the group keys really belongs to the user, this key can be verified.
-A safety number can be helpful to check if the verify key is the right one.
+A safety number can be helpful to check if the verify-key is the right one.
 
 :::: tabs#p
 
@@ -1672,7 +1671,7 @@ async fn example(user: &StdUser, user_id: &str)
 
 ::::
 
-To check the right verify key of this public key the user can get it:
+To check the right verify-key of this public key, the user can get it:
 
 :::: tabs#p
 
@@ -1715,7 +1714,7 @@ async fn example(user: &StdUser, user_id: &str)
 	//fetch a public key of a user
 	let public_key: UserPublicKeyData = user.get_user_public_key_data(user_id).await.unwrap();
 
-	//is an Option
+	//it is an Option
 	let verify_key_id = public_key.public_key_sig_key_id.unwrap();
 
 	let verify_key: UserVerifyKeyData = user.get_user_verify_key_data(user_id, verify_key_id).await.unwrap();

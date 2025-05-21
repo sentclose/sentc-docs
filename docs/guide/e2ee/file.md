@@ -4,14 +4,14 @@
 File handling will be available after the beta.
 :::
 
-Handling large encrypted files can be difficult, especially in the browser.
+Handling large encrypted files can be challenging, especially in the browser.
 
 Large files are generally too big to encrypt all at once and can potentially overload system memory. 
 To solve this issue, one solution is to use a stream to encrypt and decrypt files one piece at a time. 
 However, browsers cannot send file streams through requests.
 
 Another solution is to chunk the file into smaller pieces and encrypt each piece before sending it to storage. 
-This allows encrypted files to be sent from the browser, but requires managing multiple files instead of just one. 
+This allows encrypted files to be sent from the browser but requires managing multiple files instead of just one. 
 In addition to handling uploads, file deletion must also be managed, including deleting the individual pieces.
 
 ::: tip Sentc solution
@@ -30,7 +30,7 @@ Additionally, you can delete the file as if it were a single file, and Sentc wil
 With Sentc, files can be encrypted for a group or for a single user. 
 We recommend encrypting files for a group, as this allows all group members to download and decrypt the file.
 
-For each file, Sentc creates a new key that is used for encryption. To encrypt and upload a file for a group, follow these steps:
+For each file, Sentc creates a new key used for encryption. To encrypt and upload a file for a group, follow these steps:
 
 ::: warning
 It is important to store the `file id` to fetch the file later
@@ -44,7 +44,7 @@ It is important to store the `file id` to fetch the file later
 const output = await group.createFile(file);
 ```
 
-The output is from type FileCreateOutput.
+The output is from the type FileCreateOutput.
 
 ````typescript
 interface FileCreateOutput
@@ -74,7 +74,7 @@ Create a file with a path:
 FileCreateOutput output = await group.createFileWithPath(path: "<path-to-your-file>");
 ```
 
-The output is from type FileCreateOutput.
+The output is from the type FileCreateOutput.
 
 ```dart
 class FileCreateOutput {
@@ -141,7 +141,7 @@ async fn example(user: &StdUser, path: &str)
 To also sign a file, set the 'sign' parameter to 'true' in the function. This will use the user's sign key. 
 Note that this is not necessary when handling files only within your application and not from any other apps. 
 
-When downloading and verifying the file, you will also need to store the user ID to fetch the right verify key
+When downloading and verifying the file, you will also need to store the user ID to fetch the right verify-key
 
 :::: tabs#p
 
@@ -291,7 +291,7 @@ This will cancel the actual upload of a file. But this won't delete the file.
 
 ## Download and decrypt a file
 
-To download a file, simply use its file ID. 
+To download a file, use its file ID. 
 The file key may be encrypted using either another created key or a group key. 
 The file creator will always provide you with the master key ID.
 
@@ -304,7 +304,7 @@ const [url, meta_info, file_key] = await group.downloadFile(file_id);
 ```
 
 - This will return the file blob url, so you can use it in the browser, like set the url as an image src or download the file.
-- meta info are from type FileMetaInformation. Most of the info is not really relevant for your application, just for sentc. 
+- meta-info is from the type FileMetaInformation. Most of the info is not really relevant for your application, just for sentc. 
 
 ````typescript
 interface FileMetaInformation {
@@ -323,16 +323,16 @@ interface FileMetaInformation {
 }
 ````
 
-- the file key is the key which was used to encrypt the file. 
+- the file key is the key used to encrypt the file. 
 
 ::: warning
 sentc is using the indexeddb to save each file part in the browser.
 
-There is a limit to store just up to 2 gb into the indexeddb in many browser.
+There is a limit to storing just up to 2 gb into the indexeddb in many browsers.
 :::
 
-::: tip Download a file in a browser
-To download a file just make a 'fake' a-tag and click it. Just get the file name from the meta info to show it in the browser for download.
+::: tip Downloads a file in a browser
+To download a file make a 'fake' a-tag and clicks it. Get the file name from the meta-info to show it in the browser for download.
 
 ````typescript
 const [url, meta_info, file_key] = await group.downloadFile(file_id);
@@ -343,7 +343,7 @@ a.href = url;
 a.click();
 ````
 
-Download file for another user:
+Download the file for another user:
 
 ```typescript
 const [url, meta_info, file_key] = await user.downloadFile(file_id);
@@ -353,14 +353,14 @@ const [url, meta_info, file_key] = await user.downloadFile(file_id);
 
 @tab Flutter
 
-Download a file with path. If the file exists, a number will be added to the filename: 
-- file -> file(1) -> file(2), and so on.
+Download a file with a path. If the file exists, a number will be added to the filename: 
+- file → file(1) → file(2), and so on.
 
 ```dart
 DownloadResult result = await group.downloadFile(path: "<your-download-path>", fileId: fileId);
 ```
 
-Download with file object.
+Download with a file object.
 
 ```dart
 DownloadResult result = await group.downloadFileWithFile(file: file, fileId: fileId);
@@ -368,7 +368,7 @@ DownloadResult result = await group.downloadFileWithFile(file: file, fileId: fil
 
 - The file will be stored at your local. The user can then access it. 
 - Using download with a file object can be handy if you just want to show an image, so you can store it on the tmp dir on the device.
-- meta info are from type FileMetaInformation. Most of the info is not really relevant for your application, just for sentc.
+- meta-info is from the type FileMetaInformation. Most of the info is not really relevant for your application, just for sentc.
 
 ```dart
 class DownloadResult {
@@ -403,7 +403,7 @@ class FileMetaInformation {
 }
 ```
 
-Download file for another user:
+Download the file for another user:
 
 ```dart
 DownloadResult result = await user.downloadFile(path: "<your-download-path>", fileId: fileId);
@@ -420,7 +420,7 @@ async fn example(group: &StdGroup, jwt: &str, file: File)
 }
 ````
 
-Download file for another user:
+Download the file for another user:
 
 ````rust
 use sentc::keys::StdUser;
@@ -433,9 +433,9 @@ async fn example(user: &StdUser, file: File)
 
 ::::
 
-To also verify the file by put in the right verify key. Make sure you save the user id from the creator of the file when uploading a file.
+To also verify the file by put in the right verify-key. Make sure you save the user id from the creator of the file when uploading a file.
 
-To get the user verify key just fetch it see [user - Public user information](/guide/user/#public-user-information)
+To get the user verify-key, just fetch it see [user - Public user information](/guide/user/#public-user-information)
 
 :::: tabs#p
 
@@ -475,7 +475,7 @@ To see the actual download progress pass in the download file function a closure
 ````
 
 ````typescript
-//no verify key in this case, just pass in an empty string
+//no verify key in this case, pass in an empty string
 const output = await group.downloadFile(file, '', (progress: number) => {
 	console.log("Download: " + progress);
 });
@@ -525,8 +525,8 @@ async fn example(group: &StdGroup, jwt: &str, file: File)
 
 @tab Javascript
 
-::: tip Cancel download
-To cancel the download just set this static variable to true:
+::: tip Cancels download
+To cancel the download, just set this static variable to true:
 
 ````typescript
 import {Downloader} from "@sentclose/sentc";
@@ -539,8 +539,8 @@ This will cancel the actual download of a file.
 
 @tab Flutter
 
-::: tip Cancel download
-To cancel the download just set this static variable to true:
+::: tip Cancels download
+To cancel the download, just set this static variable to true:
 
 ```dart
 Downloader.cancelDownload = true;
@@ -551,7 +551,7 @@ Downloader.cancelDownload = true;
 
 ## Delete a file
 
-Just pass in the file id of the file to delete.
+Pass in the file id of the file to delete.
 
 :::: tabs#p
 
@@ -585,7 +585,7 @@ async fn example(group: &StdGroup, jwt: &str)
 In the [app options](/guide/create-app/), you can choose to use your own storage for file upload and download. 
 By default, the SDK uses sentc storage, and you are charged per GB per month for its usage.
 
-If you have your own storage solution, such as AWS S3, you can simply update the `delete`, `download` and `upload` URLs to point to your own storage. 
+If you have your own storage solution, such as AWS S3, you can update the `delete`, `download` and `upload` URLs to point to your own storage. 
 This will allow all file parts to be uploaded and downloaded directly from your storage.
 
 If a file is deleted, we will call your backend storage to delete the corresponding file. 
@@ -640,7 +640,7 @@ We use the same URL for both upload and download, but with different HTTP method
 - Download: Method get
 
 
-To update your URL, simply set the file part URL in the options. 
+To update your URL, set the file part URL in the options. 
 The uploader will automatically upload the parts to the new URL, 
 and the downloader will attempt to download the parts from the new URL.
 
@@ -659,7 +659,7 @@ Header value: <your_app_token>
 ```
 
 - session_id is the id of the file upload session, this is a string.
-- file_part_sequence is the sequence of the file part when downloading and decrypting the file. if this is wrong then the file can't be decrypted anymore.
+- file_part_sequence is the sequence of the file part when downloading and decrypting the file. if this is wrong, then the file can't be decrypted anymore.
 - end is a boolean. Pass in false if the file upload has not finished yet or true if it is.
 - user_id is the user that uploaded the file.
 
@@ -669,17 +669,17 @@ A request might look like:
 - or `https://your_url.com/abc_123/0/false` 
 - or `https://your_url.com/abc_123/1/true`
 
-Just extract the values and call the sentc api to register the file part, so sentc can download the file. 
+Extract the values and call the sentc api to register the file part, so sentc can download the file. 
 In the example above: 
 - `https://api.sentc.com/api/v1/file/part/abc_123/0/false/<user_id>` 
 - and `https://api.sentc.com/api/v1/file/part/abc_123/1/true/<user_id>`
 
-### After calling the sentc api you will get back the file part id
+### After calling the sentc api, you will get back the file part id
 
 This id is used to fetch and delete a part. 
 Please store the id or rename your file part to this id.
 
-Return the success result as json to the sdk: `{"status":true,"result":"Success"}`.
+Return the success result as JSON to the sdk: `{"status":true,"result":"Success"}`.
 
 ### Alternative workflow
 
@@ -689,7 +689,7 @@ Then you will get the right id, and you can name your file correctly.
 
 ### Set to delete endpoint for file parts 
 
-This endpoint will be called with a `post` request and the deleted file part names in the body as json array:
+This endpoint will be called with a `post` request and the deleted file part names in the body as JSON array:
 
 ````json
 ["name_0", "name_1", "name_2"]
@@ -699,7 +699,7 @@ See more here [app options](/guide/create-app/).
 
 You can also set a token for us, so you know that the request comes really from our api to delete the files.
 
-### When downloading a part the part id is in the url
+### When downloading a part, the part id is in the url
 
 The sdk will call your endpoint with a get request and the part id in the url. 
 And except the encrypted file part as bytes.

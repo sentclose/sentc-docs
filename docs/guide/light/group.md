@@ -1,9 +1,9 @@
 # Group
 
 A groups helps to gain access to resources for some users.
-As long as a user is in a group he/she can access all protected content. 
+As long as a user is in a group, he/she can access all protected content. 
 
-Sentc provides simple checks for your backend to see if a user is in a group. Just link resources with the group.
+Sentc provides simple checks for your backend to see if a user is in a group. Link resources with the group.
 
 ## Create a group
 
@@ -26,7 +26,7 @@ String groupId = await user.createGroup();
 ::::
 
 When you use your own backend, make a POST request to our API (https://api.sentc.com/api/v1/group) from your backend.
-Don't forget to include the Authorization header with the JWT.
+Remember to include the Authorization header with the JWT.
 
 ## Fetch a group
 
@@ -61,7 +61,7 @@ To retrieve all group IDs where the user is a member, use this function:
 const groups = await user.getGroups();
 ```
 
-The groups are an array and each item is from type GroupList
+The groups are an array, and each item is from type GroupList
 
 ````ts
 interface GroupList
@@ -95,7 +95,7 @@ class ListGroups {
 
 ::::
 
-To fetch more groups use pagination and pass in the last fetched item:
+To fetch more groups, use pagination and pass in the last fetched item:
 
 :::: tabs#p
 
@@ -145,7 +145,7 @@ await group.updateRank("internal_user_id", 2);
 ::::
 
 If you have your own backend and want to change a user's rank using a secret token,
-use this function to obtain the input data for the API.
+use this function to collect the input data for the API.
 To change the rank, make a PUT request to the following URL with the group ID
 and the input data from your backend: `https://api.sentc.com/api/v1/group/<the_group_id>/change_rank`
 
@@ -166,7 +166,7 @@ String input = await group.prepareUpdateRank("internal_user_id", 2);
 
 See more at [own backend](/guide/advanced/backend-only/)
 
-## Invite more user
+## Invite more users
 
 There are two methods to add more users to a group: by invitation or by join request.
 
@@ -175,7 +175,7 @@ There are two methods to add more users to a group: by invitation or by join req
 Inviting a user is done by a group administrator (ranks 0-2) to a non-group member.
 The non-group member can choose to accept or reject the invitation.
 
-Optional, a rank can be set for the invited user.
+Optionally, a rank can be set for the invited user.
 
 :::: tabs#p
 
@@ -207,7 +207,7 @@ A user can get invites by fetching invites or from init the client.
 const invites = await user.getGroupInvites();
 ```
 
-The invites are an array and each item is from type GroupInviteListItem
+The invites are an array, and each item is from the type GroupInviteListItem
 
 ````ts
 interface GroupInviteListItem
@@ -233,7 +233,7 @@ class GroupInviteReqList {
 
 ::::
 
-To fetch more invites just pass in the last fetched item from the function:
+To fetch more invites, pass in the last fetched item from the function:
 
 :::: tabs#p
 
@@ -252,7 +252,7 @@ List<GroupInviteReqList> invitesPageTwo = await user.getGroupInvites(invites.las
 
 ::::
 
-To accept an invitation as user call his function with the group id to accept:
+To accept an invitation as a user calls his function with the group id to accept:
 
 :::: tabs#p
 
@@ -313,7 +313,7 @@ await user.groupJoinRequest("<group_id>");
 
 ::::
 
-To fetch the join requests as a group admin use this function:
+To fetch the join requests as a group admin, use this function:
 
 :::: tabs#p
 
@@ -323,7 +323,7 @@ To fetch the join requests as a group admin use this function:
 const req = await group.getJoinRequests();
 ```
 
-The requests are an array and each item is from type GroupJoinReqListItem
+The requests are an array, and each item is from the type GroupJoinReqListItem
 
 ````ts
 interface GroupJoinReqListItem
@@ -350,7 +350,7 @@ class GroupJoinReqList {
 
 ::::
 
-To fetch more requests just pass in the last fetched item from the function:
+To fetch more requests, pass in the last fetched item from the function:
 
 :::: tabs#p
 
@@ -522,7 +522,7 @@ The fetch uses pagination to not fetch all members at once.
 const members = await group.getMember();
 ```
 
-Members are an array and each item is from type GroupUserListItem.
+Members are an array, and each item is from the type GroupUserListItem.
 
 ````ts
 interface GroupUserListItem 
@@ -551,13 +551,13 @@ class GroupUserListItem {
 
 ::::
 
-To fetch more use the last fetched member item:
+To fetch more, use the last fetched member item:
 
 :::: tabs#p
 
 @tab Javascript
 
-Members are from type GroupUserListItem.
+Members are from the type GroupUserListItem.
 
 ```ts
 const last_item = members[members.length -1];
@@ -567,7 +567,7 @@ const members_page_two = await group.getMember(last_item);
 
 @tab Flutter
 
-Members are from type GroupUserListItem.
+Members are from the type GroupUserListItem.
 
 ```dart
 List<GroupUserListItem> memberPageTwo = await group.getMember(member.last); 
@@ -631,7 +631,7 @@ parent
     child from parent
 ````
 
-To create a child group just call group create in the parent group not in the user scope
+To create a child group, call group-create in the parent group, not in the user scope
 
 :::: tabs#p
 
@@ -663,7 +663,7 @@ final groupFromParent = await group.getChildGroup(groupId);
 
 To get all children of the first level use the `getChildren()` function in the group object.
 
-It returns a List with the child group id, the child group created time and the parent id.
+It returns a List with the child group id, the child group created time, and the parent id.
 
 :::: tabs#p
 
@@ -687,11 +687,11 @@ final childrenPageTwo = await group.getChildren(children.last);
 
 ## Connected groups
 
-A group can also be a member in another group which is not a child of this group.
+A group can also be a member in another group, which is not a child of this group.
 Connected groups can also have children or be a child of a parent.
 Groups with access to the connected group got also access to all the child groups.
-A connected group can't be member in another group, so only normal groups can be a member in a connected group.
-Normal groups can't have other groups as member except their child groups.
+A connected group can't be a member in another group, so only normal groups can be a member in a connected group.
+Normal groups can't have other groups as members except their child groups.
 
 A connected group can be created from a normal group.
 
@@ -710,7 +710,7 @@ final groupId = await group.createConnectedGroup();
 
 ::::
 
-To fetch the connected group you can either fetch it from the group or from the user.
+To fetch the connected group, you can either fetch it from the group or from the user.
 From user requires the group id which was connected to the connected group.
 
 :::: tabs#p
@@ -735,7 +735,7 @@ final connectedGroupByUser = await user.getGroup(connectedGroupId, groupId);
 
 ::::
 
-When accessing a child group of a connected group, make sure to load the parent group first which is connected to the user group.
+When accessing a child group of a connected group, make sure to load the parent group first, which is connected to the user group.
 
 To get all connected groups to a group use the `getGroups()` function in the group object.
 It returns a List of groups with the group id and the group created time.
@@ -834,16 +834,16 @@ await group.deleteJoinReq("<group_id>");
 
 ::::
 
-## Child groups vs connected groups, when use what?
+## Child groups vs. connected groups, when use what?
 
 The problem with child groups is that it is a fixed structure and can't be changed in the future.
 
-A connected group can be helpfully if you want to give a group (and all its parents) access to another group (and all its children).
-This can be used to connect resources and users together, e.g.:
+A connected group can be helpful if you want to give a group (and all its parents) access to another group (and all its children).
+This can be used to connect resources and users, e.g.:
 - user in department groups (hr, marketing, development)
 - resources like customer, employee data, devops secrets
 - let dev manager access group employee data and devops secrets and marketing access customer.
-- Inside each department group there are multiple child groups for each sub department. If the manger is in the parent group, he/she can access every subgroup
+- Inside each department group there are multiple child groups for each subdepartment. If the manger is in the parent group, he/she can access every subgroup
 
 The recommended approach is to use normal groups for user and connected groups for resources.
 
@@ -877,15 +877,15 @@ await group.deleteGroup();
 
 ## Backend endpoints
 
-To create and delete groups from your backend the jwt of the creator is always required.
-If the jwt is not available in some situations you can use the following endpoints to call it with your secret token.
+To create and delete groups from your backend, the jwt of the creator is always required.
+If the jwt is not available in some situations, you can use the following endpoints to call it with your secret token.
 
 - Deleting a group with a delete request: `https://api.sentc.com/api/v1/group/forced/<group_id_to_delete`
     - This endpoint will delete the group
-- Creating a group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/light`
+- Creating a group with a post-request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/light`
     - This endpoint will return the group_id
-- Creating a child group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child/light`
-- Create a connected group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected/light`
+- Creating a child group with a post-request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child/light`
+- Create a connected group with a post-request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected/light`
 - Add a user to the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/invite_auto/<user_id_to_invite>/light` (post request)
 - Add a group to the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/invite_auto/<user_id_to_invite>/group_light` (post request)
 - Kick a user from the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/kick/<user_id_to_kick>` (delete request)

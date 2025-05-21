@@ -61,10 +61,10 @@ Before starting set also the both Env: `MYSQL_HOST` (your host where the db is r
 docker-compose -f mysql/docker-compose.external_db.yml up -d
 ```
 
-Keep in mind that this will use the array cache as default not redis. If you have redis also running, set the Env `CACHE` to 2
+Keep in mind that this will use the array cache as default, not redis. If you have redis also running, set the Env `CACHE` to 2
 and the Env `REDIS_URL` to your running redis url instance.
 
-To use the sqlite container use this compose file:
+To use the sqlite container, use this composed file:
 
 ```bash:no-line-numbers
 docker-compose -f sqlite/docker-compose.yml up -d
@@ -75,7 +75,7 @@ You can get it from the [api repo](https://github.com/sentclose/sentc-api/blob/m
 
 ### Server
 
-This hosting approach not be directly access from the outside. Use a reverse proxy like nginx to handle tls. 
+This hosting approach not be directly accessed from the outside. Use a reverse proxy like nginx to handle tls. 
 Sentc itself will use http.
 
 ```text
@@ -131,7 +131,7 @@ For rust sdk set it everywhere in the code where it is asked for the base_url li
 
 ## Register a self-hosted app
 
-You can access your dashboard by going to your address where your instance running. 
+You can access your dashboard by going to your address where your instance is running. 
 Then simply follow the register an app [guide for creating an app](/guide/create-app/).
 
 Use your public and secret token from this app. 

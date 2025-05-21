@@ -3,18 +3,18 @@
 Sentc is an end-to-end encryption SDK with user and group management.
 
 ::: tip
-Sentc now supports post quantum cryptography with CRYSTALS Kyber and CRYSTALS Dilithium. [See more here](/protocol/).
+Sentc now supports post-quantum cryptography with CRYSTALS Kyber and CRYSTALS Dilithium. [See more here](/protocol/).
 
 CRYSTALS Kyber is used in hybrid with x25519
 
 CRYSTALS Dilithium is used in hybrid with ed25519
 :::
 
-End-to-end encryption can be difficult to develop and maintain. 
+End-to-end encryption can be challenging to develop and maintain. 
 Fortunately, Sentc gives you full control of your application and provides easy-to-use encryption for groups or between users. 
 
 Sentc uses a flexible protocol to be able to change the underlying encryption algorithm in the feature. 
-To ensure backward compatibility, data that was encrypted with older algorithm can still be decrypted but new data will be encrypted by the newest.
+To ensure backward compatibility, data encrypted with the older algorithm can still be decrypted, but new data will be encrypted by the newest.
 
 ::: tip
 There is also a sdk version without the encryption but with the user and group management. 
@@ -51,7 +51,7 @@ User and group functionalities can be tested in our [playground](/playground/) w
 
 To use the sdk, you need a public and secret token.
 
-The public token will be used in your sdk at the frontend and the secret token should only be used at your backend. 
+The public token will be used in your sdk at the frontend, and the secret token should only be used at your backend. 
 You can set what function should be called with which token.
 
 1. Got to [https://api.sentc.com/dashboard/register](https://api.sentc.com/dashboard/register) and create an account. You will be redirected to the account dashboard.
@@ -103,7 +103,7 @@ The core SDK uses WebAssembly (WASM) in the browser.
 
 If you are using a module bundler like Webpack and you are not using the browser import,
 please refer to the module bundler WASM configuration in our documentation.
-[see Module bundler](/guide/advanced/module-bundler/)
+[See Module bundler](/guide/advanced/module-bundler/)
 
 :::
 
@@ -120,14 +120,12 @@ flutter pub add sentc
 cargo add sentc
 ```
 
-Please choose an implementation of the algorithms. There are StdKeys, FIPS or Rec keys. The impl can not work together.
+Please choose an implementation of the algorithms. There are StdKeys, FIPS, or Rec keys. The impl cannot work together.
 
-- StdKeys (feature = std_keys) are a pure rust implementation of the algorithms. They can be used in the web with wasm
+- StdKeys (feature = std_keys) are a pure rust implementation of the algorithms. They can be used on the web with wasm
   and on mobile.
-- FIPS keys (feature = fips_keys) are FIPS approved algorithms used from Openssl Fips. This impl does not support post
-  quantum.
-- Rec keys (feature = rec_keys) or recommended keys are a mix of FIPS keys for the classic algorithms and oqs (for post
-  quantum).
+- FIPS keys (feature = fips_keys) are FIPS approved algorithms used from Openssl Fips. This impl does not support post-quantum.
+- Rec keys (feature = rec_keys) or recommended keys are a mix of FIPS keys for the classic algorithms and oqs (for post-quantum).
 
 The net feature is necessary for the requests to the backend. The library reqwest is used to do it.
 
@@ -183,10 +181,10 @@ await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi");
 
 #### Secure storage
 
-The standard storage for keys is shared preferences. This is however not secure and will leave the keys unencrypted on your device.
+The standard storage for keys is shared preferences. This is, however, not secure and will leave the keys unencrypted on your device.
 
 We also provide another storage solution with [flutter_secure_storage](https://github.com/mogol/flutter_secure_storage). 
-This will encrypt the keys and stored them into a keychain.
+This will encrypt the keys and store them into a keychain.
 
 Install the storage:
 
@@ -194,7 +192,7 @@ Install the storage:
 flutter pub add sentc_flutter_secure_storage
 ```
 
-and then just replace the storage in the option.
+and then replace the storage in the option.
 
 ```dart
 import 'package:sentc/sentc.dart';
@@ -252,7 +250,7 @@ Every function that makes a request (in JavaScript with a Promise) will throw an
 
 We have noted when the function will also throw an error.
 
-The Error is a json string which can be decoded into the Error type:
+The Error is a JSON string that can be decoded into the Error type:
 
 ```ts
 interface SentcError
@@ -268,7 +266,7 @@ interface SentcError
 ::: warning
 Every function that makes a request will throw an error if the request or server output is not correct.
 
-The Error is a string which can be transpiled into the `SentcError` class:
+The Error is a string that can be transpiled into the `SentcError` class:
 
 ```dart
 try {
@@ -347,9 +345,9 @@ async fn example()
 
 ::::
 
-### Login a user
+### Log in a user
 
-Log in a user with their username and password. The user can also enable Multi-factor auth. [learn more here](/guide/e2ee/user)
+Log in a user with their username and password. The user can also enable Multi-factor auth. [Learn more here](/guide/e2ee/user)
 After login, the user receives a JSON Web Token (JWT).
 
 After logging in, you will receive a user object.
@@ -381,7 +379,7 @@ const user = await Sentc.login("username", "password", true);
            app_token: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6Hi" // <-- your app token
         });
 
-		//login a user, ignoring possible Multi-factor auth
+		//log in a user, ignoring possible Multi-factor auth
         const user = await sentc.login("username", "password", true);
     }
 
@@ -413,7 +411,7 @@ async fn example()
 
 ### Create a group
 
-You can create a group using the user object. The group keys are automatically encrypted by the user keys.
+You can create a group using the user object. The user keys automatically encrypt the group keys.
 
 With the group object, you can encrypt/decrypt content, invite or delete members, and perform key rotation. 
 For more information, please refer to the Groups documentation.
@@ -452,10 +450,10 @@ async fn example()
 	//create a group
 	let group_id = user.create_group(false).await.unwrap();
 
-	//get a group. first check if there are any data that the user need before decrypting the group keys.
+	//get a group. first check if there is any data that the user needs before decrypting the group keys.
 	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
 
-	//if no data then just decrypt the group keys
+	//if no data, then just decrypt the group keys
 	assert!(matches!(res, GroupFetchResult::Ok));
 
 	let group = user.done_get_group(data, None, None).unwrap();

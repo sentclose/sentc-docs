@@ -1,6 +1,6 @@
 # Searchable encryption
 
-When the data is fully end-to-end encrypted, nobody even the server can decrypt and read / analyse the data.
+When the data is fully end-to-end encrypted, nobody even the server can decrypt and read / analyze the data.
 This makes it very hard to query the data without loading everything all at once, decrypt in the client and then fulfill the query.
 
 With Sentc you can create searchable encryption from your keywords.
@@ -15,7 +15,7 @@ You can choose if you want to hash the full keyword or each character.
 Hashing the full word can be helpful if you want to store credit-card numbers.
 In this case you will only find a match if you pass in the full number
 
-When hashing each character you can search for similar results.
+When hashing each character, you can search for similar results.
 You can also set a limit of how many characters will be hashed.
 For no limit, all characters will be hashed.
 It will only find words from the start to bottom, the word smart and smith will be
@@ -23,15 +23,15 @@ It will only find words from the start to bottom, the word smart and smith will 
 - but not for: `m` or `t`.
 
 Unlike the [sortable encryption](/guide/e2ee/sortable), this technic can also be used to encrypt sensible data. 
-For sortable encryption, only the first 4 letters are encrypted, here the full string can be encrypted.
+For sortable encryption, only the first four letters are encrypted; here the full string can be encrypted.
 
 This is only a one-way process. You can't get the plain text back. 
-You can use it alongside with symmetric group encryption, encrypt the data with the group key and also hash the data. 
+You can use it alongside symmetric group encryption, encrypt the data with the group key and also hash the data. 
 The group members are still able to decrypt the data, and you can search it in your backend.
 
 ## Create
 
-You get a list or any array of hashes back. This contains the hash of each letter combination of your string.
+You get a list or any array of hashes back. This contains the hash of each letter combination from your string.
 
 You can store the hashes in your database in a different table like this:
 
@@ -41,11 +41,11 @@ You can store the hashes in your database in a different table like this:
 | `your id to an item`      | `another hash of the item` |
 | `your id to another item` | `hash of the other item`   |
 
-The relationship should be 1:n (one to many) because one hash should only belong to one item but an item can have multiple hashes.
+The relationship should be 1:n (one to many) because one hash should only belong to one item, but an item can have multiple hashes.
 
 The length of a hash is 32 bytes, so a varchar(32) should be great.
 
-For sql databases, bulk insert (multiple rows at once insert) should be used for the hashes.
+For SQL databases, bulk insert (multiple rows at once insert) should be used for the hashes.
 
 :::: tabs#p
 
@@ -120,7 +120,7 @@ fn example(group: &StdGroup, data: &str)
 ## Search a value
 
 The sdk will create a hash with the same group key for your search term, and now you can check it in your database with the hashes table.
-If you are using primary keys for the hash and the item id the search is very quick.
+If you are using primary keys for the hash and the item-id, the search is rapid.
 
 :::: tabs#p
 
@@ -162,7 +162,7 @@ For this query you will get a list of all matched hashes.
 
 ## Options
 
-You can also limit the number of hashes of a word (e.g. only the first 4 combinations) or just hash the full word without letter combinations.
+You can also limit the number of hashes from a word (e.g., only the first four combinations) or just hash the full word without letter combinations.
 This works for both, the raw and the normal functions.
 
 ### Full word hash
@@ -224,7 +224,7 @@ fn example(group: &StdGroup, data: &str)
 
 ::::
 
-Now the length of the hashes is maximal 4.
+Now the length of the hashes is maximally 4.
 
 ## Going further
 
@@ -239,6 +239,6 @@ This helps to do queries where you need the equal value and not all values like 
 | `your id to an item`      | `another hash of the item` | true  |
 | `your id to another item` | `hash of the other item`   | false |
 
-If you want to only got the exact values test if the last is true.
+If you want to only get the exact values test if the last is true.
 
 With search and sortable encryption you got now everything you need to query your data without decrypting it first.

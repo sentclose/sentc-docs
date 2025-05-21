@@ -1,18 +1,18 @@
 # Database with encrypted values
 
-Like it was mentioned in [searchable](/guide/e2ee/searchable/) and [sortable](/guide/e2ee/sortable/) 
+Like it was mentioned in [searchable](/guide/e2ee/searchable/) and [sortable](/guide/e2ee/sortable/),
 you can still use your database to query data to the customer without the need to decrypt it first and then doing queries like 
-searching for a value, getting the exact results or returning a sorted list of values.
+searching for a value. Getting the exact results or returning a sorted list of values.
 
 Use searchable encryption to get either the exact data match or multiple data to a searched value 
 and sortable encryption to do range queries like `ORDER BY name`.
 
-Because sortable encryption won't encrypt your full data it should not be used for exact matches.
+Because sortable encryption won't encrypt your full data, it should not be used for exact matches.
 
 The best thing is that you don't need to modify your database or just different functions. 
 Both technics can be used with the native database query functions like you would do with not encrypted data.
 
-The example below is a relational database like mysql, sqlite or postgres but this will also work for nosql databases.
+The example below is a relational database like mysql, sqlite or postgres, but this will also work for nosql databases.
 
 ## The tables
 
@@ -26,11 +26,11 @@ Table: user:
 | 124 | John       | Snowing   | 55  |
 | 125 | Johnny     | Depp      | 60  |
 
-In the real world the data is end-to-end encrypted in your group. The problem, you can't do anything with it, except storing them.
+In the real world the data is end-to-end encrypted in your group. The problem is, you can't do anything with it, except storing them.
 
 ### Searchable
 
-Create a 2nd table for the search hashes of each column you want to query and link it to your users table.
+Create a second table for the search hashes of each column you want to query and link it to your users' table.
 
 Table: user_hash:
 
@@ -93,14 +93,14 @@ This helps to do queries where you need the equal value and not all values like 
 | 124     | `hash of John`        | false     |
 | 125     | `hash of Johnny`      | false     |
 
-If you want to only got the exact values test if the last is true.
+If you want to only get the exact values test if the last is true.
 
 ### Sort/Order able
 
-If you also want to query the last name create a second table for the hashes of the last name 
+If you want to query the last name too: Create a second table for the hashes of the last name 
 or create a column with a flag that identifies to what column the hash is for, for the id.
 
-To do range queries expand the users table by a column of a value that you want to do the range query. Like if you want to `ORDER BY` first_name, 
+To do range queries, expand the user's table by a column of a value that you want to do the range query. Like if you want to `ORDER BY` first_name, 
 then create another column with the sortable first_name.
 
 | id  | first_name  | last_name   | age         | order_first_name |
@@ -149,17 +149,17 @@ fn example(group: &StdGroup)
 
 ## Query
 
-To get now the data just use the normal database queries.
+To get now, the data just use the normal database queries.
 
-To get all users order by name:
+To get all users to order by the name:
 
 ```sql
 SELECT id, first_name, last_name, age FROM users ORDER BY order_first_name
 ```
 
-This data can then decrypt by the group key.
+This data can then be decrypted by the group key.
 
-To get the exact data you need to create a hash in the client first and then search it:
+To get the exact data, you need to create a hash in the client first and then search it:
 
 :::: tabs#p
 
@@ -196,9 +196,9 @@ WHERE
     hash = ?
 ```
 
-The result would be all three users because everyone begins with `jo`. The is equal to sql LIKE queries.
+The result would be all three users because everyone begins with `jo`. It is the equivalent to SQL LIKE queries.
 
-To get exact values just check if it is the last hash (of the full word).
+To get exact values, check if it is the last hash (of the full word).
 
 ```sql
 SELECT id, first_name, last_name, age 

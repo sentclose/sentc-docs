@@ -1,19 +1,19 @@
 # User
 
 The light sdk provides secure user register and login as well as group management. 
-We are not storing any additional information about the user only the necessary data for login.
+We are not storing any additional information about the user, only the necessary data for login.
 If you require additional information, such as an email address or full name, you can register the user from your own backend.
 
 Please refer to the [own backend](/guide/advanced/backend-only/) section for more information.
 
 The registration and login processes are mostly the same as from the end-to-end encryption sdk. 
-The only difference is that there are no user keys only device keys.
+The only difference is that there are no user keys, only device keys.
 
 Using Multi-factor auth with an authentication app is also possible.
 
 ## Register
 
-The username/identifier can be anything, such as a name, email address, or random number.
+The username/identifier can be anything, such as a name, email address or random number.
 The username is only required to log in to the correct device.
 
 :::: tabs#p
@@ -233,17 +233,17 @@ See more at [own backend](/guide/advanced/backend-only/)
 
 ## Login
 
-To log in, you just need to provide the identifier (i.e., username, email, or random number) and the password that was used during registration.
+To log in, you need to provide the identifier (i.e., username, email, or random number) and the password that was used during registration.
 The user will then be logged in to the device associated with the given identifier.
 
 The password is not sent to the API, so we cannot access or retrieve the user's password.
-This is accomplished by using a password derivation function in the client instead of on the server.
+This is achieved by using a password derivation function in the client instead of on the server.
 
 If the identifier or the password is incorrect, this function will throw an error.
 
-The Login function returns an either the user type or data for the mfa validation process.
+The Login function returns either the user type or data for the mfa validation process.
 
-If you disabled the Mfa in the app options then you can force login to get just the user object back.
+If you disabled the Mfa in the app options, then you can force login to get just the user object back.
 
 ::: tip
 You can learn more about Multi-factor and how your users can enable it [below](/guide/e2ee/user/#multi-factor-authentication).
@@ -252,13 +252,13 @@ You can learn more about Multi-factor and how your users can enable it [below](/
 ### Login forced
 
 With this method the sdk will just return the user object or throw an exception or error
-if the user enabled mfa because this must be handled in order to get the user data.
+if the user enabled mfa because this must be handled to get the user data.
 
 :::: tabs#p
 
 @tab Javascript
 
-For js, just set an optional flag to true in the login function.
+For js, set an optional flag to true in the login function.
 
 ```ts
 import Sentc from "@sentclose/sentc-light";
@@ -283,7 +283,7 @@ User user = await Sentc.loginForced("identifier", "password");
 
 @tab Javascript
 
-For typescript, we are using the [Discriminated Unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions).
+For TypeScript, we are using the [Discriminated Unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions).
 
 An object with two properties is returned from the function: `kind` and `u`.
 
@@ -387,10 +387,10 @@ if (userData is MfaLogin) {
 
 ::::
 
-### Login with recovery key
+### Login with a recovery key
 
-If the user is not able to create the token (e.g. the device is broken or stolen), then the user can also log in with a recovery key.
-These keys are obtained after mfa was enabled. If the user uses one key then the key gets deleted and can't be used again.
+If the user is not able to create the token (e.g., the device is broken or stolen), then the user can also log in with a recovery key.
+These keys are obtained after mfa was enabled. If the user uses one key, then the key gets deleted and can't be used again.
 
 :::: tabs#p
 
@@ -426,7 +426,7 @@ if (userData is MfaLogin) {
 
 After successfully logging in, you will receive a user object, which is required to perform all user actions, such as creating a group.
 
-You can obtain the actual user object by calling the init function as follows:
+You can get the actual user object by calling the init function as follows:
 
 :::: tabs#p
 
@@ -449,7 +449,7 @@ final user = await Sentc.init(appToken: "5zMb6zs3dEM62n+FxjBilFPp+j9e7YUFA+7pi6H
 
 ::::
 
-Alternatively, you can obtain the actual user object by calling the getActualUser() function. This function will not check the JWT.
+Alternatively, you can get the actual user object by calling the getActualUser() function. This function will not check the JWT.
 
 :::: tabs#p
 
@@ -477,17 +477,17 @@ For the device:
 - Asymmetric key pairs only for the device.
 - Device ID.
 
-For user account:
+For a user account:
 - The actual JWT for this session.
 - The refresh token for this session.
 - User ID
 
-To get the data, just access the data in the user class.
+To get the data, access the data in the user class.
 
 :::: tabs#p
 
 @tab Javascript
-The devices are from type UserDeviceList
+The devices are from the type UserDeviceList
 
 ```ts
 //user from login
@@ -521,7 +521,7 @@ See more at [own backend](/guide/advanced/backend-only/)
 
 ## Multi-Factor authentication
 
-Sentc uses Time-based one-time password (Totp) for Multi-factor auth. These tokens can easily be generated by any totp generator app like google authenticator, authy or free otp.
+Sentc uses Time-based one-time password (Totp) for Multi-factor auth. These tokens can easily be generated by any totp generator app like Google authenticator, authy or free otp.
 
 A secret is generated alone side with six recovery keys (just in case if the user lost access to the auth device).
 The user should print out or store the recovery keys to still get access to the account.
@@ -529,16 +529,16 @@ The user should print out or store the recovery keys to still get access to the 
 The auth app needs the secret and information about the used algorithm.
 The simplest way is to get an otpauth url and transform it into a qr code, so the auth app can scan it.
 
-The mfa is bind to all devices in the user account not just the actual one.
+The mfa is assigned to all devices in the user account, not just the actual one.
 
-The user must be logged in, in order to activate mfa and has to enter the password again.
+The user must be logged in to activate mfa and has to enter the password again.
 `issuer` and `audience` are needed for the auth app. Issuer can be your app name and audience the username email or something else.
 
 :::: tabs#p
 
 @tab Javascript
 
-The url is for the auth app and the recovery_keys is an array of all six keys.
+The url is for the auth app, and the recovery_keys is an array of all six keys.
 
 ```ts
 const [url, revocery_keys] = await user.registerOtp("<issuer>", "<audience>", "<password>");
@@ -546,7 +546,7 @@ const [url, revocery_keys] = await user.registerOtp("<issuer>", "<audience>", "<
 
 @tab Flutter
 
-The url is for the auth app and the recoveryKeys is a list of all six keys.
+The url is for the auth app, and the recoveryKeys is a list of all six keys.
 
 ```dart
 final (user, recoveryKeys) = await user.registerOtp("<issuer>", "<audience>", "<password>");
@@ -556,12 +556,12 @@ final (user, recoveryKeys) = await user.registerOtp("<issuer>", "<audience>", "<
 
 ### Reset mfa
 
-If the user only got one recovery key left or the device with the auth app ist stolen or lost then resetting the mfa is the best practice
+If the user only got one recovery key left or the device with the auth app ist stolen or lost, then resetting the mfa is the best practice
 
-The old recovery keys and the old secret will be deleted and replaced by new one.
+The old recovery keys and the old secret will be deleted and replaced by a new one.
 The return values are the same as in the register process.
 
-The user also needs to enter a totp from an auth app or a recovery key in order to reset it.
+The user also needs to enter a totp from an auth app or a recovery key to reset it.
 This will make sure that only a person with access can change it.
 
 :::: tabs #p
@@ -664,13 +664,13 @@ List<String> keys = await user.getOtpRecoverKeys("<password>", "<recovery_key>",
 
 ::::
 
-Alternative you can disable the mfa from your backend, e.g. if the user looses the recovery keys and the device access.
+Alternatively, you can disable the mfa from your backend, e.g., if the user loses the recovery keys and the device access.
 [See here for more details](/guide/advanced/backend-only#disable-mfa-from-server)
 
 ## Register Device
 
 To register a new device, the user must be logged in on another device.
-The process has three parts: preparing the data on the new device, sending the data to the logged-in device, and adding the new device.
+The process has three parts: preparing the data on the new device, sending the data to the logged-in device and adding the new device.
 
 To produce the input on the new device, follow these steps. The identifier and password could be generated the same way as during user registration.
 
@@ -733,7 +733,7 @@ The device list can be fetched through pagination.
 const devices = await user.getDevices();
 ```
 
-The devices are an array and each item is from type UserDeviceList
+The devices are an array, and each item is from the type UserDeviceList
 
 ````ts
 interface UserDeviceList
@@ -762,12 +762,12 @@ class UserDeviceList {
 
 ::::
 
-To fetch the next pages, simply call this function with the last fetched device.
+To fetch the next pages, call this function with the last fetched device.
 
 :::: tabs#p
 
 @tab Javascript
-The devices are from type UserDeviceList
+The devices are from the type UserDeviceList
 
 ```ts
 const last_item = devices[devices.length - 1];
@@ -776,7 +776,7 @@ const devices_page_two = await user.getDevices(last_item);
 ```
 
 @tab Flutter
-The devices are from type UserDeviceList
+The devices are from the type UserDeviceList
 
 ```dart
 List<UserDeviceList> devicesPageTwo = await user.getDevices(devices.last);
@@ -812,7 +812,7 @@ This function will also throw an error if **the old password was not correct**
 
 ## Reset password
 
-Unlike in the end-to-end encryption sdk, the user don't have to be logged in for resetting the password. 
+Unlike in the end-to-end encryption sdk, the user doesn't have to be logged in for resetting the password. 
 For security reasons this process can only be done with your backend (with the secret token) and not from your frontend (public token).
 
 To prepare the reset, register the actual user device again with a new password:
@@ -957,7 +957,7 @@ String deviceId = user.deviceId;
 
 ::::
 
-## Delete account
+## Delete an account
 
 To delete the entire account, use any device password.
 

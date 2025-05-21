@@ -45,7 +45,7 @@ async fn example(user: &StdUser)
 
 When you use your own backend, call the prepare function. This function returns the client data for a new group. 
 Make a POST request to our API (https://api.sentc.com/api/v1/group) with this data from your backend. 
-Don't forget to include the Authorization header with the JWT.
+Remember to include the Authorization header with the JWT.
 
 :::: tabs#p
 
@@ -77,7 +77,7 @@ See more at [own backend](/guide/advanced/backend-only/)
 
 ### Sign a group key
 
-The group key can be signed by the creator to make sure that the key is not corrupted. Just set the sign value to true.
+The creator can sign the group key to make sure that the key is not corrupted. Set the sign value to true.
 All members can now verify the group key.
 
 :::: tabs#p
@@ -136,11 +136,11 @@ Group group = await user.getGroup(groupId);
 
 @tab Rust
 In the rust version there are two different functions to call.
-Data are the group data to decrypt and res will signal if you need to fetch more keys for the user. This can happen if
+Data is the group of data to decrypt, and res will signal if you need to fetch more keys for the user. This can happen if
 the device of the user missed a key rotation and the group invite was done by the new keys of the user. In this case,
-just finish the key rotation on this device.
+ finish the key rotation on this device.
 
-The 2nd function will then decrypt the group keys when the user got all keys.
+The second function will then decrypt the group keys when the user got all keys.
 
 ````rust
 use sentc::keys::StdUser;
@@ -164,7 +164,7 @@ async fn example(user: &StdUser)
 :::: tabs#p
 
 @tab Javascript
-Set verify to `1` to verify the key but ignore it when the user was deleted. Set it to `2` to throw an error if the user is not found.
+Set verifying to `1` to verify the key but ignore it when the user was deleted. Set it to `2` to throw an error if the user is not found.
 
 ```ts
 //the user obj from login
@@ -180,11 +180,11 @@ Group group = await user.getGroup(groupId, null, 1);
 
 @tab Rust
 The group keys are a vec. Each group key got the information if the key was signed and from which user and key.
-Just integrate over the group keys after calling `prepare_get_group` and fetch all verify keys, or the keys you like to
-verify. If you want to skip keys, then just set None in the vec of verify keys. The index of the verify key in the vec
+Integrate over the group keys after calling `prepare_get_group` and fetch all verify-keys, or the keys you like to
+verify. If you want to skip keys, then just set None in the vec of verify-keys. The index of the verify-key in the vec
 has to match the index of the group key in the group key vec.
 
-`done_get_group` will return the error client_31 if the verify key failed:
+`done_get_group` will return the error client_31 if the verify-key failed:
 SentcError::Sdk(SdkError::Util(SdkUtilError::Base(Error::KeyDecryptionVerifyFailed)))
 
 ````rust
@@ -201,7 +201,7 @@ async fn example(user: &StdUser)
 
 	for key in &data.keys {
 		let verify_key = if let (Some(user_id), Some(key_id)) = (&key.signed_by_user_id, &key.signed_by_user_sign_key_id) {
-			//fetch here the verify key like this:
+			//fetch here the verify-key like this:
 			let verify_key: UserVerifyKeyData = user.get_user_verify_key_data(user_id, key_id).await.unwrap();
 
 			verify_key
@@ -228,7 +228,7 @@ To retrieve all group IDs where the user is a member, use this function:
 const groups = await user.getGroups();
 ```
 
-The groups are an array and each item is from type GroupList
+The groups are an array, and each item is from type GroupList
 
 ````ts
 interface GroupList
@@ -272,7 +272,7 @@ async fn example(user: &StdUser)
 
 ::::
 
-To fetch more groups use pagination and pass in the last fetched item:
+To fetch more groups, use pagination and pass in the last fetched item:
 
 :::: tabs#p
 
@@ -295,7 +295,7 @@ use sentc::keys::StdUser;
 
 async fn example(user: &StdUser)
 {
-	//To fetch more groups use pagination and pass in the last fetched item:
+	//To fetch more groups, use pagination and pass in the last fetched item:
 	let list = user.get_groups(Some(list.last().unwrap())).await.unwrap();
 }
 ````
@@ -306,7 +306,7 @@ async fn example(user: &StdUser)
 
 Every group member has access to all group keys and can encrypt or decrypt data for any other group member. 
 To encrypt data, the group uses the most current group key. 
-To decrypt data, the group automatically retrieves the key that was used to encrypt the data.
+To decrypt data, the group automatically retrieves the key used to encrypt the data.
 
 :::: tabs#p
 
@@ -334,7 +334,7 @@ String decryptedString = await group.decryptString(encrypted_string);
 
 @tab Rust
 Decrypt will fail when the key that was used is not in the group key vec. The error tells you what key is missing:
-SentcError::KeyRequired. Just do a key rotation in this case to fetch the key.
+SentcError::KeyRequired. Do a key rotation in this case to fetch the key.
 
 ````rust
 use sentc::keys::StdGroup;
@@ -394,7 +394,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 ::::
 
 If you have your own backend and want to change a user's rank using a secret token, 
-use this function to obtain the input data for the API. 
+use this function to collect the input data for the API. 
 To change the rank, make a PUT request to the following URL with the group ID 
 and the input data from your backend: `https://api.sentc.com/api/v1/group/<the_group_id>/change_rank`
 
@@ -425,7 +425,7 @@ fn example(group: &StdGroup)
 
 See more at [own backend](/guide/advanced/backend-only/)
 
-## Invite more user
+## Invite more users
 
 There are two methods to add more users to a group: by invitation or by join request. 
 When a user is invited or their join request is accepted, the group keys are encrypted using the new member's most current public key.
@@ -435,7 +435,7 @@ When a user is invited or their join request is accepted, the group keys are enc
 Inviting a user is done by a group administrator (ranks 0-2) to a non-group member. 
 The non-group member can choose to accept or reject the invitation.
 
-Optional, a rank can be set for the invited user.
+Optionally, a rank can be set for the invited user.
 
 :::: tabs#p
 
@@ -482,7 +482,7 @@ A user can get invites by fetching invites or from init the client.
 const invites = await user.getGroupInvites();
 ```
 
-The invites are an array and each item is from type GroupInviteListItem
+The invites are an array, and each item is from the type GroupInviteListItem
 
 ````ts
 interface GroupInviteListItem
@@ -518,7 +518,7 @@ async fn example(user: &StdUser)
 
 ::::
 
-To fetch more invites just pass in the last fetched item from the function:
+To fetch more invites pass in the last fetched item from the function:
 
 :::: tabs#p
 
@@ -547,7 +547,7 @@ async fn example(user: &StdUser)
 
 ::::
 
-To accept an invitation as user call his function with the group id to accept:
+To accept an invitation as a user calls his function with the group id to accept:
 
 :::: tabs#p
 
@@ -639,7 +639,7 @@ async fn example(user: &StdUser)
 
 ::::
 
-To fetch the join requests as a group admin use this function:
+To fetch the join requests as a group admin, use this function:
 
 :::: tabs#p
 
@@ -649,7 +649,7 @@ To fetch the join requests as a group admin use this function:
 const req = await group.getJoinRequests();
 ```
 
-The requests are an array and each item is from type GroupJoinReqListItem
+The requests are an array, and each item is from the type GroupJoinReqListItem
 
 ````ts
 interface GroupJoinReqListItem
@@ -688,7 +688,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 ::::
 
-To fetch more requests just pass in the last fetched item from the function:
+To fetch more requests, pass in the last fetched item from the function:
 
 :::: tabs#p
 
@@ -830,7 +830,7 @@ async fn example(user: &StdUser)
 {
 	let list = user.get_sent_join_req(None).await.unwrap();
 
-	//to load more use the last item of the pre-fetch
+	//to load more, use the last item of the pre-fetch
 
 	let list = user.get_sent_join_req(list.last()).await.unwrap();
 }
@@ -940,7 +940,7 @@ The fetch uses pagination to not fetch all members at once.
 const members = await group.getMember();
 ```
 
-Members are an array and each item is from type GroupUserListItem.
+Members are an array, and each item is from the type GroupUserListItem.
 
 ````ts
 interface GroupUserListItem 
@@ -975,7 +975,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 {
 	let list = group.get_member(jwt_from_user, None).await.unwrap();
 
-	//To fetch more use the last fetched member item:
+	//To fetch more, use the last fetched member item:
 
 	let list = group.get_member(jwt_from_user, list.last()).await.unwrap();
 }
@@ -983,13 +983,13 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 ::::
 
-To fetch more use the last fetched member item:
+To fetch more, use the last fetched member item:
 
 :::: tabs#p
 
 @tab Javascript
 
-Members are from type GroupUserListItem.
+Members are from the type GroupUserListItem.
 
 ```ts
 const last_item = members[members.length -1];
@@ -999,7 +999,7 @@ const members_page_two = await group.getMember(last_item);
 
 @tab Flutter
 
-Members are from type GroupUserListItem.
+Members are from the type GroupUserListItem.
 
 ```dart
 List<GroupUserListItem> memberPageTwo = await group.getMember(member.last); 
@@ -1082,7 +1082,7 @@ parent
     child from parent
 ````
 
-To create a child group just call group create in the parent group not in the user scope
+To create a child group, call group-create in the parent group, not in the user scope
 
 :::: tabs#p
 
@@ -1155,7 +1155,7 @@ See more at [own backend](/guide/advanced/backend-only/)
 
 To get all children of the first level use the `getChildren()` function in the group object.
 
-It returns a List with the child group id, the child group created time and the parent id.
+It returns a List with the child group id, the child group created time, and the parent id.
 
 :::: tabs#p
 
@@ -1193,7 +1193,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 ### Create a child group and sign the group key
 
 The sign key of the creator is needed. When a user creates a group, the sign key from the user data is used.
-Obtain the user who sign the key.
+Get the user who signs the key.
 
 :::: tabs#p
 
@@ -1232,7 +1232,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 }
 ````
 
-For prepare obtain the user who should sign the group key.
+To prepare, get the user who should sign the group key.
 
 ````rust
 use sentc::keys::StdGroup;
@@ -1247,11 +1247,11 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 ## Connected groups
 
-A group can also be a member in another group which is not a child of this group. 
+A group can also be a member in another group, which is not a child of this group. 
 Connected groups can also have children or be a child of a parent.
 Groups with access to the connected group got also access to all the child groups.
-A connected group can't be member in another group, so only normal groups can be a member in a connected group.
-Normal groups can't have other groups as member except their child groups.
+A connected group can't be a member in another group, so only normal groups can be a member in a connected group.
+Normal groups can't have other groups as members except their child groups.
 
 A connected group can be created from a normal group.
 
@@ -1281,7 +1281,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 ::::
 
-To fetch the connected group you can either fetch it from the group or from the user. 
+To fetch the connected group, you can either fetch it from the group or from the user. 
 From user requires the group id which was connected to the connected group.
 
 :::: tabs#p
@@ -1321,7 +1321,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 ::::
 
-When accessing a child group of a connected group, make sure to load the parent group first which is connected to the user group.
+When accessing a child group of a connected group, make sure to load the parent group first, which is connected to the user group.
 
 To get all connected groups to a group use the `getGroups()` function in the group object. 
 It returns a List of groups with the group id and the group created time.
@@ -1433,7 +1433,7 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 {
 	let list = group.get_group_sent_join_req(jwt_from_user, None).await.unwrap();
 
-	//to load more use the last item of the pre-fetch
+	//to load more, use the last item of the pre-fetch
 	let list = group.get_group_sent_join_req(jwt_from_user, list.last()).await.unwrap();
 }
 ````
@@ -1496,16 +1496,16 @@ async fn example(group: &StdGroup, jwt_from_user: &str)
 
 ::::
 
-## Child groups vs connected groups, when use what?
+## Child groups vs. connected groups, when use what?
 
 The problem with child groups is that it is a fixed structure and can't be changed in the future.
 
-A connected group can be helpfully if you want to give a group (and all its parents) access to another group (and all its children).
-This can be used to connect resources and users together, e.g.:
+A connected group can be helpful if you want to give a group (and all its parents) access to another group (and all its children).
+This can be used to connect resources and users, e.g.:
 - user in department groups (hr, marketing, development)
 - resources like customer, employee data, devops secrets
 - let dev manager access group employee data and devops secrets and marketing access customer.
-- Inside each department group there are multiple child groups for each sub department. If the manger is in the parent group, he/she can access every subgroup
+- Inside each department group there are multiple child groups for each subdepartment. If the manger is in the parent group, he/she can access every subgroup
 
 The recommended approach is to use normal groups for user and connected groups for resources.
 
@@ -1526,11 +1526,11 @@ This is done on the server side, but the server does not have access to the clea
 Key rotation can be useful when a member leaves the group, ensuring that all new content is encrypted using the newest key.
 
 The user who starts the rotation can also sign the new keys.
-When the other member finish the rotation, the signed keys can be verified to make sure that the starter is the real user.
+When the other member finishes the rotation, the signed keys can be verified to make sure that the starter is the real user.
 
 ### Key rotation start
 
-To start the rotation call this function from any group member account:
+To start the rotation, call this function from any group member account:
 
 :::: tabs#p
 
@@ -1588,14 +1588,14 @@ async fn example(group: &StdGroup, user: &StdUser)
 ::::
 
 The new keys will be created on your device, encrypted by the starter public key, and sent to the API. 
-The API will encrypt the new group keys for all other members, but the API still doesn't know the clear text keys and 
+The API will encrypt the new group keys for all other members. However, the API still doesn't know the clear text keys and 
 can't use them because the new keys are encrypted by an ephemeral key that is only accessible to the group members.
 
 It doesn't matter how many members are in this group because the user devices are not doing the encryption for every member.
 
 ### Key rotation finish
 
-To get the new key for the other member just call this function for all group member:
+To get the new key for the other member, call this function for all group members:
 
 :::: tabs#p
 
@@ -1623,7 +1623,7 @@ use sentc::group::net::{GroupFinishKeyRotation, GroupKeyFetchResult};
 
 async fn example(group: &StdGroup, user: &StdUser)
 {
-	//This fn checks if the user needs to fetch the newest user key. if no continue
+	//This fn checks if the user needs to fetch the newest user key. If no continue
 	let res = group.prepare_finish_key_rotation(user.get_jwt().unwrap(), Some(user), None).await.unwrap();
 
 	//check if the user needs to fetch keys first
@@ -1650,7 +1650,7 @@ async fn example(group: &StdGroup, user: &StdUser)
 ````
 
 
-Like for group create, a new group key can be signed too. Set the sign parameter to true and obtain always a user even
+Like for group create, a new group key can be signed too. Set the sign parameter to true and get always a user even
 for child or connected groups.
 
 ````rust
@@ -1675,7 +1675,7 @@ async fn example(group: &StdGroup, user: &StdUser)
 }
 ````
 
-To get the new key for the other member just call this function for all group member:
+To get the new key for the other member, call this function for all group members:
 
 ````rust
 use sentc::keys::{StdGroup, StdUser};
@@ -1683,7 +1683,7 @@ use sentc::group::net::{GroupFinishKeyRotation, GroupKeyFetchResult};
 
 async fn example(group: &StdGroup, user: &StdUser)
 {
-	//This fn checks if the user needs to fetch the newest user key. if no continue
+	//This fn checks if the user needs to fetch the newest user key. If no continue
 	let res = group.prepare_finish_key_rotation(user.get_jwt().unwrap(), Some(user), None).await.unwrap();
 
 	//check if the user needs to fetch keys first
@@ -1715,7 +1715,7 @@ This will fetch all new keys for a group and prepares the new keys.
 
 ### Key rotation with own backend
 
-If you want to control the rotation from your own backend, just call this function to start the rotation:
+If you want to control the rotation from your own backend, call this function to start the rotation:
 
 :::: tabs#p
 
@@ -1742,16 +1742,16 @@ fn example(group: &StdGroup, user: &StdUser)
 
 ::::
 
-and call this endpoint to start the rotation with a post request: `https://api.sentc.com/api/v1/group/<group_id>/key_rotation`
+and call this endpoint to start the rotation with a post-request: `https://api.sentc.com/api/v1/group/<group_id>/key_rotation`
 
-Still use the finishKeyRotation function to finish the rotation.
+Still, use the finishKeyRotation function to finish the rotation.
 
 ## Re invite
 
 If there is an error during the key rotation, the corresponding user won't get the new keys. 
 This can happen if the user already done a user key rotation and the keys are not correctly created.
 
-Users can be re invited to a group. It is almost the same process as the invite but this time the user keeps the rank.
+Users can be re invited to a group. It is almost the same process as the invite, but this time the user keeps the rank.
 
 :::: tabs#p
 
@@ -1785,7 +1785,7 @@ async fn example(group: &StdGroup)
 
 ## Public group information
 
-Only the newest public key is used. You can just fetch the newest group public key.
+Only the newest public key is used. You can fetch the newest group public key.
 
 :::: tabs#p
 
@@ -1851,17 +1851,17 @@ async fn example(group: &StdGroup, jwt: &str)
 
 ## Backend endpoints
 
-To create and delete groups from your backend the jwt of the creator is always required. 
-If the jwt is not available in some situations you can use the following endpoints to call it with your secret token.
+To create and delete groups from your backend, the jwt of the creator is always required. 
+If the jwt is not available in some situations, you can use the following endpoints to call it with your secret token.
 
 - Deleting a group with a delete request: `https://api.sentc.com/api/v1/group/forced/<group_id_to_delete>`
   - This endpoint will delete the group
-- Creating a group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>`
+- Creating a group with a post-request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>`
   - use the `prepareGroupCreate` function in the group section to get the encrypted keys for the creator and call this endpoint with the returned string
   - This endpoint will return the group_id
-- Creating a child group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child`
+- Creating a child group with a post-request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<parent_group_id>/child`
   - do the same as for creating a normal group but use `prepareCreateChildGroup` in the parent group to get the decrypted keys
-- Create a connected group with a post request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected`
+- Create a connected group with a post-request: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<connected_group_id>/connected`
 - Add a user to the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/invite_auto/<user_id_to_invite>` (post request)
 - Add a group to the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/invite_auto/<user_id_to_invite>/group` (post request)
 - Kick a user from the group: `https://api.sentc.com/api/v1/group/forced/<creator_user_id>/<group_id>/kick/<user_id_to_kick>` (delete request)

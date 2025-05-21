@@ -111,7 +111,7 @@ console.log(decrypted_string);  //hello there!
             //register a user:
             await sentc.register("username", "password");
 
-			//login a user, ignoring possible Multi-factor auth
+			//log in a user, ignoring possible Multi-factor auth
             const user = await sentc.login("username", "password", true);
 			
             //create a group
@@ -190,14 +190,12 @@ demo() async {
 cargo add sentc
 ```
 
-Please choose an implementation of the algorithms. There are StdKeys, FIPS or Rec keys. The impl can not work together.
+Please choose an implementation of the algorithms. There are StdKeys, FIPS or Rec keys. The impl cannot work together.
 
-- StdKeys (feature = std_keys) are a pure rust implementation of the algorithms. They can be used in the web with wasm
+- StdKeys (feature = std_keys) are a pure rust implementation of the algorithms. They can be used on the web with wasm
   and on mobile.
-- FIPS keys (feature = fips_keys) are FIPS approved algorithms used from Openssl Fips. This impl does not support post
-  quantum.
-- Rec keys (feature = rec_keys) or recommended keys are a mix of FIPS keys for the classic algorithms and oqs (for post
-  quantum).
+- FIPS keys (feature = fips_keys) are FIPS approved algorithms used from Openssl Fips. This impl does not support post-quantum.
+- Rec keys (feature = rec_keys) or recommended keys are a mix of FIPS keys for the classic algorithms and oqs (for post-quantum).
 
 The net feature is necessary for the requests to the backend. The library reqwest is used to do it.
 
@@ -211,21 +209,21 @@ async fn example()
 	//register a user
 	let user_id = StdUser::register("base_url".to_string(), "app_token".to_string(), "the-username", "the-password").await.unwrap();
 
-	//login a user, ignoring possible Multi-factor auth
+	//log in a user, ignoring possible Multi-factor auth
 	let user = StdUser::login_forced("base_url".to_string(), "app_token", "username", "password").await.unwrap();
 
 	//create a group
 	let group_id = user.create_group(false).await.unwrap();
 
-	//get a group. first check if there are any data that the user need before decrypting the group keys.
+	//get a group. first check if there is any data that the user needs before decrypting the group keys.
 	let (data, res) = user.prepare_get_group("group_id", None).await.unwrap();
 
-	//if no data then just decrypt the group keys
+	//if no data, then just decrypt the group keys
 	assert!(matches!(res, GroupFetchResult::Ok));
 
 	let group = user.done_get_group(data, None, None).unwrap();
 
-	//invite another user to the group. Not here in the example because we only got one user so far
+	//Invite another user to the group. Not here in the example because we only got one user so far
 	group.invite_auto(user.get_jwt().unwrap(), "user_id_to_invite", user_public_key, None).await.unwrap();
 
 	//encrypt a string for the group
@@ -249,15 +247,15 @@ async fn example()
 
 The protocol is designed for async long-running communication between groups.
 - A group member should be able to decrypt the whole communication even if they joined years after the beginning.
-- Group member should get decrypt all messages even if they were offline for years.
+- Group members should get to decrypt all messages even if they were offline for years.
 
 The both requirements make perfect forward secrecy impossible. See more [at the Protocol](/protocol/) how we solved it.
 
 ### In Browser encryption
 
-- Make sure to protected your app against XSS attacks. The data is encrypted and can't be checked on the server. XSS attacks can also leak the private keys!
+- Make sure to protect your app against XSS attacks. The data is encrypted and can't be checked on the server. XSS attacks can also leak the private keys!
 - If you are using a CDN, make sure that the CDN will not inject malicious code that could leak information instead of your original code. 
-- In the browser we are using the indexed db to store the keys and the files. The db has only 2 gb of space. If the user needs to download larger files try to use a native app instead of the browser. 
+- In the browser we are using the indexed db to store the keys and the files. The db has only 2 gb of space. If the user needs to download larger files, try to use a native app instead of the browser. 
 
 
 ## Contact

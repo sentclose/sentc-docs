@@ -17,7 +17,7 @@ Sentc will handle key management for you, determining which key should be used f
 
 When encrypting content for a user, the content is encrypted using the user's public key. 
 However, it is important to note that public/private key encryption may not be suitable for handling large amounts of data. 
-To address this, best practice is to use a symmetric key to encrypt the content, 
+To address this, the best practice is to use a symmetric key to encrypt the content  
 and then encrypt the symmetric key with the user's public key (as with groups).
 
 When encrypting content for a user, the reply user ID is required.
@@ -25,9 +25,9 @@ When encrypting content for a user, the reply user ID is required.
 ::: tip
 We highly recommend creating a group even for one-on-one user communication. 
 This allows the user who encrypts the data to also decrypt it later without any additional configuration. 
-To achieve this, simply auto-invite the other user and use the "stop invite" feature for this group. 
+To achieve this, auto-invite the other user and use the "stop invite" feature for this group. 
 
-For more information on auto-invite functionality, please see the [auto invite](/guide/group/#invite-more-user). section.
+For more information on auto-invite functionality, please see the [auto invite](/guide/group/#invite-more-user) section.
 :::
 
 ## Encrypt raw data
@@ -74,7 +74,7 @@ function fileParse(file: Blob) {
 async function fileLoadingAndEncryption(file: Blob) {
 	const uint8arrayFile = await fileParse(file);
 
-	//get the group obj from outside of the function
+	//get the group obj from outside the function
 	const encryptedFile = await group.encrypt(uint8arrayFile);
 	
 	//do domething with the encrypted file
@@ -86,7 +86,7 @@ For file upload you can also use the sentc [file handling](/guide/file/)
 :::
 
 @tab Flutter
-For Flutter, Uint8List are used for raw data.
+For Flutter, Uint8List is used for raw data.
 
 For a group:
 
@@ -134,7 +134,7 @@ fn example(user: &StdUser, data: &[u8])
 
 ## Decrypt raw data
 
-For groups this is the same way around like encrypting data. Every group member can encrypt the data.
+For groups this is the same way around as encrypting data. Every group member can encrypt the data.
 
 :::: tabs#p
 
@@ -146,7 +146,7 @@ const decrypted = await group.decrypt(encrypted);
 ```
 
 @tab Flutter
-For flutter, Uint8List are used for raw data. The encrypted data should be a Uint8List too.
+For flutter, Uint8List is used for raw data. The encrypted data should be a Uint8List too.
 
 ```dart
 final decrypted = await group.decrypt(encrypted);
@@ -166,7 +166,7 @@ fn example(group: &StdGroup, data: &[u8])
 
 ::::
 
-For user this is a little more complicated. Only the user which user id was used in encrypt can decrypt the content.
+For user this is a little more complicated. Only the user which user id was used in encrypting can decrypt the content.
 
 But the right key is automatically fetched by sentc.
 
@@ -181,7 +181,7 @@ const decrypted = await user.decrypt(encrypted);
 
 @tab Flutter
 
-For flutter, Uint8List are used for raw data. The encrypted data should be a Uint8List too.
+For flutter, Uint8List is used for raw data. The encrypted data should be a Uint8List too.
 
 ```dart
 final decrypted = await user.decrypt(encrypted);
@@ -202,7 +202,7 @@ fn example(user: &StdUser, encrypted: &[u8])
 
 ## Encrypt strings
 
-Encrypting strings is a special case, as it requires converting the text to bytes using an UTF-8 reader before encryption.
+Encrypting strings is a special case, as it requires converting the text to bytes using a UTF-8 reader before encryption.
 
 To simplify this process, Sentc offers string encryption functions that handle this conversion for you.
 
@@ -261,7 +261,7 @@ fn example(user: &StdUser, data: &str)
 
 ## Decrypt strings
 
-The same as decrypt raw data but this time with a string as encrypted data.
+The same as decrypting raw data but this time with a string as encrypted data.
 
 :::: tabs#p
 
@@ -333,7 +333,7 @@ For sign, the newest sign key of the user is used.
 
 For a group:
 ```ts
-//just set sign to true
+//set sign to true
 
 const encrypted = await group.encryptString("hello there!", true);
 ```
@@ -386,7 +386,7 @@ fn example(user: &StdUser, data: &str)
 
 ### Verify
 
-For verify, the right verify key is fetched, but you need to save the id of the user who encrypted the content.
+For verifying, the right verify-key is fetched, but you need to save the id of the user who encrypted the content.
 
 :::: tabs#p
 
@@ -394,7 +394,7 @@ For verify, the right verify key is fetched, but you need to save the id of the 
 
 For a group:
 ```ts
-//just set sign to true
+//set sign to true
 
 const decrypted = await group.decryptString(encrypted, true, "<user_id>");
 ```
@@ -419,7 +419,7 @@ final decrypted = await user.decryptString(encrypted, true, "<user_id>");
 
 @tab Rust
 
-For verify, the right verify key needs to be fetched first.
+For verifying, the right verify-key needs to be fetched first.
 
 ````rust
 use sentc::keys::StdGroup;
